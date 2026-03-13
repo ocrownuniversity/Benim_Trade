@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>BENIM_TRADE — Premium Fashion Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
+<script>
+var PRODUCTS=[
+{id:1,cat:'women',name:'Ankara Wrap Dress',brand:'BENIM',price:12500,old:18000,emoji:'👗',sizes:['S','M','L','XL'],badge:'Hot',bc:'red',rating:4.5,reviews:128,bonus:true},
+{id:2,cat:'women',name:'Lace Blouse Top',brand:'Elegance',price:6500,old:9000,emoji:'👚',sizes:['S','M','L'],badge:'New',bc:'grn',rating:4.2,reviews:64,bonus:false},
+{id:3,cat:'women',name:'High-Waist Palazzo Pants',brand:'StyleMax',price:8800,old:12000,emoji:'👖',sizes:['S','M','L','XL','XXL'],badge:null,bc:'',rating:4.0,reviews:47,bonus:false},
+{id:4,cat:'women',name:'Floral Maxi Skirt',brand:'BENIM',price:7500,old:10500,emoji:'🌸',sizes:['S','M','L'],badge:'Sale',bc:'gld',rating:4.3,reviews:89,bonus:true},
+{id:5,cat:'women',name:'Bodycon Midi Dress',brand:'CurveFit',price:9500,old:14000,emoji:'👗',sizes:['S','M','L','XL'],badge:'Trending',bc:'red',rating:4.6,reviews:201,bonus:false},
+{id:6,cat:'women',name:'Chiffon Peplum Top',brand:'Elegance',price:5500,old:8000,emoji:'👕',sizes:['S','M','L'],badge:null,bc:'',rating:4.1,reviews:55,bonus:false},
+{id:7,cat:'women',name:'Aso-Oke Blouse & Wrapper',brand:'BENIM',price:18000,old:25000,emoji:'🥻',sizes:['S','M','L','XL'],badge:'Premium',bc:'blu',rating:4.8,reviews:176,bonus:true},
+{id:8,cat:'women',name:'Denim Jumpsuit',brand:'UrbanLady',price:14500,old:20000,emoji:'👗',sizes:['XS','S','M','L','XL'],badge:'New',bc:'grn',rating:4.4,reviews:98,bonus:false},
+{id:9,cat:'women',name:'Off-Shoulder Party Dress',brand:'GlamUp',price:11000,old:16000,emoji:'👗',sizes:['S','M','L'],badge:'Hot',bc:'red',rating:4.7,reviews:143,bonus:false},
+{id:10,cat:'women',name:'Casual Joggers Set',brand:'SportyLady',price:7000,old:10000,emoji:'🩱',sizes:['S','M','L','XL','XXL'],badge:null,bc:'',rating:4.0,reviews:62,bonus:true},
+{id:11,cat:'women',name:'Striped Button-Down Shirt',brand:'ClassicWear',price:6000,old:8500,emoji:'👚',sizes:['S','M','L'],badge:'Sale',bc:'gld',rating:4.2,reviews:77,bonus:false},
+{id:12,cat:'women',name:'Linen Wide-Leg Trousers',brand:'StyleMax',price:9000,old:13000,emoji:'👖',sizes:['S','M','L','XL'],badge:null,bc:'',rating:4.3,reviews:84,bonus:false},
+{id:13,cat:'men',name:'Senator Kaftan Set',brand:'KingStyle',price:15000,old:20000,emoji:'🧕',sizes:['M','L','XL','XXL'],badge:'Hot',bc:'red',rating:4.7,reviews:203,bonus:true},
+{id:14,cat:'men',name:'Casual Oxford Shirt',brand:'MenFirst',price:9500,old:13000,emoji:'👔',sizes:['S','M','L','XL'],badge:null,bc:'',rating:4.1,reviews:76,bonus:false},
+{id:15,cat:'men',name:'Slim Fit Chinos',brand:'BENIM',price:11000,old:15000,emoji:'👖',sizes:['28','30','32','34','36'],badge:'New',bc:'grn',rating:4.4,reviews:112,bonus:false},
+{id:16,cat:'men',name:'Agbada Embroidered Set',brand:'RoyalWear',price:25000,old:35000,emoji:'🎭',sizes:['M','L','XL','XXL'],badge:'Premium',bc:'blu',rating:4.8,reviews:156,bonus:true},
+{id:17,cat:'men',name:'Native Embroidered Shirt',brand:'KingStyle',price:8500,old:12000,emoji:'👕',sizes:['S','M','L','XL','XXL'],badge:null,bc:'',rating:4.3,reviews:118,bonus:false},
+{id:18,cat:'men',name:'Classic T-Shirt 3-Pack',brand:'BasicMan',price:5500,old:8000,emoji:'👕',sizes:['S','M','L','XL'],badge:'Sale',bc:'gld',rating:4.5,reviews:234,bonus:true},
+{id:19,cat:'men',name:'Formal Suit Jacket',brand:'GentleMan',price:32000,old:45000,emoji:'🤵',sizes:['M','L','XL','XXL'],badge:'Premium',bc:'blu',rating:4.9,reviews:87,bonus:false},
+{id:20,cat:'men',name:'Shorts & Polo Set',brand:'BENIM',price:7500,old:11000,emoji:'🩳',sizes:['S','M','L','XL'],badge:'New',bc:'grn',rating:4.2,reviews:93,bonus:false},
+{id:21,cat:'men',name:'Denim Jeans Straight Fit',brand:'DenimKing',price:13000,old:18000,emoji:'👖',sizes:['28','30','32','34','36','38'],badge:null,bc:'',rating:4.4,reviews:165,bonus:true},
+{id:22,cat:'men',name:'Ankara Print Shirt',brand:'AfriStyle',price:7000,old:10000,emoji:'👔',sizes:['S','M','L','XL'],badge:'Hot',bc:'red',rating:4.6,reviews:142,bonus:false},
+{id:23,cat:'men',name:'Tracksuit Set',brand:'SportKing',price:14000,old:20000,emoji:'🏃',sizes:['S','M','L','XL','XXL'],badge:null,bc:'',rating:4.1,reviews:71,bonus:false},
+{id:24,cat:'men',name:'Linen Jogger Trousers',brand:'RelaxMan',price:8000,old:11500,emoji:'👖',sizes:['28','30','32','34','36'],badge:'Sale',bc:'gld',rating:4.3,reviews:99,bonus:false},
+{id:25,cat:'kids',name:'Kids Ankara Outfit',brand:'TinyStyle',price:4500,old:6500,emoji:'👶',sizes:['2-3yr','4-5yr','6-7yr','8-9yr'],badge:'Cute',bc:'gld',rating:4.6,reviews:92,bonus:true},
+{id:26,cat:'kids',name:'Boys School Uniform Set',brand:'SchoolReady',price:5500,old:7500,emoji:'🎒',sizes:['4-5yr','6-7yr','8-9yr','10-11yr'],badge:null,bc:'',rating:4.3,reviews:58,bonus:false},
+{id:27,cat:'kids',name:'Girls Party Dress',brand:'PrincessWear',price:6000,old:8500,emoji:'👗',sizes:['2-3yr','4-5yr','6-7yr','8-9yr'],badge:'New',bc:'grn',rating:4.7,reviews:113,bonus:false},
+{id:28,cat:'kids',name:'Boys Casual Shorts & Top',brand:'TinyStyle',price:3500,old:5000,emoji:'🩳',sizes:['2-3yr','4-5yr','6-7yr','8-9yr'],badge:null,bc:'',rating:4.2,reviews:67,bonus:true},
+{id:29,cat:'kids',name:'Kids Tracksuit',brand:'LittleChamp',price:5000,old:7000,emoji:'🏃',sizes:['4-5yr','6-7yr','8-9yr','10-11yr'],badge:'Sale',bc:'gld',rating:4.4,reviews:84,bonus:false},
+{id:30,cat:'kids',name:'Girls Ankara Gown',brand:'BENIM',price:4000,old:6000,emoji:'👗',sizes:['2-3yr','4-5yr','6-7yr','8-9yr'],badge:'Hot',bc:'red',rating:4.8,reviews:127,bonus:false},
+{id:31,cat:'kids',name:'Boys Native Senator Set',brand:'KingKids',price:6500,old:9000,emoji:'🧕',sizes:['4-5yr','6-7yr','8-9yr','10-11yr'],badge:'Premium',bc:'blu',rating:4.5,reviews:76,bonus:true},
+{id:32,cat:'kids',name:'Baby Romper 3-Pack',brand:'BabyFirst',price:4200,old:6000,emoji:'👶',sizes:['0-6m','6-12m','12-18m','18-24m'],badge:'New',bc:'grn',rating:4.6,reviews:145,bonus:false},
+{id:33,cat:'accessories',name:'Leather Handbag',brand:'LuxBags',price:13500,old:18000,emoji:'👜',sizes:['One Size'],badge:'Luxury',bc:'blu',rating:4.7,reviews:134,bonus:true},
+{id:34,cat:'accessories',name:'Ankara Head Wrap',brand:'BENIM',price:2500,old:4000,emoji:'🧣',sizes:['One Size'],badge:null,bc:'',rating:4.2,reviews:43,bonus:false},
+{id:35,cat:'accessories',name:"Men's Leather Belt",brand:'BeltKing',price:4500,old:7000,emoji:'🪡',sizes:['S','M','L','XL'],badge:null,bc:'',rating:4.4,reviews:88,bonus:false},
+{id:36,cat:'accessories',name:'Ladies Wristwatch',brand:'TimeLux',price:18000,old:25000,emoji:'⌚',sizes:['One Size'],badge:'Luxury',bc:'blu',rating:4.8,reviews:156,bonus:true},
+{id:37,cat:'accessories',name:'Sunglasses',brand:'CoolShades',price:6500,old:9500,emoji:'🕶️',sizes:['One Size'],badge:'Trending',bc:'red',rating:4.5,reviews:201,bonus:false},
+{id:38,cat:'accessories',name:'Silk Scarf',brand:'Elegance',price:3500,old:5500,emoji:'🧣',sizes:['One Size'],badge:'New',bc:'grn',rating:4.3,reviews:67,bonus:false},
+{id:39,cat:'accessories',name:'Ankara Bow Tie',brand:'AfriStyle',price:2000,old:3500,emoji:'🎀',sizes:['One Size'],badge:null,bc:'',rating:4.1,reviews:32,bonus:true},
+{id:40,cat:'accessories',name:'Hair Accessories Set',brand:'BeautyPlus',price:2800,old:4500,emoji:'💍',sizes:['One Size'],badge:'Sale',bc:'gld',rating:4.2,reviews:119,bonus:false},
+{id:41,cat:'shoes',name:'Ladies Block Heels',brand:'HeelQueen',price:14000,old:20000,emoji:'👠',sizes:['36','37','38','39','40'],badge:'Trending',bc:'red',rating:4.5,reviews:167,bonus:true},
+{id:42,cat:'shoes',name:"Men's Classic Loafers",brand:'StepUp',price:16500,old:22000,emoji:'👞',sizes:['40','41','42','43','44','45'],badge:null,bc:'',rating:4.3,reviews:88,bonus:false},
+{id:43,cat:'shoes',name:'Ladies Flat Sandals',brand:'ComfortStep',price:8500,old:12000,emoji:'🩴',sizes:['36','37','38','39','40','41'],badge:'New',bc:'grn',rating:4.4,reviews:143,bonus:false},
+{id:44,cat:'shoes',name:"Men's Sneakers",brand:'KickFresh',price:19500,old:28000,emoji:'👟',sizes:['40','41','42','43','44','45'],badge:'Hot',bc:'red',rating:4.7,reviews:289,bonus:true},
+{id:45,cat:'shoes',name:'Ladies Court Shoes',brand:'HeelQueen',price:11000,old:16000,emoji:'👡',sizes:['36','37','38','39','40'],badge:null,bc:'',rating:4.2,reviews:76,bonus:false},
+{id:46,cat:'shoes',name:"Men's Ankle Boots",brand:'BootKing',price:22000,old:32000,emoji:'🥾',sizes:['40','41','42','43','44','45'],badge:'Premium',bc:'blu',rating:4.6,reviews:112,bonus:false},
+{id:47,cat:'shoes',name:'Kids School Shoes',brand:'SchoolReady',price:7500,old:11000,emoji:'👟',sizes:['28','30','32','34','36'],badge:null,bc:'',rating:4.3,reviews:94,bonus:true},
+{id:48,cat:'shoes',name:'Ladies Wedge Sandals',brand:'WalkGlam',price:12000,old:17000,emoji:'👡',sizes:['36','37','38','39','40','41'],badge:'Sale',bc:'gld',rating:4.5,reviews:188,bonus:false},
+{id:49,cat:'bags',name:'School Backpack',brand:'CarryOn',price:8000,old:11000,emoji:'🎒',sizes:['One Size'],badge:null,bc:'',rating:4.1,reviews:72,bonus:false},
+{id:50,cat:'bags',name:"Men's Laptop Bag",brand:'ProBag',price:12000,old:17000,emoji:'💼',sizes:['One Size'],badge:'New',bc:'grn',rating:4.4,reviews:95,bonus:true},
+{id:51,cat:'bags',name:'Ladies Tote Bag',brand:'LuxBags',price:15000,old:22000,emoji:'👜',sizes:['One Size'],badge:'Luxury',bc:'blu',rating:4.7,reviews:167,bonus:false},
+{id:52,cat:'bags',name:'Mini Crossbody Bag',brand:'ChicBag',price:9500,old:14000,emoji:'👛',sizes:['One Size'],badge:'Trending',bc:'red',rating:4.5,reviews:134,bonus:false},
+{id:53,cat:'bags',name:"Men's Travel Duffel Bag",brand:'TravelPro',price:18000,old:25000,emoji:'🧳',sizes:['One Size'],badge:null,bc:'',rating:4.3,reviews:89,bonus:true},
+{id:54,cat:'bags',name:'Kids School Bag',brand:'CarryOn',price:6500,old:9500,emoji:'🎒',sizes:['One Size'],badge:'New',bc:'grn',rating:4.4,reviews:156,bonus:false},
+{id:55,cat:'bags',name:'Clutch Evening Bag',brand:'GlamUp',price:7000,old:10500,emoji:'👛',sizes:['One Size'],badge:'Hot',bc:'red',rating:4.6,reviews:112,bonus:false},
+{id:56,cat:'bags',name:"Men's Waist Pouch",brand:'UrbanMan',price:5500,old:8000,emoji:'🎒',sizes:['One Size'],badge:'Sale',bc:'gld',rating:4.2,reviews:78,bonus:true}
+];
+var cart=[],selSizes={},curFilter='all',searchQ='',curUser=null,users=[];
+function showLogin(){
+  var t1=document.getElementById('tabLogin'),t2=document.getElementById('tabSignup');
+  if(t1)t1.className='tab active';if(t2)t2.className='tab';
+  var f=document.getElementById('authForm');if(!f)return;
+  f.innerHTML='<div class="af"><label>Email</label><input id="ae" type="email" placeholder="your@email.com"/></div>'+
+    '<div class="af"><label>Password</label><input id="ap" type="password" placeholder="Password"/></div>'+
+    '<div id="authErr" class="errbx"></div>'+
+    '<button class="bor" onclick="doLogin()">LOGIN</button>'+
+    '<p class="swt">No account? <span onclick="showSignup()">Sign Up Free</span></p>';
+}
+function showSignup(){
+  var t1=document.getElementById('tabLogin'),t2=document.getElementById('tabSignup');
+  if(t1)t1.className='tab';if(t2)t2.className='tab active';
+  var f=document.getElementById('authForm');if(!f)return;
+  f.innerHTML='<div class="af"><label>Full Name</label><input id="an" placeholder="Your full name"/></div>'+
+    '<div class="af"><label>Email</label><input id="ae" type="email" placeholder="your@email.com"/></div>'+
+    '<div class="af"><label>Phone</label><input id="aph" placeholder="08012345678"/></div>'+
+    '<div class="af"><label>Password</label><input id="ap" type="password" placeholder="Min 6 characters"/></div>'+
+    '<div id="authErr" class="errbx"></div>'+
+    '<button class="bor" onclick="doSignup()">CREATE ACCOUNT</button>'+
+    '<p class="swt">Have account? <span onclick="showLogin()">Login</span></p>';
+}
+function setErr(m){var e=document.getElementById('authErr');if(e){e.style.display='block';e.textContent=m;}}
+function doLogin(){
+  var ae=document.getElementById('ae'),ap=document.getElementById('ap');
+  if(!ae||!ap)return;
+  var e=ae.value.trim(),p=ap.value;
+  if(!e||!p){setErr('Please fill all fields.');return;}
+  var u=null;for(var i=0;i<users.length;i++){if(users[i].email===e&&users[i].password===p){u=users[i];break;}}
+  if(!u){setErr('Incorrect email or password.');return;}
+  loginOK(u);
+}
+function doSignup(){
+  var an=document.getElementById('an'),ae=document.getElementById('ae'),aph=document.getElementById('aph'),ap=document.getElementById('ap');
+  if(!an||!ae||!aph||!ap)return;
+  var n=an.value.trim(),e=ae.value.trim(),ph=aph.value.trim(),p=ap.value;
+  if(!n||!e||!ph||!p){setErr('Please fill all fields.');return;}
+  if(p.length<6){setErr('Password must be 6+ characters.');return;}
+  for(var i=0;i<users.length;i++){if(users[i].email===e){setErr('Email already registered.');return;}}
+  var nu={name:n,email:e,phone:ph,password:p};users.push(nu);loginOK(nu);
+  showToast('Welcome to BENIM_TRADE, '+n.split(' ')[0]+'! 🎉');
+}
+function loginOK(u){
+  curUser=u;
+  var ov=document.getElementById('authOverlay');if(ov)ov.style.display='none';
+  var nu=document.getElementById('navUser');if(nu)nu.innerHTML='Hi, <b style="color:#e8b44a;">'+u.name.split(' ')[0]+'</b>';
+  var lo=document.getElementById('navLogout');if(lo)lo.style.display='flex';
+  /* if login was triggered by checkout, proceed to order */
+  if(pendingCheckout){pendingCheckout=false;openOrder();}
+}
+var pendingCheckout=false;
+function checkoutOrLogin(){
+  if(curUser){openOrder();}
+  else{
+    pendingCheckout=true;
+    showLogin();
+    var ov=document.getElementById('authOverlay');
+    if(ov){
+      ov.style.display='flex';
+      /* update subtitle to explain why login is needed */
+      var sub=ov.querySelector('.auth-sub');
+      if(sub)sub.textContent='Sign in to complete your order';
+    }
+  }
+}
+function logout(){
+  curUser=null;cart=[];updBadge();
+  var nu=document.getElementById('navUser');if(nu)nu.innerHTML='';
+  var lo=document.getElementById('navLogout');if(lo)lo.style.display='none';
+  showToast('You have been logged out.');
+}
+function stars(r){var s='';for(var i=1;i<=5;i++)s+=i<=r?'★':'☆';return s;}
+function N(n){return n.toLocaleString();}
+function renderProducts(){
+  var g=document.getElementById('prodGrid');if(!g)return;
+  var data=[];
+  for(var i=0;i<PRODUCTS.length;i++){
+    var p=PRODUCTS[i];
+    if((curFilter==='all'||p.cat===curFilter)&&(!searchQ||p.name.toLowerCase().indexOf(searchQ)>=0||p.brand.toLowerCase().indexOf(searchQ)>=0))data.push(p);
+  }
+  if(!data.length){g.innerHTML='<div style="background:#fff;padding:60px;text-align:center;grid-column:1/-1;"><div style="font-size:48px;margin-bottom:12px;">🔍</div><div style="font-family:Nunito,sans-serif;font-size:15px;color:#999;">No products found</div></div>';return;}
+  var h='';
+  for(var i=0;i<data.length;i++){
+    var p=data[i];var d=Math.round((1-p.price/p.old)*100);
+    h+='<div class="pc" onclick="openDetail('+p.id+')">';
+    if(p.bonus)h+='<div class="pbns">+20% BONUS</div>';
+    if(p.badge)h+='<div class="pbdg b-'+p.bc+'">'+p.badge+'</div>';
+    h+='<div class="pimg">'+p.emoji+'</div>';
+    h+='<div class="pinf"><div class="pname">'+p.name+'</div>';
+    h+='<div class="pprice">&#8358;'+N(p.price)+'</div>';
+    h+='<div class="pold"><span class="pstr">&#8358;'+N(p.old)+'</span> <span class="pdsc">-'+d+'%</span></div>';
+    if(p.bonus)h+='<div class="pbonus">🎁 +20% Cashback Bonus</div>';
+    h+='<div class="prat">'+stars(Math.floor(p.rating))+' <span class="prev">('+p.reviews+')</span></div>';
+    h+='<button class="atcbtn" onclick="event.stopPropagation();openDetail('+p.id+')">VIEW DETAILS</button>';
+    h+='</div></div>';
+  }
+  g.innerHTML=h;
+}
+
+/* ---- PRODUCT DETAIL MODAL ---- */
+var detailSelSize={};
+function openDetail(id){
+  var p=null;for(var i=0;i<PRODUCTS.length;i++){if(PRODUCTS[i].id===id){p=PRODUCTS[i];break;}}
+  if(!p)return;
+  var disc=Math.round((1-p.price/p.old)*100);
+  var catLabels={women:"Women's Fashion",men:"Men's Fashion",kids:"Kids' Wear",accessories:"Accessories",shoes:"Shoes",bags:"Bags"};
+  /* size buttons */
+  var szHtml='';
+  for(var j=0;j<p.sizes.length;j++){
+    var sel=j===0?' dsz-sel':'';
+    szHtml+='<button class="dsz'+sel+'" onclick="pickDSz('+p.id+',\''+p.sizes[j]+'\',this)">'+p.sizes[j]+'</button>';
+  }
+  if(!detailSelSize[id]) detailSelSize[id]=p.sizes[0];
+  /* star display */
+  var fullStars=Math.floor(p.rating);
+  var starHtml='';
+  for(var k=1;k<=5;k++) starHtml+='<span style="color:'+(k<=fullStars?'#e8b44a':'#ddd')+';">★</span>';
+  /* feature tags */
+  var tags=['Fast Delivery','Genuine Product','Easy Returns'];
+  if(p.bonus) tags.unshift('+20% Cashback Bonus');
+  var tagHtml='';for(var t=0;t<tags.length;t++) tagHtml+='<span class="dtag">'+tags[t]+'</span>';
+  var ob=document.getElementById('detailBody');
+  ob.innerHTML=
+    '<div class="dimg-big">'+
+      (p.bonus?'<div class="dbns-big">+20% BONUS</div>':'')+
+      (p.badge?'<div class="dbdg-big b-'+p.bc+'">'+p.badge+'</div>':'')+
+      '<div class="demi-big">'+p.emoji+'</div>'+
+    '</div>'+
+    '<div class="dinf-wrap">'+
+      '<div class="dcat-label">'+catLabels[p.cat]+'</div>'+
+      '<div class="dname-big">'+p.name+'</div>'+
+      '<div class="dbrand-line">by <b>'+p.brand+'</b></div>'+
+      '<div class="drating-row">'+starHtml+'<span class="drat-num">'+p.rating+'</span><span class="drev-num">('+p.reviews+' reviews)</span></div>'+
+      '<div class="dprice-row">'+
+        '<span class="dprice-main">&#8358;'+N(p.price)+'</span>'+
+        '<span class="dprice-old">&#8358;'+N(p.old)+'</span>'+
+        '<span class="dprice-disc">-'+disc+'% OFF</span>'+
+      '</div>'+
+      (p.bonus?'<div class="dbonus-box">🎁 You get <b>+20% Cashback Bonus</b> on this item!</div>':'')+
+      '<div class="dsz-label">Select Size:</div>'+
+      '<div class="dsz-row" id="dszRow'+id+'">'+szHtml+'</div>'+
+      '<div class="dtags-row">'+tagHtml+'</div>'+
+      '<div class="dstock">✅ In Stock — Ready to Ship</div>'+
+      '<div class="dbtn-row">'+
+        '<button class="datcbtn" onclick="addCartFromDetail('+p.id+')">🛒 ADD TO CART</button>'+
+        '<button class="dbybtn" onclick="addCartFromDetail('+p.id+');closeDetail();checkoutOrLogin()">⚡ BUY NOW</button>'+
+      '</div>'+
+      '<div class="ddesc">'+
+        '<div class="ddesc-title">Product Description</div>'+
+        '<div class="ddesc-body">'+getDesc(p)+'</div>'+
+      '</div>'+
+    '</div>';
+  var ov=document.getElementById('detailOverlay');if(ov)ov.classList.add('open');
+}
+function closeDetail(){
+  var ov=document.getElementById('detailOverlay');if(ov)ov.classList.remove('open');
+}
+function pickDSz(id,s,el){
+  detailSelSize[id]=s;
+  var row=document.getElementById('dszRow'+id);
+  if(!row)return;
+  var all=row.querySelectorAll('.dsz');
+  for(var i=0;i<all.length;i++)all[i].classList.remove('dsz-sel');
+  el.classList.add('dsz-sel');
+}
+function addCartFromDetail(id){
+  var p=null;for(var i=0;i<PRODUCTS.length;i++){if(PRODUCTS[i].id===id){p=PRODUCTS[i];break;}}
+  if(!p)return;
+  var sz=detailSelSize[id]||selSizes[id]||p.sizes[0];
+  var key=id+'_'+sz,ex=null;
+  for(var i=0;i<cart.length;i++){if(cart[i].key===key){ex=cart[i];break;}}
+  if(ex)ex.qty++;else cart.push({id:p.id,name:p.name,price:p.price,emoji:p.emoji,size:sz,key:key,qty:1});
+  updBadge();showToast(p.name+' added to cart 🛍️');
+}
+function getDesc(p){
+  var descs={
+    women:'A stunning addition to any wardrobe. Made from premium fabric with expert stitching. Perfect for casual outings, parties, and special occasions. Easy to style and comfortable all day.',
+    men:'A must-have piece for the modern man. Crafted with high-quality material that offers comfort and style. Suitable for work, events, and everyday wear.',
+    kids:'Designed for comfort and style. Made from soft, skin-friendly fabric that is durable and easy to wash. Perfect for school, play, and special occasions.',
+    accessories:'A premium accessory that adds the perfect finishing touch to any outfit. Made with quality materials built to last.',
+    shoes:'Handcrafted for comfort and style. Durable soles, premium material, and a perfect fit for all-day wear.',
+    bags:'Stylish and spacious. Made from high-quality material with strong zips and stitching. Perfect for daily use, travel, and special occasions.'
+  };
+  return descs[p.cat]||descs.women;
+}
+function pickSz(id,s,el){
+  selSizes[id]=s;var all=el.parentNode.querySelectorAll('.sz');
+  for(var i=0;i<all.length;i++)all[i].classList.remove('sel');el.classList.add('sel');
+}
+function addCart(id){
+  var p=null;for(var i=0;i<PRODUCTS.length;i++){if(PRODUCTS[i].id===id){p=PRODUCTS[i];break;}}
+  if(!p)return;
+  var sz=selSizes[id]||p.sizes[0],key=id+'_'+sz,ex=null;
+  for(var i=0;i<cart.length;i++){if(cart[i].key===key){ex=cart[i];break;}}
+  if(ex)ex.qty++;else cart.push({id:p.id,name:p.name,price:p.price,emoji:p.emoji,size:sz,key:key,qty:1});
+  updBadge();showToast(p.name+' added to cart 🛍️');
+}
+function updBadge(){var t=0;for(var i=0;i<cart.length;i++)t+=cart[i].qty;var b=document.getElementById('cartBadge');if(b)b.textContent=t;}
+function filterCat(cat){
+  curFilter=cat;
+  var ls=document.querySelectorAll('.navlink');
+  for(var i=0;i<ls.length;i++){if(ls[i].getAttribute('data-cat')===cat)ls[i].classList.add('active');else ls[i].classList.remove('active');}
+  var titles={all:'All <span>Products</span>',women:"Women's <span>Fashion</span>",men:"Men's <span>Fashion</span>",kids:"Kids' <span>Wear</span>",accessories:'<span>Accessories</span>',shoes:'<span>Shoes</span>',bags:'<span>Bags</span>'};
+  var pt=document.getElementById('prodTitle');if(pt)pt.innerHTML=titles[cat]||titles.all;
+  renderProducts();
+  var ps=document.getElementById('prodSec');if(ps)ps.scrollIntoView({behavior:'smooth'});
+}
+function doSearch(v){searchQ=v.toLowerCase().trim();renderProducts();}
+function openCart(){buildCart();var el=document.getElementById('cartPanel');if(el)el.classList.add('open');}
+function closeCart(){var el=document.getElementById('cartPanel');if(el)el.classList.remove('open');}
+function buildCart(){
+  var body=document.getElementById('cartBody'),foot=document.getElementById('cartFoot');
+  if(!body||!foot)return;
+  if(!cart.length){body.innerHTML='<div style="text-align:center;padding:56px 20px;"><div style="font-size:54px;margin-bottom:12px;">🛒</div><div style="font-family:Nunito,sans-serif;font-size:14px;color:#aaa;">Your cart is empty</div></div>';foot.innerHTML='';return;}
+  var total=0;for(var i=0;i<cart.length;i++)total+=cart[i].price*cart[i].qty;
+  var h='';
+  for(var i=0;i<cart.length;i++){
+    var c=cart[i];
+    h+='<div class="citem"><div class="cemi">'+c.emoji+'</div><div class="cinf">'+
+      '<div class="cname">'+c.name+'</div><div class="csz">Size: '+c.size+'</div>'+
+      '<div class="cprice">&#8358;'+N(c.price*c.qty)+'</div>'+
+      '<div class="cqty"><button class="qbtn" onclick="chQty(\''+c.key+'\',-1)">&#8722;</button>'+
+      '<span class="qnum">'+c.qty+'</span><button class="qbtn" onclick="chQty(\''+c.key+'\',1)">+</button>'+
+      '<button class="delbtn" onclick="chQty(\''+c.key+'\',-99)">&#128465;</button></div>'+
+      '</div></div>';
+  }
+  body.innerHTML=h;
+  foot.innerHTML='<div class="ctotal"><span>Subtotal</span><span class="ctotalv">&#8358;'+N(total)+'</span></div>'+
+    '<button class="bor" onclick="closeCart();checkoutOrLogin()">CHECKOUT &#8594;</button>';
+}
+function chQty(key,delta){
+  for(var i=0;i<cart.length;i++){if(cart[i].key===key){cart[i].qty+=delta;if(cart[i].qty<=0)cart.splice(i,1);break;}}
+  updBadge();buildCart();
+}
+function openOrder(){var el=document.getElementById('orderPanel');if(el)el.classList.add('open');buildOrder();}
+function closeOrder(){var el=document.getElementById('orderPanel');if(el)el.classList.remove('open');}
+function buildOrder(){
+  var ob=document.getElementById('orderBody');if(!ob)return;
+  var total=0;for(var i=0;i<cart.length;i++)total+=cart[i].price*cart[i].qty;
+  var rows='';for(var i=0;i<cart.length;i++){var c=cart[i];rows+='<div class="orow"><span>'+c.name+' ('+c.size+') x'+c.qty+'</span><span>&#8358;'+N(c.price*c.qty)+'</span></div>';}
+  var name=curUser?curUser.name:'',phone=curUser?curUser.phone:'',email=curUser?curUser.email:'';
+  ob.innerHTML='<div class="osummary"><div class="osumtitle">&#128722; Order Summary</div>'+rows+
+    '<div class="osumtotal"><span>Total</span><span>&#8358;'+N(total)+'</span></div></div>'+
+    '<div class="af"><label>Full Name *</label><input id="oname" value="'+name+'" placeholder="Your full name"/></div>'+
+    '<div class="tworow"><div class="af"><label>Phone *</label><input id="ophone" value="'+phone+'" placeholder="08012345678"/></div>'+
+    '<div class="af"><label>Email</label><input id="oemail" value="'+email+'" placeholder="email@example.com"/></div></div>'+
+    '<div class="af"><label>Delivery Address *</label><textarea id="oaddr" rows="2" placeholder="Full delivery address..."></textarea></div>'+
+    '<div class="paybox"><div class="paytitle">&#128179; Payment — Transfer to:</div>'+
+    '<div class="payrow"><span>Bank</span><b>Stanbic IBTC Bank</b></div>'+
+    '<div class="payrow"><span>Account No.</span><b>0007761996</b></div>'+
+    '<div class="payrow"><span>Account Name</span><b>Oladeji Opeyemi</b></div>'+
+    '<div class="payrow"><span>Amount</span><b style="color:#c0392b;">&#8358;'+N(total)+'</b></div></div>'+
+    '<div class="af"><label>Transfer Reference *</label><input id="oref" placeholder="Your bank transfer reference"/></div>'+
+    '<div id="orderErr" class="errbx"></div>'+
+    '<button class="bor" onclick="submitOrder()">CONFIRM ORDER &#8594;</button>';
+}
+function submitOrder(){
+  var n=document.getElementById('oname').value.trim();
+  var ph=document.getElementById('ophone').value.trim();
+  var ad=document.getElementById('oaddr').value.trim();
+  var ref=document.getElementById('oref').value.trim();
+  var err=document.getElementById('orderErr');
+  if(!n||!ph||!ad||!ref){if(err){err.style.display='block';err.textContent='Please fill all required fields.';}return;}
+  var oid='BT-'+Date.now().toString().slice(-6);
+  var total=0;for(var i=0;i<cart.length;i++)total+=cart[i].price*cart[i].qty;
+  var items='';for(var i=0;i<cart.length;i++)items+=cart[i].name+' ('+cart[i].size+') x'+cart[i].qty+' = N'+N(cart[i].price*cart[i].qty)+'\n';
+  var msg='🛍️ *NEW ORDER — BENIM_TRADE*\n\n*Order ID:* '+oid+'\n*Customer:* '+n+'\n*Phone:* '+ph+'\n*Address:* '+ad+'\n\n*Items:*\n'+items+'\n*Total:* N'+N(total)+'\n*Transfer Ref:* '+ref+'\n\nKindly confirm. Thank you!';
+  var waUrl='https://wa.me/2348150898386?text='+encodeURIComponent(msg);
+  var ob=document.getElementById('orderBody');
+  ob.innerHTML='<div style="text-align:center;padding:32px 0 16px;">'+
+    '<div style="font-size:64px;margin-bottom:14px;">🎉</div>'+
+    '<div style="font-family:Nunito,sans-serif;font-size:24px;font-weight:900;color:#1a6b3c;margin-bottom:8px;">Order Placed!</div>'+
+    '<p style="font-size:14px;color:#666;line-height:1.8;margin-bottom:18px;">Thank you <b>'+n+'</b>!<br>Tap below to confirm on WhatsApp.</p>'+
+    '<div style="background:#f0f7f3;border:1px solid #b0d9c0;border-top:3px solid #1a6b3c;padding:14px;border-radius:4px;margin-bottom:18px;">'+
+    '<div style="font-size:11px;text-transform:uppercase;color:#1a6b3c;font-weight:800;letter-spacing:.1em;margin-bottom:4px;">Your Order ID</div>'+
+    '<div style="font-family:Nunito,sans-serif;font-size:28px;font-weight:900;letter-spacing:.05em;">'+oid+'</div></div>'+
+    '<a href="'+waUrl+'" target="_blank" style="display:block;background:#25D366;color:#fff;font-family:Nunito,sans-serif;font-size:15px;font-weight:900;padding:15px;border-radius:4px;text-decoration:none;margin-bottom:10px;">📲 CONFIRM ON WHATSAPP</a>'+
+    '<button class="bor" style="background:#1a6b3c;" onclick="closeOrder()">CONTINUE SHOPPING</button></div>';
+  cart=[];updBadge();
+}
+function startTimer(){
+  var end=new Date();end.setHours(23,59,59,0);
+  function tick(){
+    var diff=Math.max(0,Math.floor((end-new Date())/1000));
+    var h=Math.floor(diff/3600),m=Math.floor((diff%3600)/60),s=diff%60;
+    function p(n){return n<10?'0'+n:''+n;}
+    var el=document.getElementById('timerEl');
+    if(el)el.innerHTML='<span class="tc">'+p(h)+'</span><span class="td">:</span><span class="tc">'+p(m)+'</span><span class="td">:</span><span class="tc">'+p(s)+'</span>';
+    setTimeout(tick,1000);
+  }tick();
+}
+function showToast(msg){
+  var t=document.getElementById('toast');if(!t)return;
+  t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2600);
+}
+</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{--G:#1a6b3c;--G2:#145530;--GD:#061910;--GOLD:#e8b44a;--GOLD2:#c9972a;--RED:#c0392b;--BLU:#1a3a8b;--MID:#767676;--BD:#dedede;--LT:#f1f7f4;}
+body{font-family:'Lato',sans-serif;background:#eff4f1;color:#111;font-size:14px;overflow-x:hidden;}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-thumb{background:var(--G);}
+.auth-overlay{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:99999;display:flex;align-items:center;justify-content:center;padding:16px;}
+.auth-box{background:#fff;width:100%;max-width:420px;border-radius:8px;overflow:hidden;box-shadow:0 12px 56px rgba(0,0,0,.4);}
+.auth-head{background:linear-gradient(135deg,var(--GD),var(--G));padding:22px 24px;display:flex;align-items:center;gap:14px;}
+.auth-title{font-family:'Nunito',sans-serif;font-size:22px;font-weight:900;color:#fff;}
+.auth-title em{color:var(--GOLD);font-style:normal;}
+.auth-sub{font-size:11px;color:rgba(255,255,255,.5);margin-top:3px;}
+.auth-body{padding:22px 24px 26px;}
+.tabs{display:flex;border-bottom:2px solid var(--BD);margin-bottom:18px;}
+.tab{flex:1;padding:9px;text-align:center;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;cursor:pointer;color:var(--MID);border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .2s;}
+.tab.active{color:var(--G);border-bottom-color:var(--G);}
+.af{margin-bottom:12px;}
+.af label{display:block;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--MID);margin-bottom:4px;}
+.af input,.af textarea,.fi input,.fi textarea{font-family:'Lato',sans-serif;font-size:14px;border:1.5px solid var(--BD);padding:10px 13px;width:100%;outline:none;border-radius:4px;transition:border-color .2s;}
+.af input:focus,.fi input:focus,.fi textarea:focus{border-color:var(--G);}
+.bor{font-family:'Nunito',sans-serif;font-size:13px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;background:var(--G);color:#fff;border:none;padding:13px;width:100%;cursor:pointer;border-radius:4px;}
+.bor:hover{background:var(--G2);}
+.errbx{display:none;font-size:12px;color:var(--RED);padding:8px 11px;background:#fff5f5;border-left:3px solid var(--RED);border-radius:3px;margin-bottom:10px;}
+.swt{text-align:center;margin-top:14px;font-size:12px;color:var(--MID);}
+.swt span{color:var(--G);cursor:pointer;font-weight:700;}
+.topbar{background:linear-gradient(135deg,var(--GD) 0%,var(--G) 100%);padding:0 16px;position:sticky;top:0;z-index:990;box-shadow:0 2px 8px rgba(0,0,0,.25);}
+.topbar-inner{max-width:1300px;margin:0 auto;display:flex;align-items:center;height:62px;gap:14px;}
+.brand{display:flex;align-items:center;gap:10px;cursor:pointer;}
+.brand-name{font-family:'Nunito',sans-serif;font-size:20px;font-weight:900;color:#fff;white-space:nowrap;line-height:1;}
+.brand-name em{color:var(--GOLD);font-style:normal;}
+.brand-tag{font-size:9px;color:rgba(255,255,255,.4);letter-spacing:.1em;text-transform:uppercase;margin-top:2px;}
+.searchbar{flex:1;max-width:540px;display:flex;}
+.searchbar input{flex:1;font-family:'Lato',sans-serif;font-size:13px;border:none;padding:10px 14px;outline:none;border-radius:4px 0 0 4px;}
+.searchbar button{background:var(--GOLD);color:#fff;border:none;padding:0 16px;cursor:pointer;font-size:16px;border-radius:0 4px 4px 0;}
+.cart-btn{background:rgba(255,255,255,.15);color:#fff;border:none;padding:8px 16px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;cursor:pointer;border-radius:4px;display:flex;align-items:center;gap:7px;}
+.cart-badge{background:var(--GOLD);color:#fff;width:20px;height:20px;border-radius:50%;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;}
+.navbar{background:var(--GD);padding:0 16px;}
+.navbar-inner{max-width:1300px;margin:0 auto;display:flex;align-items:center;height:42px;overflow-x:auto;}
+.navlink{font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;color:rgba(255,255,255,.6);padding:0 15px;height:42px;display:flex;align-items:center;cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;transition:all .2s;}
+.navlink:hover,.navlink.active{color:#fff;border-bottom-color:var(--GOLD);}
+.nav-user{margin-left:auto;font-size:12px;color:rgba(255,255,255,.45);font-family:'Nunito',sans-serif;white-space:nowrap;}
+.nav-logout{font-size:11px;color:rgba(255,255,255,.35);cursor:pointer;margin-left:12px;border:1px solid rgba(255,255,255,.1);padding:3px 9px;border-radius:3px;font-family:'Nunito',sans-serif;font-weight:700;}
+.hero{background:linear-gradient(125deg,var(--GD) 0%,#0d3a22 50%,#0d2b18 100%);position:relative;overflow:hidden;}
+.hero-inner{max-width:1300px;margin:0 auto;padding:clamp(32px,6vw,70px) 16px;display:flex;align-items:center;min-height:300px;}
+.hero-deco{position:absolute;right:-2%;top:50%;transform:translateY(-50%);font-size:clamp(80px,18vw,220px);opacity:.055;pointer-events:none;user-select:none;}
+.hero-content{position:relative;z-index:1;max-width:580px;}
+.hero-pill{display:inline-block;background:var(--GOLD);color:#fff;font-family:'Nunito',sans-serif;font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;padding:5px 13px;border-radius:3px;margin-bottom:14px;}
+.hero-h{font-family:'Nunito',sans-serif;font-size:clamp(24px,5.5vw,54px);font-weight:900;color:#fff;line-height:1.1;margin-bottom:12px;}
+.hero-h em{color:var(--GOLD);font-style:normal;}
+.hero-p{font-size:14px;color:rgba(255,255,255,.5);line-height:1.8;margin-bottom:22px;}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;}
+.btn-p{font-family:'Nunito',sans-serif;font-size:13px;font-weight:900;background:var(--G);color:#fff;border:none;padding:12px 24px;cursor:pointer;border-radius:4px;text-transform:uppercase;letter-spacing:.06em;}
+.btn-g{font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;background:transparent;color:#fff;border:1px solid rgba(255,255,255,.3);padding:12px 24px;cursor:pointer;border-radius:4px;}
+.trustbar{background:#fff;border-bottom:1px solid var(--BD);padding:10px 16px;}
+.trustbar-inner{max-width:1300px;margin:0 auto;display:flex;justify-content:center;gap:clamp(10px,3vw,44px);flex-wrap:wrap;}
+.trust-item{display:flex;align-items:center;gap:8px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;}
+.ti{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.flash{background:#8b1a0a;padding:9px 16px;}
+.flash-inner{max-width:1300px;margin:0 auto;display:flex;align-items:center;gap:14px;}
+.flash-label{font-family:'Nunito',sans-serif;font-size:14px;font-weight:900;color:#fff;white-space:nowrap;}
+.timer{display:flex;gap:4px;align-items:center;}
+.tc{background:rgba(0,0,0,.35);color:#fff;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;padding:3px 9px;border-radius:3px;min-width:34px;text-align:center;}
+.td{color:rgba(255,255,255,.5);font-weight:900;}
+.section{padding:10px 16px;}
+.section-inner{max-width:1300px;margin:0 auto;}
+.sec-head{background:#fff;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid var(--G);margin-bottom:1px;}
+.sec-title{font-family:'Nunito',sans-serif;font-size:17px;font-weight:900;}
+.sec-title span{color:var(--G);}
+.see-all{font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;color:var(--G);background:none;border:1.5px solid var(--G);padding:5px 14px;cursor:pointer;border-radius:3px;}
+.see-all:hover{background:var(--G);color:#fff;}
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:1px;background:var(--BD);}
+.cat-item{background:#fff;padding:16px 8px;text-align:center;cursor:pointer;transition:background .2s;}
+.cat-item:hover{background:var(--LT);}
+.cat-emoji{font-size:34px;display:block;margin-bottom:6px;}
+.cat-name{font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;}
+.cat-count{font-size:11px;color:var(--MID);margin-top:2px;}
+.prod-wrap{background:var(--BD);}
+.prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:1px;}
+.pc{background:#fff;position:relative;cursor:pointer;transition:box-shadow .2s;}
+.pc:hover{box-shadow:0 4px 22px rgba(0,0,0,.13);z-index:2;}
+.pbns{position:absolute;top:8px;right:8px;background:#1a7a3c;color:#fff;font-family:'Nunito',sans-serif;font-size:10px;font-weight:800;padding:3px 7px;border-radius:3px;z-index:3;}
+.pbdg{position:absolute;top:8px;left:8px;font-family:'Nunito',sans-serif;font-size:10px;font-weight:800;padding:3px 7px;border-radius:3px;z-index:3;}
+.b-red{background:var(--RED);color:#fff;}.b-grn{background:#1a7a3c;color:#fff;}.b-gld{background:var(--GOLD);color:#fff;}.b-blu{background:var(--BLU);color:#fff;}
+.pimg{height:172px;background:linear-gradient(135deg,#edf7f1,#cce8d8);display:flex;align-items:center;justify-content:center;font-size:68px;position:relative;}
+.pwish{position:absolute;top:6px;right:6px;width:27px;height:27px;background:rgba(255,255,255,.88);border-radius:50%;border:none;cursor:pointer;font-size:13px;}
+.pinf{padding:10px 12px 13px;}
+.pname{font-size:13px;line-height:1.4;height:37px;overflow:hidden;margin-bottom:5px;}
+.pprice{font-family:'Nunito',sans-serif;font-size:18px;font-weight:900;color:var(--RED);}
+.pold{margin:2px 0 4px;}
+.pstr{font-size:12px;color:var(--MID);text-decoration:line-through;}
+.pdsc{font-family:'Nunito',sans-serif;font-size:11px;font-weight:800;color:var(--G);margin-left:4px;}
+.pbonus{background:#edfaf2;border:1px solid #9ed9b5;color:#176b38;font-family:'Nunito',sans-serif;font-size:11px;font-weight:800;padding:3px 7px;display:inline-block;border-radius:3px;margin:3px 0 5px;}
+.prat{font-size:12px;color:var(--GOLD);margin:4px 0;}
+.prev{font-size:11px;color:var(--MID);}
+.psizes{display:flex;gap:4px;flex-wrap:wrap;margin:5px 0 8px;}
+.sz{font-size:10px;border:1.5px solid var(--BD);padding:2px 6px;cursor:pointer;border-radius:3px;font-family:'Nunito',sans-serif;font-weight:700;transition:all .15s;}
+.sz:hover,.sz.sel{border-color:var(--G);background:var(--G);color:#fff;}
+.atcbtn{width:100%;font-family:'Nunito',sans-serif;font-size:12px;font-weight:900;background:var(--G);color:#fff;border:none;padding:9px;cursor:pointer;border-radius:4px;text-transform:uppercase;letter-spacing:.05em;}
+.atcbtn:hover{background:var(--G2);}
+.cart-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9000;}
+.cart-overlay.open{display:block;}
+.cart-panel{position:fixed;top:0;right:0;bottom:0;width:100%;max-width:420px;background:#fff;z-index:9001;display:flex;flex-direction:column;transform:translateX(110%);transition:transform .3s ease;box-shadow:-6px 0 24px rgba(0,0,0,.18);}
+.cart-overlay.open .cart-panel{transform:translateX(0);}
+.cart-head{background:linear-gradient(135deg,var(--GD),var(--G));padding:16px 20px;display:flex;align-items:center;justify-content:space-between;}
+.cart-head-title{font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;color:#fff;}
+.close-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:16px;}
+.cart-body{flex:1;overflow-y:auto;padding:14px 16px;}
+.cart-foot{padding:14px 16px;border-top:1px solid var(--BD);background:#fafafa;}
+.citem{display:flex;gap:13px;padding:12px 0;border-bottom:1px solid var(--BD);}
+.cemi{width:62px;height:62px;background:linear-gradient(135deg,#edf7f1,#cce8d8);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;}
+.cinf{flex:1;}
+.cname{font-size:13px;font-weight:600;margin-bottom:2px;line-height:1.4;}
+.csz{font-size:11px;color:var(--MID);margin-bottom:4px;}
+.cprice{font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;color:var(--RED);}
+.cqty{display:flex;align-items:center;gap:6px;margin-top:6px;}
+.qbtn{width:25px;height:25px;border:1.5px solid var(--BD);background:#fff;cursor:pointer;border-radius:3px;font-weight:700;font-size:14px;}
+.qbtn:hover{border-color:var(--G);color:var(--G);}
+.qnum{font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;min-width:22px;text-align:center;}
+.delbtn{background:none;border:none;cursor:pointer;color:var(--MID);font-size:14px;margin-left:auto;}
+.delbtn:hover{color:var(--RED);}
+.ctotal{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:13px;}
+.ctotal span{font-size:13px;color:var(--MID);}
+.ctotalv{font-family:'Nunito',sans-serif;font-size:22px;font-weight:900;color:var(--RED);}
+.order-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9500;overflow-y:auto;padding:16px;}
+.order-overlay.open{display:flex;align-items:flex-start;justify-content:center;}
+.order-box{background:#fff;width:100%;max-width:560px;margin:auto;border-radius:6px;overflow:hidden;}
+.order-head{background:linear-gradient(135deg,var(--GD),var(--G));padding:16px 20px;display:flex;align-items:center;justify-content:space-between;}
+.order-head-title{font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;color:#fff;}
+.order-body{padding:20px;}
+.fi{margin-bottom:13px;}
+.fi label{display:block;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--MID);margin-bottom:4px;}
+.tworow{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.osummary{background:#f1f7f4;border:1px solid #b4d8c1;border-left:4px solid var(--G);padding:14px;border-radius:0 4px 4px 0;margin-bottom:16px;}
+.osumtitle{font-family:'Nunito',sans-serif;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--G);margin-bottom:10px;}
+.orow{display:flex;justify-content:space-between;font-size:13px;padding:4px 0;border-bottom:1px solid rgba(26,107,60,.08);gap:8px;}
+.orow span:last-child{font-weight:700;white-space:nowrap;}
+.osumtotal{display:flex;justify-content:space-between;font-family:'Nunito',sans-serif;font-size:18px;font-weight:900;padding-top:10px;margin-top:6px;}
+.osumtotal span:last-child{color:var(--RED);}
+.paybox{background:#fffaf0;border:1px solid #f0d89a;border-left:4px solid var(--GOLD);padding:14px;border-radius:0 4px 4px 0;margin-bottom:14px;}
+.paytitle{font-family:'Nunito',sans-serif;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--GOLD2);margin-bottom:10px;}
+.payrow{display:flex;justify-content:space-between;font-size:13px;padding:5px 0;border-bottom:1px solid rgba(232,180,74,.15);}
+.payrow:last-child{border:none;}
+.payrow span{color:var(--MID);}
+.footer{background:var(--GD);padding:36px 16px 20px;}
+.footer-inner{max-width:1300px;margin:0 auto;}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:36px;margin-bottom:28px;}
+.footer-brand{font-family:'Nunito',sans-serif;font-size:20px;font-weight:900;color:#fff;display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.footer-brand em{color:var(--GOLD);font-style:normal;}
+.footer-desc{font-size:13px;color:rgba(255,255,255,.28);line-height:1.8;max-width:230px;}
+.footer-contact{font-size:12px;color:rgba(255,255,255,.2);line-height:2.4;margin-top:12px;}
+.footer-h{font-family:'Nunito',sans-serif;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.22);margin-bottom:13px;}
+.footer-link{display:block;font-size:13px;color:rgba(255,255,255,.32);margin-bottom:9px;cursor:pointer;}
+.footer-link:hover{color:var(--GOLD);}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.06);padding-top:16px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.footer-copy{font-size:12px;color:rgba(255,255,255,.18);}
+.pay-badge{background:rgba(255,255,255,.07);color:rgba(255,255,255,.35);font-family:'Nunito',sans-serif;font-size:10px;font-weight:700;padding:4px 11px;border-radius:3px;display:inline-block;margin-left:6px;}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(18px);background:#0d2b18;color:#fff;padding:11px 22px;border-radius:4px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;z-index:999999;opacity:0;transition:all .3s;white-space:nowrap;box-shadow:0 4px 18px rgba(0,0,0,.35);pointer-events:none;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+/* ---- PRODUCT DETAIL MODAL ---- */
+.detail-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:9800;overflow-y:auto;padding:16px;}
+.detail-overlay.open{display:flex;align-items:flex-start;justify-content:center;}
+.detail-box{background:#fff;width:100%;max-width:680px;margin:auto;border-radius:10px;overflow:hidden;box-shadow:0 16px 60px rgba(0,0,0,.4);}
+.detail-head{background:linear-gradient(135deg,var(--GD),var(--G));padding:14px 20px;display:flex;align-items:center;justify-content:space-between;}
+.detail-head-title{font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;color:rgba(255,255,255,.7);letter-spacing:.05em;text-transform:uppercase;}
+.detail-body{display:flex;flex-wrap:wrap;}
+.dimg-big{width:100%;max-width:260px;min-height:260px;background:linear-gradient(135deg,#edf7f1,#c8e8d4);display:flex;align-items:center;justify-content:center;font-size:100px;position:relative;flex-shrink:0;}
+.dbns-big{position:absolute;top:12px;right:12px;background:#1a7a3c;color:#fff;font-family:'Nunito',sans-serif;font-size:10px;font-weight:800;padding:4px 9px;border-radius:3px;}
+.dbdg-big{position:absolute;top:12px;left:12px;font-family:'Nunito',sans-serif;font-size:10px;font-weight:800;padding:4px 9px;border-radius:3px;}
+.demi-big{font-size:clamp(70px,15vw,110px);}
+.dinf-wrap{flex:1;padding:20px 22px;min-width:240px;}
+.dcat-label{font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--G);margin-bottom:6px;}
+.dname-big{font-family:'Nunito',sans-serif;font-size:clamp(17px,3vw,22px);font-weight:900;line-height:1.3;margin-bottom:4px;}
+.dbrand-line{font-size:13px;color:var(--MID);margin-bottom:10px;}
+.drating-row{display:flex;align-items:center;gap:6px;margin-bottom:12px;}
+.drat-num{font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;color:#333;}
+.drev-num{font-size:12px;color:var(--MID);}
+.dprice-row{display:flex;align-items:baseline;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+.dprice-main{font-family:'Nunito',sans-serif;font-size:28px;font-weight:900;color:var(--RED);}
+.dprice-old{font-size:14px;color:var(--MID);text-decoration:line-through;}
+.dprice-disc{font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;color:#fff;background:var(--G);padding:2px 8px;border-radius:3px;}
+.dbonus-box{background:#edfaf2;border:1px solid #9ed9b5;border-left:4px solid #1a7a3c;color:#176b38;font-size:13px;font-weight:600;padding:9px 12px;border-radius:0 4px 4px 0;margin-bottom:12px;line-height:1.5;}
+.dsz-label{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--MID);margin-bottom:8px;}
+.dsz-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px;}
+.dsz{font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;border:2px solid var(--BD);background:#fff;padding:5px 12px;cursor:pointer;border-radius:4px;transition:all .15s;}
+.dsz:hover{border-color:var(--G);color:var(--G);}
+.dsz-sel{border-color:var(--G)!important;background:var(--G)!important;color:#fff!important;}
+.dtags-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+.dtag{font-size:11px;font-weight:700;background:#f1f7f4;border:1px solid #b4d8c1;color:var(--G);padding:4px 9px;border-radius:20px;}
+.dstock{font-size:12px;color:#1a7a3c;font-weight:700;margin-bottom:14px;}
+.dbtn-row{display:flex;gap:10px;margin-bottom:18px;}
+.datcbtn{flex:1;font-family:'Nunito',sans-serif;font-size:13px;font-weight:900;background:var(--G);color:#fff;border:none;padding:12px;cursor:pointer;border-radius:5px;text-transform:uppercase;letter-spacing:.05em;transition:background .2s;}
+.datcbtn:hover{background:var(--G2);}
+.dbybtn{flex:1;font-family:'Nunito',sans-serif;font-size:13px;font-weight:900;background:var(--GOLD);color:#fff;border:none;padding:12px;cursor:pointer;border-radius:5px;text-transform:uppercase;letter-spacing:.05em;}
+.ddesc{border-top:1px solid var(--BD);padding-top:14px;}
+.ddesc-title{font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#555;margin-bottom:7px;}
+.ddesc-body{font-size:13px;color:#666;line-height:1.8;}
+@media(max-width:540px){.dimg-big{max-width:100%;min-height:200px;width:100%;}.detail-body{flex-direction:column;}}
+@media(max-width:960px){.footer-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:640px){.searchbar{display:none;}.prod-grid{grid-template-columns:1fr 1fr;}.cat-grid{grid-template-columns:repeat(3,1fr);}.footer-grid{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+
+<!-- AUTH -->
+<div class="auth-overlay" id="authOverlay" style="display:none;">
+  <div class="auth-box">
+    <div class="auth-head">
+      <svg width="50" height="50" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="30" cy="30" r="30" fill="#0d3a22"/>
+        <circle cx="30" cy="30" r="26" fill="none" stroke="#e8b44a" stroke-width="1.5"/>
+        <path d="M30 13 Q30 9 34 9 Q38 9 38 13 Q38 17 30 21 Q22 17 22 13 Q22 9 26 9 Q30 9 30 13Z" fill="none" stroke="#e8b44a" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M17 25 L24 20 L30 24 L36 20 L43 25 L39 30 L37 27 L37 44 L23 44 L23 27 L21 30Z" fill="#e8b44a"/>
+        <text x="30" y="54" text-anchor="middle" font-family="Arial,sans-serif" font-weight="900" font-size="5.5" fill="rgba(255,255,255,.55)" letter-spacing="0.5">BENIM_TRADE</text>
+      </svg>
+      <div>
+        <div class="auth-title">BENIM<em>_TRADE</em></div>
+        <div class="auth-sub">Premium Fashion Store · Nigeria</div>
+      </div>
+    </div>
+    <div class="auth-body">
+      <div class="tabs">
+        <div class="tab active" id="tabLogin" onclick="showLogin()">Login</div>
+        <div class="tab" id="tabSignup" onclick="showSignup()">Sign Up</div>
+      </div>
+      <div id="authForm"></div>
+    </div>
+  </div>
+</div>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand" onclick="scrollTo(0,0)">
+      <svg width="38" height="38" viewBox="0 0 60 60">
+        <circle cx="30" cy="30" r="30" fill="#0d3a22"/>
+        <circle cx="30" cy="30" r="26" fill="none" stroke="#e8b44a" stroke-width="1.5"/>
+        <path d="M30 13 Q30 9 34 9 Q38 9 38 13 Q38 17 30 21 Q22 17 22 13 Q22 9 26 9 Q30 9 30 13Z" fill="none" stroke="#e8b44a" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M17 25 L24 20 L30 24 L36 20 L43 25 L39 30 L37 27 L37 44 L23 44 L23 27 L21 30Z" fill="#e8b44a"/>
+      </svg>
+      <div>
+        <div class="brand-name">BENIM<em>_TRADE</em></div>
+        <div class="brand-tag">Premium Fashion Store</div>
+      </div>
+    </div>
+    <div class="searchbar">
+      <input type="text" id="searchInput" placeholder="Search products, brands..." oninput="doSearch(this.value)"/>
+      <button>🔍</button>
+    </div>
+    <div>
+      <button class="cart-btn" onclick="openCart()">🛒 Cart <span class="cart-badge" id="cartBadge">0</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<div class="navbar">
+  <div class="navbar-inner">
+    <div class="navlink active" data-cat="all" onclick="filterCat('all')">All Products</div>
+    <div class="navlink" data-cat="women" onclick="filterCat('women')">Women</div>
+    <div class="navlink" data-cat="men" onclick="filterCat('men')">Men</div>
+    <div class="navlink" data-cat="kids" onclick="filterCat('kids')">Kids</div>
+    <div class="navlink" data-cat="accessories" onclick="filterCat('accessories')">Accessories</div>
+    <div class="navlink" data-cat="shoes" onclick="filterCat('shoes')">Shoes</div>
+    <div class="navlink" data-cat="bags" onclick="filterCat('bags')">Bags</div>
+    <div class="nav-user" id="navUser"></div>
+    <div class="nav-logout" id="navLogout" style="display:none;" onclick="logout()">Logout</div>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-deco">👗</div>
+    <div class="hero-content">
+      <div class="hero-pill">🔥 New Collection — 2026</div>
+      <div class="hero-h">Shop <em>Premium</em> Fashion<br>with BENIM_TRADE</div>
+      <div class="hero-p">The best styles for men, women &amp; kids at unbeatable prices. Fast delivery nationwide across Nigeria.</div>
+      <div class="hero-btns">
+        <button class="btn-p" onclick="document.getElementById('prodSec').scrollIntoView({behavior:'smooth'})">Shop Now</button>
+        <button class="btn-g" onclick="document.getElementById('catSec').scrollIntoView({behavior:'smooth'})">Browse Categories</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TRUST BAR -->
+<div class="trustbar">
+  <div class="trustbar-inner">
+    <div class="trust-item"><div class="ti" style="background:#1a6b3c;">🚚</div>Fast Delivery Nationwide</div>
+    <div class="trust-item"><div class="ti" style="background:#e8b44a;">✅</div>100% Genuine Products</div>
+    <div class="trust-item"><div class="ti" style="background:#1a3a8b;">🔒</div>Secure Bank Payment</div>
+    <div class="trust-item"><div class="ti" style="background:#c0392b;">↩️</div>Easy Returns</div>
+    <div class="trust-item"><div class="ti" style="background:#1a7a3c;">🎁</div>20% Bonus on Select Items</div>
+  </div>
+</div>
+
+<!-- FLASH SALE -->
+<div class="flash">
+  <div class="flash-inner">
+    <div class="flash-label">⚡ FLASH SALE</div>
+    <div class="timer" id="timerEl"></div>
+    <div style="margin-left:auto;font-family:Nunito,sans-serif;font-size:12px;font-weight:700;color:rgba(255,255,255,.75);">Up to 40% OFF — Today Only!</div>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<div class="section" id="catSec">
+  <div class="section-inner">
+    <div class="sec-head"><div class="sec-title">Shop by <span>Category</span></div></div>
+    <div class="cat-grid">
+      <div class="cat-item" onclick="filterCat('women')"><span class="cat-emoji">👗</span><div class="cat-name">Women</div><div class="cat-count">12 items</div></div>
+      <div class="cat-item" onclick="filterCat('men')"><span class="cat-emoji">👔</span><div class="cat-name">Men</div><div class="cat-count">12 items</div></div>
+      <div class="cat-item" onclick="filterCat('kids')"><span class="cat-emoji">🧒</span><div class="cat-name">Kids</div><div class="cat-count">8 items</div></div>
+      <div class="cat-item" onclick="filterCat('accessories')"><span class="cat-emoji">🧣</span><div class="cat-name">Accessories</div><div class="cat-count">8 items</div></div>
+      <div class="cat-item" onclick="filterCat('shoes')"><span class="cat-emoji">👠</span><div class="cat-name">Shoes</div><div class="cat-count">8 items</div></div>
+      <div class="cat-item" onclick="filterCat('bags')"><span class="cat-emoji">👜</span><div class="cat-name">Bags</div><div class="cat-count">8 items</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCTS -->
+<div class="section" id="prodSec">
+  <div class="section-inner">
+    <div class="sec-head">
+      <div class="sec-title" id="prodTitle">All <span>Products</span></div>
+      <button class="see-all" onclick="filterCat('all')">See All</button>
+    </div>
+    <div class="prod-wrap"><div class="prod-grid" id="prodGrid"></div></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">
+          <svg width="28" height="28" viewBox="0 0 60 60"><circle cx="30" cy="30" r="30" fill="#0d3a22"/><path d="M17 25 L24 20 L30 24 L36 20 L43 25 L39 30 L37 27 L37 44 L23 44 L23 27 L21 30Z" fill="#e8b44a"/></svg>
+          BENIM<em>_TRADE</em>
+        </div>
+        <div class="footer-desc">Your trusted premium fashion store in Nigeria. Quality clothing for men, women and kids at the best prices.</div>
+        <div class="footer-contact">✉️ shopwithbenim@gmail.com<br>📞 08150898386<br>🏦 Stanbic IBTC Bank</div>
+      </div>
+      <div>
+        <div class="footer-h">Categories</div>
+        <span class="footer-link" onclick="filterCat('women')">Women's Fashion</span>
+        <span class="footer-link" onclick="filterCat('men')">Men's Fashion</span>
+        <span class="footer-link" onclick="filterCat('kids')">Kids' Wear</span>
+        <span class="footer-link" onclick="filterCat('accessories')">Accessories</span>
+        <span class="footer-link" onclick="filterCat('shoes')">Shoes</span>
+        <span class="footer-link" onclick="filterCat('bags')">Bags</span>
+      </div>
+      <div>
+        <div class="footer-h">Customer Care</div>
+        <span class="footer-link">Help Center</span>
+        <span class="footer-link">Track My Order</span>
+        <span class="footer-link">Returns &amp; Refund</span>
+        <span class="footer-link">Contact Us</span>
+        <span class="footer-link">WhatsApp Support</span>
+      </div>
+      <div>
+        <div class="footer-h">Payment Info</div>
+        <div style="font-size:13px;color:rgba(255,255,255,.28);line-height:2.3;">Bank: <b style="color:rgba(255,255,255,.48)">Stanbic IBTC</b><br>Acc: <b style="color:rgba(255,255,255,.48)">0007761996</b><br>Name: <b style="color:rgba(255,255,255,.48)">Oladeji Opeyemi</b></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 BENIM_TRADE. All rights reserved. | shopwithbenim@gmail.com</div>
+      <div><span class="pay-badge">Bank Transfer</span><span class="pay-badge">Cash on Delivery</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- CART PANEL -->
+<div class="cart-overlay" id="cartPanel" onclick="if(event.target===this)closeCart()">
+  <div class="cart-panel">
+    <div class="cart-head"><div class="cart-head-title">🛒 Shopping Cart</div><button class="close-btn" onclick="closeCart()">✕</button></div>
+    <div class="cart-body" id="cartBody"></div>
+    <div class="cart-foot" id="cartFoot"></div>
+  </div>
+</div>
+
+<!-- ORDER PANEL -->
+<div class="order-overlay" id="orderPanel">
+  <div class="order-box">
+    <div class="order-head"><div class="order-head-title">🧾 Complete Your Order</div><button class="close-btn" onclick="closeOrder()">✕</button></div>
+    <div class="order-body" id="orderBody"></div>
+  </div>
+</div>
+
+<!-- PRODUCT DETAIL MODAL -->
+<div class="detail-overlay" id="detailOverlay" onclick="if(event.target===this)closeDetail()">
+  <div class="detail-box">
+    <div class="detail-head">
+      <div class="detail-head-title">Product Details</div>
+      <button class="close-btn" onclick="closeDetail()">✕</button>
+    </div>
+    <div class="detail-body" id="detailBody"></div>
+  </div>
+</div>
+
+<!-- WHATSAPP FLOAT -->
+<a href="https://wa.me/2348150898386?text=Hello%20BENIM_TRADE!%20I%20need%20help%20with%20an%20order." target="_blank" style="position:fixed;bottom:24px;right:22px;background:#25D366;color:#fff;width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;box-shadow:0 4px 18px rgba(37,211,102,.55);z-index:8000;text-decoration:none;">💬</a>
+
+<div class="toast" id="toast"></div>
+
+<script>
+document.addEventListener('DOMContentLoaded',function(){renderProducts();startTimer();});
+</script>
+</body>
+</html>
