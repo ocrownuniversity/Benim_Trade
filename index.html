@@ -282,6 +282,12 @@ function openDetail(id){
     +'<div class="dsz-row" id="dszRow'+id+'">'+szH+'</div>'
     +'<div class="dtags-row">'+tgH+'</div>'
     +'<div class="dstock">&#9989; In Stock &mdash; Ready to Ship</div>'
+    +'<div style="display:flex;align-items:center;gap:12px;margin:14px 0;">'
+    +'<span style="font-size:13px;font-weight:700;color:#555;">Quantity:</span>'
+    +'<button onclick="detQtyChange('+id+',-1)" style="width:34px;height:34px;font-size:20px;border-radius:8px;border:2px solid #ddd;background:#fff;cursor:pointer;font-weight:800;line-height:1;">&#8722;</button>'
+    +'<span id="detQty'+id+'" style="font-size:17px;font-weight:800;min-width:30px;text-align:center;">1</span>'
+    +'<button onclick="detQtyChange('+id+',1)" style="width:34px;height:34px;font-size:20px;border-radius:8px;border:2px solid #ddd;background:#fff;cursor:pointer;font-weight:800;line-height:1;">+</button>'
+    +'</div>'
     +'<div class="dbtn-row">'
     +'<button class="datcbtn" onclick="addCartFromDetail('+id+')">&#128722; ADD TO CART</button>'
     +'<button class="dbybtn" onclick="addCartFromDetail('+id+');closeDetail();checkoutOrLogin()">&#9889; BUY NOW</button>'
@@ -300,12 +306,21 @@ function pickDSz(el){
   for(var i=0;i<all.length;i++)all[i].classList.remove("dsz-sel");
   el.classList.add("dsz-sel");
 }
+function detQtyChange(id,delta){
+  var el=document.getElementById("detQty"+id);
+  if(!el)return;
+  var v=parseInt(el.textContent||1)+delta;
+  if(v<1)v=1;
+  el.textContent=v;
+}
 function addCartFromDetail(id){
   var p=null;for(var i=0;i<PRODUCTS.length;i++){if(PRODUCTS[i].id===id){p=PRODUCTS[i];break;}}
   if(!p)return;
+  var qtyEl=document.getElementById("detQty"+id);
+  var addQty=qtyEl?parseInt(qtyEl.textContent||1):1;
   var sz=detailSelSize[id]||p.sizes[0],key=id+"_"+sz,ex=null;
   for(var i=0;i<cart.length;i++){if(cart[i].key===key){ex=cart[i];break;}}
-  if(ex)ex.qty++;
+  if(ex)ex.qty+=addQty;
   else cart.push({id:p.id,name:p.name,price:p.price,img:p.img||"",emoji:p.emoji,size:sz,key:key,qty:1});
   updBadge();showToast(p.name+" added to cart!");
 }
