@@ -37,7 +37,7 @@ onAuthStateChanged(auth,function(user){
     var lo=document.getElementById("navLogout");if(lo)lo.style.display="flex";
     var ov=document.getElementById("authOverlay");if(ov)ov.style.display="none";
     if(user.email===ADMIN_EMAIL){var ab=document.getElementById("adminBtn");if(ab)ab.style.display="flex";}
-    if(pendingCheckout){pendingCheckout=false;openOrder();}
+    loadCartCloud(user.uid,function(){if(pendingCheckout){pendingCheckout=false;openOrder();}});
   }else{
     window._curUserFB=null;curUser=null;
     var nu=document.getElementById("navUser");if(nu)nu.innerHTML="";
@@ -121,6 +121,46 @@ var PRODUCTS=[
 ];
 var cart=[],selSizes={},curFilter="all",searchQ="",curUser=null,pendingCheckout=false,detailSelSize={};
 
+// Cart Persistence - localStorage
+function saveCart(){
+  try{localStorage.setItem("benim_cart",JSON.stringify(cart));}catch(e){}
+}
+function loadCart(){
+  try{
+    var raw=localStorage.getItem("benim_cart");
+    if(raw){var parsed=JSON.parse(raw);if(Array.isArray(parsed)&&parsed.length){cart=parsed;}}
+  }catch(e){}
+}
+// Firebase cart sync for logged-in users
+function saveCartCloud(uid){
+  if(!uid||!window._fbDb)return;
+  try{
+    import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js").then(function(m){
+      m.setDoc(m.doc(window._fbDb,"userCarts",uid),{cart:JSON.stringify(cart),ts:Date.now()}).catch(function(){});
+    });
+  }catch(e){}
+}
+function loadCartCloud(uid,cb){
+  if(!uid||!window._fbDb){if(cb)cb();return;}
+  try{
+    import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js").then(function(m){
+      m.getDoc(m.doc(window._fbDb,"userCarts",uid)).then(function(snap){
+        if(snap.exists()){
+          var d=snap.data();
+          if(d.cart){
+            var parsed=JSON.parse(d.cart);
+            if(Array.isArray(parsed)&&parsed.length){
+              cart=parsed;saveCart();updBadge();
+              showToast("Your saved cart has been restored!");
+            }
+          }
+        }
+        if(cb)cb();
+      }).catch(function(){if(cb)cb();});
+    });
+  }catch(e){if(cb)cb();}
+}
+
 function showLogin(){
   var t1=document.getElementById("tabLogin"),t2=document.getElementById("tabSignup");
   if(t1)t1.className="tab active";if(t2)t2.className="tab";
@@ -170,7 +210,9 @@ function doSignup(){
 }
 function logout(){
   if(window._fbSignOut)window._fbSignOut(window._fbAuth);
-  cart=[];updBadge();showToast("You have been logged out.");
+  cart=[];
+  try{localStorage.removeItem("benim_cart");}catch(e){}
+  updBadge();showToast("You have been logged out.");
 }
 function checkoutOrLogin(){
   if(curUser){openOrder();}
@@ -285,7 +327,12 @@ function addCartFromDetail(id){
   else cart.push({id:p.id,name:p.name,price:p.price,img:p.img||"",emoji:p.emoji,size:sz,key:key,qty:1});
   updBadge();showToast(p.name+" added to cart!");
 }
-function updBadge(){var t=0;for(var i=0;i<cart.length;i++)t+=cart[i].qty;var b=document.getElementById("cartBadge");if(b)b.textContent=t;}
+function updBadge(){
+  var t=0;for(var i=0;i<cart.length;i++)t+=cart[i].qty;
+  var b=document.getElementById("cartBadge");if(b)b.textContent=t;
+  saveCart();
+  if(curUser&&curUser.uid)saveCartCloud(curUser.uid);
+}
 function filterCat(cat){
   curFilter=cat;
   var ls=document.querySelectorAll(".navlink");
@@ -378,7 +425,7 @@ function submitOrder(){
       +'<div style="font-size:12px;color:#666;margin-top:6px;">Transfer &#8358;'+N(total)+' to Opay &mdash; 9168031213</div></div>'
       +'<a href="'+waUrl+'" target="_blank" style="display:block;background:#25D366;color:#fff;font-family:Nunito,sans-serif;font-size:14px;font-weight:900;padding:14px;border-radius:4px;text-decoration:none;margin-bottom:10px;">&#128172; CONFIRM ON WHATSAPP</a>'
       +'<button class="bor" onclick="closeOrder()">CONTINUE SHOPPING</button></div>';
-    cart=[];updBadge();
+    cart=[];try{localStorage.removeItem("benim_cart");}catch(e){}updBadge();
     // Auto-open WhatsApp immediately after order is saved
     setTimeout(function(){window.open(waUrl,"_blank");},600);
   }).catch(function(){
@@ -493,7 +540,7 @@ function declineOrder(docId){
     showToast("Order Declined ❌");loadAdminOrders();
   });
 }
-document.addEventListener("DOMContentLoaded",function(){renderProducts();startTimer();});
+document.addEventListener("DOMContentLoaded",function(){loadCart();updBadge();renderProducts();startTimer();});
 </script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
