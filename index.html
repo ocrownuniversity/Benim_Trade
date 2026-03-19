@@ -237,8 +237,8 @@ function renderProducts(){
     if(p.desc)h+='<div class="pdesc-short">'+p.desc.substring(0,60)+(p.desc.length>60?"...":"")+'</div>';
     h+='<div class="prat">'+stars(Math.floor(p.rating))+' <span class="prev">('+p.reviews+')</span></div>';
     h+='<div class="pcard-btns">';
-    h+='<button class="pcard-atc" onclick="event.stopPropagation();quickAddToCart('+p.id+')">&#128722; Add to Cart</button>';
-    h+='<button class="pcard-buy" onclick="event.stopPropagation();quickBuyNow('+p.id+')">&#9889; Buy Now</button>';
+    h+='<button class="pcard-atc" onclick="event.stopPropagation();quickAddToCart('+p.id+',this)">&#128722; Add to Cart</button>';
+    h+='<button class="pcard-buy" onclick="event.stopPropagation();quickBuyNow('+p.id+',this)">&#9889; Buy Now</button>';
     h+='</div>';
     h+='<button class="pcard-view" onclick="openDetail('+p.id+');addToRecent('+p.id+')">&#128065; View Description</button>';
     h+='</div></div>';
@@ -291,7 +291,7 @@ function openDetail(id){
     +'<div class="dstock">&#9989; In Stock &mdash; Ready to Ship</div>'
     +'<div style="display:flex;align-items:center;gap:12px;margin:14px 0;"><span style="font-size:13px;font-weight:700;color:#555;">Qty:</span><button onclick="detQtyChange('+id+',-1)" style="width:34px;height:34px;font-size:20px;border-radius:8px;border:2px solid #ddd;background:#fff;cursor:pointer;font-weight:800;">&#8722;</button><span id="detQty'+id+'" style="font-size:17px;font-weight:800;min-width:30px;text-align:center;">1</span><button onclick="detQtyChange('+id+',1)" style="width:34px;height:34px;font-size:20px;border-radius:8px;border:2px solid #ddd;background:#fff;cursor:pointer;font-weight:800;">+</button></div>'
     +'<div class="dbtn-row">'
-    +'<button class="datcbtn" onclick="addCartFromDetail('+id+')">&#128722; ADD TO CART</button>'
+    +'<button class="datcbtn" onclick="addCartFromDetailFeedback('+id+',this)">&#128722; ADD TO CART</button>'
     +'<button class="dbybtn" onclick="addCartFromDetail('+id+');closeDetail();checkoutOrLogin()">&#9889; BUY NOW</button>'
     +'</div>'
     +'<div class="ddesc"><div class="ddesc-title">Product Description</div>'
@@ -363,7 +363,8 @@ function buildCart(){
   }
   body.innerHTML=h;
   foot.innerHTML='<div class="ctotal"><span>Subtotal</span><span class="ctotalv">&#8358;'+N(total)+'</span></div>'
-    +'<button class="bor" onclick="closeCart();checkoutOrLogin()">CHECKOUT &#8594;</button>';
+    +'<button class="bor" onclick="closeCart();checkoutOrLogin()">&#128722; PROCEED TO CHECKOUT &#8594;</button>'
+    +'<button class="continue-shopping" onclick="closeCart()">&#8592; Continue Shopping</button>';
 }
 function chQty(key,delta){
   for(var i=0;i<cart.length;i++){if(cart[i].key===key){cart[i].qty+=delta;if(cart[i].qty<=0)cart.splice(i,1);break;}}
@@ -888,6 +889,246 @@ body{font-family:'Lato',sans-serif;background:#eff4f1;color:#111;font-size:14px;
   .dimg-big{width:100%;min-width:unset;height:240px;min-height:unset;flex-shrink:0;}
   .dinf-wrap{overflow-y:visible;padding:16px;}
 }
+
+/* Button press animations */
+.pcard-atc:active,.pcard-buy:active,.pcard-view:active,.atcbtn:active,.datcbtn:active,.dbybtn:active{
+  transform:scale(0.94);
+}
+.pcard-atc,.pcard-buy,.pcard-view,.atcbtn,.datcbtn,.dbybtn{
+  transition:all .15s ease;
+  position:relative;
+  overflow:hidden;
+}
+
+/* Ripple effect */
+.btn-ripple{
+  position:absolute;
+  border-radius:50%;
+  background:rgba(255,255,255,0.5);
+  transform:scale(0);
+  animation:ripple .5s linear;
+  pointer-events:none;
+}
+@keyframes ripple{
+  to{transform:scale(4);opacity:0;}
+}
+
+/* Cart shake animation */
+@keyframes cartShake{
+  0%{transform:rotate(0deg);}
+  20%{transform:rotate(-15deg);}
+  40%{transform:rotate(15deg);}
+  60%{transform:rotate(-10deg);}
+  80%{transform:rotate(10deg);}
+  100%{transform:rotate(0deg);}
+}
+.cart-shake{animation:cartShake .4s ease;}
+
+/* Add to cart success pulse */
+@keyframes btnSuccess{
+  0%{background:#1a3a8b;}
+  40%{background:#1a6b3c;transform:scale(1.05);}
+  100%{background:#1a3a8b;transform:scale(1);}
+}
+.pcard-atc.success{animation:btnSuccess .5s ease forwards;}
+
+@keyframes btnBuySuccess{
+  0%{background:#c0392b;}
+  40%{background:#e8b44a;transform:scale(1.05);}
+  100%{background:#c0392b;transform:scale(1);}
+}
+.pcard-buy.success{animation:btnBuySuccess .5s ease forwards;}
+
+/* Floating +1 animation */
+.float-label{
+  position:fixed;
+  font-family:Nunito,sans-serif;
+  font-size:16px;
+  font-weight:900;
+  color:#1a6b3c;
+  background:#fff;
+  border:2px solid #1a6b3c;
+  border-radius:20px;
+  padding:4px 12px;
+  pointer-events:none;
+  z-index:9999;
+  animation:floatUp .8s ease forwards;
+}
+@keyframes floatUp{
+  0%{opacity:1;transform:translateY(0) scale(1);}
+  100%{opacity:0;transform:translateY(-60px) scale(1.2);}
+}
+
+/* Toast upgrade */
+.toast{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.toast-icon{font-size:18px;}
+.toast-cart{background:linear-gradient(135deg,#1a3a8b,#2c55c7) !important;}
+.toast-buy{background:linear-gradient(135deg,#c0392b,#e74c3c) !important;}
+.toast-wish{background:linear-gradient(135deg,#c0392b,#e91e8c) !important;}
+
+/* ── JUMIA-STYLE UPGRADES ────────────────────────────── */
+
+/* Cart panel - Jumia style */
+.cart-panel{
+  position:fixed;top:0;right:0;bottom:0;
+  width:100%;max-width:420px;
+  background:#fff;z-index:9001;
+  display:flex;flex-direction:column;
+  transform:translateX(110%);
+  transition:transform .35s cubic-bezier(.4,0,.2,1);
+  box-shadow:-6px 0 32px rgba(0,0,0,.2);
+}
+.cart-overlay.open .cart-panel{transform:translateX(0);}
+
+/* Flying item animation */
+.fly-item{
+  position:fixed;
+  width:50px;height:50px;
+  border-radius:50%;
+  overflow:hidden;
+  z-index:99999;
+  pointer-events:none;
+  transition:all .7s cubic-bezier(.25,.46,.45,.94);
+  box-shadow:0 4px 12px rgba(0,0,0,.3);
+  border:2px solid #fff;
+}
+
+/* Cart badge bounce */
+@keyframes badgeBounce{
+  0%{transform:scale(1);}
+  30%{transform:scale(1.6);}
+  60%{transform:scale(0.9);}
+  100%{transform:scale(1);}
+}
+.badge-bounce{animation:badgeBounce .4s ease!important;}
+
+/* Jumia-style cart item */
+.citem{
+  display:flex;gap:12px;padding:14px 16px;
+  border-bottom:1px solid #f5f5f5;
+  align-items:flex-start;
+  animation:slideInRight .3s ease;
+}
+@keyframes slideInRight{
+  from{opacity:0;transform:translateX(20px);}
+  to{opacity:1;transform:translateX(0);}
+}
+.cemi{
+  width:70px;height:70px;flex-shrink:0;
+  border-radius:8px;overflow:hidden;
+  background:#f8f8f8;border:1px solid #eee;
+  display:flex;align-items:center;justify-content:center;
+}
+.cinf{flex:1;}
+.cname{font-family:Nunito,sans-serif;font-size:13px;font-weight:700;color:#1a3a8b;margin-bottom:3px;line-height:1.3;}
+.csz{font-family:Nunito,sans-serif;font-size:11px;color:#999;margin-bottom:6px;}
+.cprice{font-family:Nunito,sans-serif;font-size:15px;font-weight:900;color:#c0392b;}
+.cqty{display:flex;align-items:center;gap:0;margin-top:6px;border:1px solid #e0e0e0;border-radius:6px;width:fit-content;overflow:hidden;}
+.qbtn{
+  width:32px;height:32px;border:none;
+  background:#f5f5f5;cursor:pointer;
+  font-size:16px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .15s;
+  font-family:Nunito,sans-serif;
+}
+.qbtn:hover{background:#e0e0e0;}
+.qbtn:active{background:#c0392b;color:#fff;transform:scale(0.92);}
+.qnum{
+  min-width:36px;height:32px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:Nunito,sans-serif;font-size:14px;font-weight:800;
+  background:#fff;border-left:1px solid #e0e0e0;border-right:1px solid #e0e0e0;
+}
+.delbtn{
+  width:32px;height:32px;border:none;
+  background:#fee2e2;color:#c0392b;cursor:pointer;
+  font-size:14px;margin-left:6px;border-radius:6px;
+  transition:all .15s;
+}
+.delbtn:hover{background:#c0392b;color:#fff;}
+.delbtn:active{transform:scale(0.88);}
+
+/* Cart footer - Jumia style */
+.cart-foot{padding:16px;border-top:2px solid #f0f0f0;background:#fafafa;}
+.ctotal{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+.ctotal span{font-family:Nunito,sans-serif;font-size:14px;font-weight:700;color:#555;}
+.ctotalv{font-family:Nunito,sans-serif;font-size:20px!important;font-weight:900!important;color:#c0392b!important;}
+.bor{
+  width:100%;padding:14px;
+  background:linear-gradient(135deg,#c0392b,#e74c3c);
+  color:#fff;border:none;border-radius:10px;
+  font-family:Nunito,sans-serif;font-size:15px;font-weight:900;
+  cursor:pointer;letter-spacing:.5px;
+  transition:all .2s;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.bor:hover{background:linear-gradient(135deg,#a93226,#c0392b);transform:translateY(-1px);}
+.bor:active{transform:scale(0.97);}
+.continue-shopping{
+  width:100%;padding:11px;margin-top:8px;
+  background:transparent;color:#1a3a8b;
+  border:2px solid #1a3a8b;border-radius:10px;
+  font-family:Nunito,sans-serif;font-size:13px;font-weight:800;
+  cursor:pointer;transition:all .2s;
+}
+.continue-shopping:hover{background:#1a3a8b;color:#fff;}
+
+/* Buy Now - direct checkout style */
+.pcard-buy{
+  flex:1;background:linear-gradient(135deg,#c0392b,#e74c3c);
+  color:#fff;border:none;padding:10px 6px;
+  border-radius:8px;font-family:Nunito,sans-serif;
+  font-size:11px;font-weight:800;cursor:pointer;
+  transition:all .2s;box-shadow:0 3px 10px rgba(192,57,43,.3);
+}
+.pcard-buy:hover{background:linear-gradient(135deg,#a93226,#c0392b);transform:translateY(-1px);}
+.pcard-buy:active{transform:scale(0.93);}
+
+.pcard-atc{
+  flex:1;background:linear-gradient(135deg,#1a3a8b,#2c55c7);
+  color:#fff;border:none;padding:10px 6px;
+  border-radius:8px;font-family:Nunito,sans-serif;
+  font-size:11px;font-weight:800;cursor:pointer;
+  transition:all .2s;box-shadow:0 3px 10px rgba(26,58,139,.3);
+}
+.pcard-atc:hover{background:linear-gradient(135deg,#122a6b,#1a3a8b);transform:translateY(-1px);}
+.pcard-atc:active{transform:scale(0.93);}
+
+/* Back button */
+.back-btn{
+  display:none;position:fixed;
+  top:70px;left:14px;z-index:400;
+  background:#fff;border:2px solid #e0e0e0;
+  border-radius:50%;width:40px;height:40px;
+  font-size:18px;cursor:pointer;
+  box-shadow:0 2px 12px rgba(0,0,0,.12);
+  align-items:center;justify-content:center;
+  transition:all .2s;font-family:Nunito,sans-serif;
+}
+.back-btn:hover{background:#1a3a8b;color:#fff;border-color:#1a3a8b;}
+.back-btn.visible{display:flex;}
+
+/* Cart head - Jumia style */
+.cart-head{
+  background:linear-gradient(135deg,#1a3a8b,#2c55c7);
+  padding:16px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;
+}
+.cart-head-title{
+  font-family:Nunito,sans-serif;font-size:16px;font-weight:900;
+  color:#fff;display:flex;align-items:center;gap:8px;
+}
+.cart-count-label{
+  background:rgba(255,255,255,.25);
+  border-radius:20px;padding:2px 10px;
+  font-size:12px;font-weight:800;color:#fff;
+}
 </style>
 </head>
 <body>
@@ -939,6 +1180,9 @@ body{font-family:'Lato',sans-serif;background:#eff4f1;color:#111;font-size:14px;
     <div class="nav-logout" id="navLogout" style="display:none;" onclick="logout()">Logout</div>
   </div>
 </div>
+<!-- BACK BUTTON -->
+<button class="back-btn" id="backBtn" onclick="goBack()">&#8592;</button>
+
 <div class="hero">
   <div class="hero-inner">
     <div class="hero-deco">&#128717;</div>
@@ -1086,7 +1330,7 @@ body{font-family:'Lato',sans-serif;background:#eff4f1;color:#111;font-size:14px;
 </div>
 <div class="cart-overlay" id="cartPanel" onclick="if(event.target===this)closeCart()">
   <div class="cart-panel">
-    <div class="cart-head"><div class="cart-head-title">&#128722; Shopping Cart</div><button class="close-btn" onclick="closeCart()">&#10005;</button></div>
+    <div class="cart-head"><div class="cart-head-title">&#128722; Shopping Cart <span class="cart-count-label" id="cartCountLabel">0 items</span></div><button class="close-btn" onclick="closeCart()" style="background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:50%;width:32px;height:32px;font-size:16px;cursor:pointer;">&#10005;</button></div>
     <div class="cart-body" id="cartBody"></div>
     <div class="cart-foot" id="cartFoot"></div>
   </div>
@@ -1525,7 +1769,39 @@ document.addEventListener("DOMContentLoaded", function(){
 </script>
 <script>
 
-function quickAddToCart(id){
+function addRipple(btn){
+  var ripple=document.createElement("span");
+  ripple.className="btn-ripple";
+  var size=Math.max(btn.offsetWidth,btn.offsetHeight);
+  ripple.style.width=ripple.style.height=size+"px";
+  ripple.style.left="50%";
+  ripple.style.top="50%";
+  ripple.style.marginLeft=(-size/2)+"px";
+  ripple.style.marginTop=(-size/2)+"px";
+  btn.appendChild(ripple);
+  setTimeout(function(){ripple.remove();},600);
+}
+
+function showFloatLabel(btn, text){
+  var rect=btn.getBoundingClientRect();
+  var label=document.createElement("div");
+  label.className="float-label";
+  label.textContent=text;
+  label.style.left=(rect.left+rect.width/2-30)+"px";
+  label.style.top=(rect.top-10)+"px";
+  document.body.appendChild(label);
+  setTimeout(function(){label.remove();},900);
+}
+
+function shakeCartBtn(){
+  var cartBtns=document.querySelectorAll(".cart-btn");
+  for(var i=0;i<cartBtns.length;i++){
+    cartBtns[i].classList.add("cart-shake");
+    (function(btn){setTimeout(function(){btn.classList.remove("cart-shake");},500);})(cartBtns[i]);
+  }
+}
+
+function quickAddToCart(id, btnEl){
   var p=null;
   for(var i=0;i<PRODUCTS.length;i++){if(PRODUCTS[i].id===id){p=PRODUCTS[i];break;}}
   if(!p)return;
@@ -1536,15 +1812,68 @@ function quickAddToCart(id){
   if(ex){ex.qty++;}
   else{cart.push({id:p.id,name:p.name,price:p.price,img:p.img||"",emoji:p.emoji,size:sz,key:key,qty:1});}
   updBadge();
-  showToast(p.name+" added to cart!");
+  // Visual feedback
+  if(btnEl){
+    addRipple(btnEl);
+    btnEl.classList.add("success");
+    var orig=btnEl.innerHTML;
+    btnEl.innerHTML="&#9989; Added!";
+    showFloatLabel(btnEl,"+ 1 item");
+    setTimeout(function(){
+      btnEl.innerHTML=orig;
+      btnEl.classList.remove("success");
+    },1200);
+  }
+  shakeCartBtn();
+  showCartToast(p.name);
 }
 
-function quickBuyNow(id){
-  quickAddToCart(id);
+function quickBuyNow(id, btnEl){
+  var p=null;
+  for(var i=0;i<PRODUCTS.length;i++){if(PRODUCTS[i].id===id){p=PRODUCTS[i];break;}}
+  if(!p)return;
+  quickAddToCart(id, null);
+  if(btnEl){
+    addRipple(btnEl);
+    btnEl.classList.add("success");
+    var orig=btnEl.innerHTML;
+    btnEl.innerHTML="&#9889; Going...";
+    setTimeout(function(){
+      btnEl.innerHTML=orig;
+      btnEl.classList.remove("success");
+    },1000);
+  }
   setTimeout(function(){
     closeCart();
     checkoutOrLogin();
-  },300);
+  },400);
+}
+
+function showCartToast(name){
+  var t=document.getElementById("toast");
+  if(!t)return;
+  t.className="toast toast-cart show";
+  t.innerHTML="&#128722; "+name.substring(0,25)+(name.length>25?"...":"")+" added to cart!";
+  setTimeout(function(){t.classList.remove("show");},2500);
+}
+
+</script>
+<script>
+
+function addCartFromDetailFeedback(id, btnEl){
+  addCartFromDetail(id);
+  if(btnEl){
+    addRipple(btnEl);
+    var orig=btnEl.innerHTML;
+    btnEl.style.background="#1a6b3c";
+    btnEl.innerHTML="&#9989; Added to Cart!";
+    showFloatLabel(btnEl,"+ 1 item");
+    shakeCartBtn();
+    setTimeout(function(){
+      btnEl.style.background="";
+      btnEl.innerHTML=orig;
+    },1300);
+  }
 }
 
 </script>
@@ -1730,4 +2059,235 @@ setTimeout(function(){loadFirebaseProducts();},2000);
     <div class="announce-item">&#9989; 100% Genuine Products</div>
   </div>
 </div>
+<script>
+// ================================================================
+// NAVIGATION HISTORY (Back Button)
+// ================================================================
+var navHistory = [];
+var currentPage = "home";
+
+function navigateTo(page, params){
+  navHistory.push({page: currentPage, params: params||{}});
+  currentPage = page;
+  updateBackBtn();
+}
+
+function goBack(){
+  if(!navHistory.length) return;
+  var prev = navHistory.pop();
+  currentPage = prev.page;
+  updateBackBtn();
+  // Restore previous state
+  if(prev.page === "home"){
+    filterCat("all");
+    window.scrollTo({top:0,behavior:"smooth"});
+  } else if(prev.page === "category"){
+    filterCat(prev.params.cat||"all");
+    var sec = document.getElementById("prodSec");
+    if(sec) sec.scrollIntoView({behavior:"smooth"});
+  } else if(prev.page === "detail"){
+    closeDetail();
+  } else if(prev.page === "search"){
+    doSearch(prev.params.q||"");
+    var sec = document.getElementById("prodSec");
+    if(sec) sec.scrollIntoView({behavior:"smooth"});
+  }
+}
+
+function updateBackBtn(){
+  var btn = document.getElementById("backBtn");
+  if(!btn) return;
+  if(navHistory.length > 0){
+    btn.classList.add("visible");
+  } else {
+    btn.classList.remove("visible");
+  }
+}
+
+// Override filterCat to track history
+var _origFilterCat = null;
+window.addEventListener("DOMContentLoaded", function(){
+  _origFilterCat = window.filterCat;
+  window.filterCat = function(cat){
+    if(cat !== "all" && currentPage !== "category_"+cat){
+      navigateTo("category_"+cat, {cat: cat});
+    }
+    _origFilterCat(cat);
+  };
+});
+
+// ================================================================
+// FLYING ITEM TO CART ANIMATION
+// ================================================================
+function flyToCart(btnEl, imgSrc){
+  var cartBtn = document.querySelector(".cart-btn");
+  if(!cartBtn || !btnEl) return;
+
+  var from = btnEl.getBoundingClientRect();
+  var to = cartBtn.getBoundingClientRect();
+
+  var fly = document.createElement("div");
+  fly.className = "fly-item";
+  fly.style.left = (from.left + from.width/2 - 25) + "px";
+  fly.style.top = (from.top + from.height/2 - 25) + "px";
+  fly.style.width = "50px";
+  fly.style.height = "50px";
+
+  if(imgSrc){
+    fly.innerHTML = "<img src='" + imgSrc + "' style='width:100%;height:100%;object-fit:cover;border-radius:50%;'>";
+  } else {
+    fly.style.background = "#1a3a8b";
+    fly.innerHTML = "<div style='width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;'>&#128722;</div>";
+  }
+
+  document.body.appendChild(fly);
+
+  // Trigger animation
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){
+      fly.style.left = (to.left + to.width/2 - 10) + "px";
+      fly.style.top = (to.top + to.height/2 - 10) + "px";
+      fly.style.width = "20px";
+      fly.style.height = "20px";
+      fly.style.opacity = "0.7";
+    });
+  });
+
+  setTimeout(function(){
+    fly.remove();
+    // Bounce cart badge
+    var badge = document.querySelector(".cart-badge");
+    if(badge){
+      badge.classList.add("badge-bounce");
+      setTimeout(function(){badge.classList.remove("badge-bounce");}, 500);
+    }
+  }, 750);
+}
+
+// ================================================================
+// JUMIA-STYLE QUICK ADD TO CART
+// ================================================================
+function quickAddToCart(id, btnEl){
+  var p = null;
+  for(var i = 0; i < PRODUCTS.length; i++){if(PRODUCTS[i].id===id){p=PRODUCTS[i];break;}}
+  if(!p) return;
+  var sz = p.sizes&&p.sizes.length ? p.sizes[0] : "One Size";
+  var key = id + "_" + sz;
+  var ex = null;
+  for(var i = 0; i < cart.length; i++){if(cart[i].key===key){ex=cart[i];break;}}
+  if(ex){ ex.qty++; }
+  else{ cart.push({id:p.id,name:p.name,price:p.price,img:p.img||"",emoji:p.emoji,size:sz,key:key,qty:1}); }
+  updBadge();
+  updateCartCountLabel();
+
+  // Fly animation
+  if(btnEl) flyToCart(btnEl, p.img||null);
+
+  // Button feedback
+  if(btnEl){
+    addRipple(btnEl);
+    var orig = btnEl.innerHTML;
+    btnEl.style.background = "linear-gradient(135deg,#1a6b3c,#27ae60)";
+    btnEl.innerHTML = "&#9989; Added!";
+    showFloatLabel(btnEl, "+ 1 item");
+    setTimeout(function(){
+      btnEl.style.background = "";
+      btnEl.innerHTML = orig;
+    }, 1300);
+  }
+  shakeCartBtn();
+  showCartToast(p.name);
+
+  // Auto open cart after short delay
+  setTimeout(function(){
+    buildCart();
+    openCart();
+  }, 800);
+}
+
+function quickBuyNow(id, btnEl){
+  var p = null;
+  for(var i = 0; i < PRODUCTS.length; i++){if(PRODUCTS[i].id===id){p=PRODUCTS[i];break;}}
+  if(!p) return;
+
+  // Add to cart first
+  var sz = p.sizes&&p.sizes.length ? p.sizes[0] : "One Size";
+  var key = id + "_" + sz;
+  var ex = null;
+  for(var i = 0; i < cart.length; i++){if(cart[i].key===key){ex=cart[i];break;}}
+  if(ex){ ex.qty++; }
+  else{ cart.push({id:p.id,name:p.name,price:p.price,img:p.img||"",emoji:p.emoji,size:sz,key:key,qty:1}); }
+  updBadge();
+  updateCartCountLabel();
+
+  // Fly animation
+  if(btnEl) flyToCart(btnEl, p.img||null);
+
+  // Button feedback
+  if(btnEl){
+    addRipple(btnEl);
+    var orig = btnEl.innerHTML;
+    btnEl.style.background = "linear-gradient(135deg,#e8b44a,#f39c12)";
+    btnEl.style.color = "#000";
+    btnEl.innerHTML = "&#9889; Processing...";
+    setTimeout(function(){
+      btnEl.style.background = "";
+      btnEl.style.color = "";
+      btnEl.innerHTML = orig;
+    }, 1000);
+  }
+
+  // Go straight to checkout
+  setTimeout(function(){
+    closeCart();
+    checkoutOrLogin();
+  }, 900);
+}
+
+function addCartFromDetailFeedback(id, btnEl){
+  addCartFromDetail(id);
+  updateCartCountLabel();
+  if(btnEl){
+    addRipple(btnEl);
+    var orig = btnEl.innerHTML;
+    btnEl.style.background = "#1a6b3c";
+    btnEl.innerHTML = "&#9989; Added to Cart!";
+    showFloatLabel(btnEl, "+ 1 item");
+    shakeCartBtn();
+    flyToCart(btnEl, null);
+    setTimeout(function(){
+      btnEl.style.background = "";
+      btnEl.innerHTML = orig;
+    }, 1300);
+  }
+  setTimeout(function(){
+    buildCart();
+    openCart();
+  }, 800);
+}
+
+function updateCartCountLabel(){
+  var label = document.getElementById("cartCountLabel");
+  if(!label) return;
+  var total = 0;
+  for(var i = 0; i < cart.length; i++) total += cart[i].qty;
+  label.textContent = total + (total === 1 ? " item" : " items");
+}
+
+// ================================================================
+// TRACK NAVIGATION FOR BACK BUTTON
+// ================================================================
+// Track when product detail opens
+var _origOpenDetail = null;
+window.addEventListener("DOMContentLoaded", function(){
+  if(window.openDetail){
+    _origOpenDetail = window.openDetail;
+  }
+});
+
+document.addEventListener("DOMContentLoaded", function(){
+  updateBackBtn();
+  updateCartCountLabel();
+});
+</script>
 >
