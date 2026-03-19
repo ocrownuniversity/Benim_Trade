@@ -1024,48 +1024,64 @@ function submitUpload(){
   var imgRaw=document.getElementById("up-imgs").value.trim();
   var badge=document.getElementById("up-badge").value;
   var rating=parseFloat(document.getElementById("up-rating").value)||4.8;
-  var msgEl=document.getElementById("uploadMsg");
-  msgEl.style.display="none";
+
   if(!name){showUploadMsg("error","Please enter product name!");return;}
   if(!cat){showUploadMsg("error","Please select a category!");return;}
   if(!price){showUploadMsg("error","Please enter a price!");return;}
   if(!imgRaw){showUploadMsg("error","Please add at least one image link!");return;}
+
   var sizes=sizesRaw?sizesRaw.split(",").map(function(s){return s.trim();}).filter(Boolean):["One Size"];
   var colors=colorsRaw?colorsRaw.split(",").map(function(s){return s.trim();}).filter(Boolean):[];
+
   var rawLines=imgRaw.split("\n");
   var imgs=[];
   for(var li=0;li<rawLines.length;li++){
-    var link=rawLines[li].trim();
-    if(!link)continue;
-    if(link.indexOf("ibb.co")!==-1&&link.indexOf("i.ibb.co")===-1){
-      link=link.replace("https://ibb.co/","https://i.ibb.co/").replace("http://ibb.co/","https://i.ibb.co/");
-      if(link.indexOf("/image.jpg")===-1)link=link+"/image.jpg";
+    var lnk=rawLines[li].trim();
+    if(!lnk)continue;
+    if(lnk.indexOf("ibb.co")!==-1&&lnk.indexOf("i.ibb.co")===-1){
+      lnk=lnk.replace("https://ibb.co/","https://i.ibb.co/").replace("http://ibb.co/","https://i.ibb.co/");
+      if(lnk.indexOf("/image.jpg")===-1)lnk=lnk+"/image.jpg";
     }
-    imgs.push(link);
+    imgs.push(lnk);
   }
   if(!imgs.length){showUploadMsg("error","No valid image links found!");return;}
+
   var badgeColors={"New":"grn","Hot":"red","Sale":"gld","Premium":"blu"};
   var bc=badge?badgeColors[badge]||"blu":"";
   var newId=Date.now();
   var uploaded=0;
+
   for(var i=0;i<imgs.length;i++){
-    var product={id:newId+i,cat:cat,name:name,brand:brand,price:price,old:oldP,img:imgs[i],emoji:"P",sizes:sizes,colors:colors,desc:desc,badge:badge||null,bc:bc,rating:rating,reviews:0,bonus:false,uploadedAt:new Date().toISOString()};
+    var product={
+      id:newId+i,cat:cat,name:name,brand:brand,
+      price:price,old:oldP,img:imgs[i],emoji:"P",
+      sizes:sizes,colors:colors,desc:desc,
+      badge:badge||null,bc:bc,rating:rating,
+      reviews:0,bonus:false,
+      uploadedAt:new Date().toISOString()
+    };
     PRODUCTS.push(product);
-    if(window._fbDb){
+
+    if(window._fbAddDoc&&window._fbCollection&&window._fbDb){
       (function(prod){
-        window._fbDb.collection("products").add(prod).then(function(){console.log("Saved!");}).catch(function(e){console.log(e.message);});
+        window._fbAddDoc(window._fbCollection(window._fbDb,"products"),prod)
+          .then(function(ref){console.log("Saved to Firebase:",ref.id);})
+          .catch(function(e){console.log("Firebase err:",e.message);});
       })(product);
     }
     uploaded++;
   }
+
   try{
     var stored=JSON.parse(localStorage.getItem("benim_products")||"[]");
-    for(var j=0;j<uploaded;j++)stored.push(PRODUCTS[PRODUCTS.length-uploaded+j]);
+    for(var j=PRODUCTS.length-uploaded;j<PRODUCTS.length;j++)stored.push(PRODUCTS[j]);
     localStorage.setItem("benim_products",JSON.stringify(stored));
   }catch(e){}
+
   renderProducts();
   showUploadMsg("success",uploaded+" product(s) uploaded successfully!");
   showToast(uploaded+" product(s) added to store!");
+
   document.getElementById("up-name").value="";
   document.getElementById("up-cat").value="";
   document.getElementById("up-price").value="";
@@ -1091,16 +1107,17 @@ function loadManageProducts(){
   var list=document.getElementById("manageProductsList");
   if(!list)return;
   list.innerHTML='<div style="text-align:center;padding:24px;color:#aaa;">Loading...</div>';
-  if(!window._fbDb){
-    list.innerHTML='<div style="padding:20px;color:#999;">Firebase not connected.</div>';
+  if(!window._fbGetDocs||!window._fbCollection||!window._fbDb){
+    list.innerHTML='<div style="padding:20px;color:#999;">Firebase not ready. Try again in a moment.</div>';
     return;
   }
-  window._fbDb.collection("products").get().then(function(snap){
+  window._fbGetDocs(window._fbCollection(window._fbDb,"products")).then(function(snap){
     if(snap.empty){
       list.innerHTML='<div style="text-align:center;padding:24px;color:#aaa;">No products uploaded via admin yet.</div>';
       return;
     }
-    var h='<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:12px;">';
+    var h='<div style="overflow-x:auto;">';
+    h+='<table style="width:100%;border-collapse:collapse;font-size:12px;">';
     h+='<thead><tr style="background:#f0f0f0;">';
     h+='<th style="padding:8px;text-align:left;">Image</th>';
     h+='<th style="padding:8px;text-align:left;">Name</th>';
@@ -1110,14 +1127,12 @@ function loadManageProducts(){
     h+='</tr></thead><tbody>';
     snap.forEach(function(docu){
       var p=docu.data();
-      var imgTag='<img src="'+p.img+'" style="width:44px;height:44px;object-fit:cover;border-radius:5px;">';
-      var delBtn='<button onclick="deleteProduct(\''+docu.id+'\')">Delete</button>';
       h+='<tr style="border-bottom:1px solid #eee;">';
-      h+='<td style="padding:7px;">'+imgTag+'</td>';
+      h+='<td style="padding:7px;"><img src="'+p.img+'" style="width:44px;height:44px;object-fit:cover;border-radius:5px;border:1px solid #ddd;"></td>';
       h+='<td style="padding:7px;font-weight:700;">'+p.name+'</td>';
       h+='<td style="padding:7px;">'+p.cat+'</td>';
-      h+='<td style="padding:7px;color:#1a3a8b;font-weight:700;">N'+(p.price||0).toLocaleString()+'</td>';
-      h+='<td style="padding:7px;">'+delBtn+'</td>';
+      h+='<td style="padding:7px;color:#1a3a8b;font-weight:700;">&#8358;'+(p.price||0).toLocaleString()+'</td>';
+      h+='<td style="padding:7px;"><button data-id="'+docu.id+'" onclick="deleteProduct(this.dataset.id)" style="background:#fee2e2;color:#991b1b;border:none;padding:4px 9px;border-radius:5px;font-size:11px;font-weight:800;cursor:pointer;">Delete</button></td>';
       h+='</tr>';
     });
     h+='</tbody></table></div>';
@@ -1129,17 +1144,22 @@ function loadManageProducts(){
 
 function deleteProduct(docId){
   if(!confirm("Delete this product?"))return;
-  window._fbDb.collection("products").doc(docId).delete().then(function(){
+  if(!window._fbDoc||!window._fbDb){showToast("Firebase not ready.");return;}
+  var ref=window._fbDoc(window._fbDb,"products",docId);
+  window._fbUpdateDoc(ref,{deleted:true}).then(function(){
     showToast("Product deleted!");
     loadManageProducts();
-  }).catch(function(e){showToast("Error: "+e.message);});
+  }).catch(function(e){
+    showToast("Error: "+e.message);
+  });
 }
 
 function loadFirebaseProducts(){
-  if(!window._fbDb)return;
-  window._fbDb.collection("products").get().then(function(snap){
+  if(!window._fbGetDocs||!window._fbCollection||!window._fbDb)return;
+  window._fbGetDocs(window._fbCollection(window._fbDb,"products")).then(function(snap){
     snap.forEach(function(docu){
       var p=docu.data();
+      if(p.deleted)return;
       p.fbDocId=docu.id;
       var exists=false;
       for(var i=0;i<PRODUCTS.length;i++){if(PRODUCTS[i].id===p.id){exists=true;break;}}
@@ -1149,7 +1169,7 @@ function loadFirebaseProducts(){
   }).catch(function(e){console.log("Load err:",e.message);});
 }
 
-setTimeout(function(){if(window._fbDb)loadFirebaseProducts();},1500);
+setTimeout(function(){loadFirebaseProducts();},2000);
 </script>
 </body>
 </html>
