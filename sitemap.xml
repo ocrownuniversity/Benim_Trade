@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Main Page -->
+  <url>
+    <loc>https://ocrownuniversity.github.io/Benim_Trade/</loc>
+    <lastmod>2026-03-20</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Men Category -->
+  <url>
+    <loc>https://ocrownuniversity.github.io/Benim_Trade/?cat=men</loc>
+    <lastmod>2026-03-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Women Category -->
+  <url>
+    <loc>https://ocrownuniversity.github.io/Benim_Trade/?cat=women</loc>
+    <lastmod>2026-03-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Kids Category -->
+  <url>
+    <loc>https://ocrownuniversity.github.io/Benim_Trade/?cat=kids</loc>
+    <lastmod>2026-03-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Shoes Category -->
+  <url>
+    <loc>https://ocrownuniversity.github.io/Benim_Trade/?cat=shoes</loc>
+    <lastmod>2026-03-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Accessories Category -->
+  <url>
+    <loc>https://ocrownuniversity.github.io/Benim_Trade/?cat=accessories</loc>
+    <lastmod>2026-03-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Bags Category -->
+  <url>
+    <loc>https://ocrownuniversity.github.io/Benim_Trade/?cat=bags</loc>
+    <lastmod>2026-03-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+</urlset>
