@@ -1,0 +1,38 @@
+{
+  "name": "BENIM Warehouse",
+  "short_name": "BENIM",
+  "description": "Premium Fashion Store in Ibadan Nigeria",
+  "start_url": "/Benim_Trade/",
+  "scope": "/Benim_Trade/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1a3a8b",
+  "theme_color": "#1a3a8b",
+  "lang": "en",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
