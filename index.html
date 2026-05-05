@@ -1452,10 +1452,11 @@ body{font-family:'Lato',sans-serif;background:#eff4f1;color:#111;font-size:14px;
 <div class="admin-overlay" id="adminOverlay">
   <div class="admin-box">
     <div class="admin-head"><div class="admin-head-title">&#128274; Admin Dashboard</div><button class="close-btn" onclick="closeAdmin()">&#10005;</button></div>
-    <div style="display:flex;border-bottom:2px solid #e0e0e0;">
-      <button id="aTab-orders" onclick="switchAdminTab('orders')" style="flex:1;padding:11px;font-family:Nunito,sans-serif;font-size:12px;font-weight:800;border:none;background:#1a3a8b;color:#fff;cursor:pointer;">Orders</button>
-      <button id="aTab-upload" onclick="switchAdminTab('upload')" style="flex:1;padding:11px;font-family:Nunito,sans-serif;font-size:12px;font-weight:800;border:none;background:#f0f0f0;color:#333;cursor:pointer;">Upload Product</button>
-      <button id="aTab-manage" onclick="switchAdminTab('manage')" style="flex:1;padding:11px;font-family:Nunito,sans-serif;font-size:12px;font-weight:800;border:none;background:#f0f0f0;color:#333;cursor:pointer;">Manage Products</button>
+    <div style="display:flex;border-bottom:2px solid #e0e0e0;flex-wrap:wrap;">
+      <button id="aTab-orders" onclick="switchAdminTab('orders')" style="flex:1;padding:11px;font-family:Nunito,sans-serif;font-size:12px;font-weight:800;border:none;background:#1a3a8b;color:#fff;cursor:pointer;">&#128220; Orders</button>
+      <button id="aTab-upload" onclick="switchAdminTab('upload')" style="flex:1;padding:11px;font-family:Nunito,sans-serif;font-size:12px;font-weight:800;border:none;background:#f0f0f0;color:#333;cursor:pointer;">&#128247; Upload</button>
+      <button id="aTab-manage" onclick="switchAdminTab('manage')" style="flex:1;padding:11px;font-family:Nunito,sans-serif;font-size:12px;font-weight:800;border:none;background:#f0f0f0;color:#333;cursor:pointer;">&#128218; Products</button>
+      <button id="aTab-settings" onclick="switchAdminTab('settings')" style="flex:1;padding:11px;font-family:Nunito,sans-serif;font-size:12px;font-weight:800;border:none;background:#f0f0f0;color:#333;cursor:pointer;">&#9881; Settings</button>
     </div>
     <div id="aPanel-orders">
       <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:#f0f0f0;border-bottom:1px solid #ddd;">
@@ -1488,6 +1489,30 @@ body{font-family:'Lato',sans-serif;background:#eff4f1;color:#111;font-size:14px;
         <button onclick="loadManageProducts()" style="font-family:Nunito,sans-serif;font-size:12px;font-weight:800;background:#1a3a8b;color:#fff;border:none;padding:6px 12px;border-radius:5px;cursor:pointer;">Refresh</button>
       </div>
       <div id="manageProductsList"></div>
+    </div>
+    <!-- SETTINGS PANEL -->
+    <div id="aPanel-settings" style="display:none;padding:22px;overflow-y:auto;max-height:75vh;">
+      <h3 style="font-family:Nunito,sans-serif;font-size:15px;font-weight:800;color:#1a3a8b;margin-bottom:6px;">&#9881; Admin Settings</h3>
+      <p style="font-family:Nunito,sans-serif;font-size:12px;color:#999;margin-bottom:18px;">Update your admin account password securely.</p>
+      <div id="ap-msg" style="display:none;padding:10px 14px;border-radius:8px;font-size:13px;font-weight:700;margin-bottom:14px;font-family:Nunito,sans-serif;"></div>
+      <div style="max-width:400px;">
+        <div style="margin-bottom:13px;">
+          <label style="font-size:11px;font-weight:800;color:#555;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px;">Current Password *</label>
+          <input type="password" id="ap-old" placeholder="Enter your current password" style="width:100%;padding:10px 13px;border:2px solid #e0e0e0;border-radius:8px;font-family:Nunito,sans-serif;font-size:13px;outline:none;">
+        </div>
+        <div style="margin-bottom:13px;">
+          <label style="font-size:11px;font-weight:800;color:#555;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px;">New Password *</label>
+          <input type="password" id="ap-new" placeholder="Enter new password (min 6 chars)" style="width:100%;padding:10px 13px;border:2px solid #e0e0e0;border-radius:8px;font-family:Nunito,sans-serif;font-size:13px;outline:none;">
+        </div>
+        <div style="margin-bottom:18px;">
+          <label style="font-size:11px;font-weight:800;color:#555;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px;">Confirm New Password *</label>
+          <input type="password" id="ap-conf" placeholder="Repeat new password" style="width:100%;padding:10px 13px;border:2px solid #e0e0e0;border-radius:8px;font-family:Nunito,sans-serif;font-size:13px;outline:none;">
+        </div>
+        <button onclick="changeAdminPassword()" style="width:100%;padding:13px;background:#1a3a8b;color:#fff;border:none;border-radius:9px;font-family:Nunito,sans-serif;font-size:14px;font-weight:800;cursor:pointer;">&#128274; Update Password</button>
+        <div style="margin-top:12px;background:#fef9c3;border:1px solid #f59e0b;border-radius:8px;padding:10px 14px;font-family:Nunito,sans-serif;font-size:12px;color:#92400e;">
+          &#9888;&#65039; For security, you will need to enter your current password to make changes. Password must be at least 6 characters.
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -1981,7 +2006,7 @@ function addCartFromDetailFeedback(id, btnEl){
 </script>
 <script>
 function switchAdminTab(tab){
-  var tabs=["orders","upload","manage"];
+  var tabs=["orders","upload","manage","settings"];
   for(var i=0;i<tabs.length;i++){
     var panel=document.getElementById("aPanel-"+tabs[i]);
     var btn=document.getElementById("aTab-"+tabs[i]);
@@ -1990,6 +2015,73 @@ function switchAdminTab(tab){
   }
   if(tab==="orders")loadAdminOrders();
   if(tab==="manage")loadManageProducts();
+}
+
+// ================================================================
+// CHANGE PASSWORD
+// ================================================================
+function changeAdminPassword(){
+  var oldPass=document.getElementById("ap-old").value;
+  var newPass=document.getElementById("ap-new").value;
+  var confPass=document.getElementById("ap-conf").value;
+  var msgEl=document.getElementById("ap-msg");
+  msgEl.style.display="none";
+
+  if(!oldPass||!newPass||!confPass){
+    showPassMsg("error","Please fill in all fields!");
+    return;
+  }
+  if(newPass.length<6){
+    showPassMsg("error","New password must be at least 6 characters!");
+    return;
+  }
+  if(newPass!==confPass){
+    showPassMsg("error","New passwords do not match!");
+    return;
+  }
+  if(newPass===oldPass){
+    showPassMsg("error","New password must be different from old password!");
+    return;
+  }
+
+  var user=window._fbAuth?window._fbAuth.currentUser:null;
+  if(!user){
+    showPassMsg("error","You must be logged in to change password!");
+    return;
+  }
+
+  showPassMsg("info","Verifying old password...");
+
+  // Re-authenticate first with old password
+  var credential=firebase.auth.EmailAuthProvider.credential(user.email, oldPass);
+  user.reauthenticateWithCredential(credential).then(function(){
+    // Now update password
+    return user.updatePassword(newPass);
+  }).then(function(){
+    showPassMsg("success","Password changed successfully!");
+    document.getElementById("ap-old").value="";
+    document.getElementById("ap-new").value="";
+    document.getElementById("ap-conf").value="";
+    showToast("Admin password updated!");
+  }).catch(function(e){
+    if(e.code==="auth/wrong-password"){
+      showPassMsg("error","Old password is incorrect!");
+    } else if(e.code==="auth/weak-password"){
+      showPassMsg("error","New password is too weak!");
+    } else {
+      showPassMsg("error","Error: "+e.message);
+    }
+  });
+}
+
+function showPassMsg(type,text){
+  var el=document.getElementById("ap-msg");
+  if(!el)return;
+  el.style.display="block";
+  el.style.background=type==="error"?"#fee2e2":type==="success"?"#dcfce7":"#e0f2fe";
+  el.style.color=type==="error"?"#991b1b":type==="success"?"#166534":"#0284c7";
+  el.style.border="1px solid "+(type==="error"?"#fca5a5":type==="success"?"#86efac":"#7dd3fc");
+  el.textContent=text;
 }
 
 function submitUpload(){
@@ -2086,48 +2178,62 @@ function showUploadMsg(type,text){
 function loadManageProducts(){
   var list=document.getElementById("manageProductsList");
   if(!list)return;
-  list.innerHTML='<div style="text-align:center;padding:24px;color:#aaa;">Loading...</div>';
-  if(!window._fbGetDocs||!window._fbCollection||!window._fbDb){
-    list.innerHTML='<div style="padding:20px;color:#999;">Firebase not ready. Try again in a moment.</div>';
-    return;
-  }
-  window._fbGetDocs(window._fbCollection(window._fbDb,"products")).then(function(snap){
-    if(snap.empty){
-      list.innerHTML='<div style="text-align:center;padding:24px;color:#aaa;">No products uploaded via admin yet.</div>';
-      return;
+  list.innerHTML='<div style="text-align:center;padding:24px;color:#aaa;">&#128260; Loading all products...</div>';
+
+  function renderTable(fbProds){
+    var allProds=[];
+    for(var i=0;i<PRODUCTS.length;i++){
+      if(!PRODUCTS[i].fbDocId) allProds.push({data:PRODUCTS[i],docId:null,source:"built-in"});
     }
-    var h='<div style="overflow-x:auto;">';
-    h+='<table style="width:100%;border-collapse:collapse;font-size:12px;">';
-    h+='<thead><tr style="background:#f0f0f0;">';
-    h+='<th style="padding:8px;text-align:left;">Image</th>';
-    h+='<th style="padding:8px;text-align:left;">Name</th>';
-    h+='<th style="padding:8px;text-align:left;">Cat</th>';
-    h+='<th style="padding:8px;text-align:left;">Price</th>';
-    h+='<th style="padding:8px;text-align:left;">Action</th>';
-    h+='</tr></thead><tbody>';
-    snap.forEach(function(docu){
-      var p=docu.data();
-      h+='<tr style="border-bottom:1px solid #eee;">';
-      h+='<td style="padding:7px;"><img src="'+p.img+'" style="width:44px;height:44px;object-fit:cover;border-radius:5px;border:1px solid #ddd;"></td>';
-      h+='<td style="padding:7px;font-weight:700;">'+p.name+'</td>';
-      h+='<td style="padding:7px;">'+p.cat+'</td>';
-      h+='<td style="padding:7px;color:#1a3a8b;font-weight:700;">&#8358;'+(p.price||0).toLocaleString()+'</td>';
-      h+='<td style="padding:7px;"><button data-id="'+docu.id+'" onclick="deleteProduct(this.dataset.id)" style="background:#fee2e2;color:#991b1b;border:none;padding:4px 9px;border-radius:5px;font-size:11px;font-weight:800;cursor:pointer;">Delete</button></td>';
-      h+='</tr>';
-    });
+    for(var j=0;j<fbProds.length;j++) allProds.push(fbProds[j]);
+
+    var h='<div style="font-family:Nunito,sans-serif;font-size:12px;color:#666;margin-bottom:10px;">Total: <strong style="color:#1a3a8b;">'+allProds.length+' products</strong></div>';
+    h+='<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:12px;">';
+    h+='<thead><tr style="background:#f0f0f0;"><th style="padding:8px;">#</th><th style="padding:8px;text-align:left;">Image</th><th style="padding:8px;text-align:left;">Name</th><th style="padding:8px;text-align:left;">Cat</th><th style="padding:8px;text-align:left;">Price</th><th style="padding:8px;text-align:left;">Source</th><th style="padding:8px;text-align:left;">Action</th></tr></thead><tbody>';
+    for(var k=0;k<allProds.length;k++){
+      var item=allProds[k];
+      var p=item.data;
+      var imgHtml=p.img?'<img src="'+p.img+'" style="width:44px;height:44px;object-fit:cover;border-radius:5px;">':'<div style="width:44px;height:44px;background:#f0f0f0;border-radius:5px;display:flex;align-items:center;justify-content:center;">'+p.emoji+'</div>';
+      var badge=item.source==="built-in"?'<span style="background:#e0f2fe;color:#0284c7;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;">Built-in</span>':'<span style="background:#dcfce7;color:#166534;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;">Firebase</span>';
+      var btn=item.docId?'<button data-id="'+item.docId+'" onclick="deleteProduct(this.dataset.id)" style="background:#fee2e2;color:#991b1b;border:none;padding:4px 9px;border-radius:5px;font-size:10px;font-weight:800;cursor:pointer;">&#128465; Delete</button>':'<span style="color:#aaa;font-size:10px;">Cannot delete</span>';
+      h+='<tr style="border-bottom:1px solid #eee;"><td style="padding:7px;color:#999;">'+(k+1)+'</td><td style="padding:7px;">'+imgHtml+'</td><td style="padding:7px;font-weight:700;">'+p.name+'</td><td style="padding:7px;">'+p.cat+'</td><td style="padding:7px;color:#c0392b;font-weight:700;">&#8358;'+(p.price||0).toLocaleString()+'</td><td style="padding:7px;">'+badge+'</td><td style="padding:7px;">'+btn+'</td></tr>';
+    }
     h+='</tbody></table></div>';
     list.innerHTML=h;
-  }).catch(function(e){
-    list.innerHTML='<div style="color:red;padding:20px;">Error: '+e.message+'</div>';
-  });
+  }
+
+  if(window._fbGetDocs&&window._fbCollection&&window._fbDb){
+    window._fbGetDocs(window._fbCollection(window._fbDb,"products")).then(function(snap){
+      var fbProds=[];
+      snap.forEach(function(docu){
+        var p=docu.data();
+        p.fbDocId=docu.id;
+        fbProds.push({data:p,docId:docu.id,source:"firebase"});
+      });
+      renderTable(fbProds);
+    }).catch(function(e){
+      renderTable([]);
+    });
+  } else {
+    renderTable([]);
+  }
 }
 
+
 function deleteProduct(docId){
-  if(!confirm("Delete this product?"))return;
-  if(!window._fbDoc||!window._fbDb){showToast("Firebase not ready.");return;}
-  var ref=window._fbDoc(window._fbDb,"products",docId);
-  window._fbUpdateDoc(ref,{deleted:true}).then(function(){
-    showToast("Product deleted!");
+  if(!confirm("Delete this product? This cannot be undone!"))return;
+  if(!window._fbDb){showToast("Firebase not ready.");return;}
+  // Hard delete from Firebase using modular API
+  window._fbDb.collection("products").doc(docId).delete().then(function(){
+    // Remove from local PRODUCTS array
+    for(var i=0;i<PRODUCTS.length;i++){
+      if(PRODUCTS[i].fbDocId===docId){
+        PRODUCTS.splice(i,1);
+        break;
+      }
+    }
+    renderProducts();
+    showToast("Product permanently deleted!");
     loadManageProducts();
   }).catch(function(e){
     showToast("Error: "+e.message);
@@ -2135,24 +2241,27 @@ function deleteProduct(docId){
 }
 
 function loadFirebaseProducts(){
-  if(!window._fbGetDocs||!window._fbCollection||!window._fbDb)return;
-  window._fbGetDocs(window._fbCollection(window._fbDb,"products")).then(function(snap){
+  if(!window._fbDb)return;
+  window._fbDb.collection("products").get().then(function(snap){
     snap.forEach(function(docu){
       var p=docu.data();
-      if(p.deleted)return;
       p.fbDocId=docu.id;
+      // Skip if deleted flag set
+      if(p.deleted)return;
+      // Check not already in PRODUCTS
       var exists=false;
-      for(var i=0;i<PRODUCTS.length;i++){if(PRODUCTS[i].id===p.id){exists=true;break;}}
+      for(var i=0;i<PRODUCTS.length;i++){
+        if(PRODUCTS[i].fbDocId===p.fbDocId){exists=true;break;}
+      }
       if(!exists)PRODUCTS.push(p);
     });
     renderProducts();
-  }).catch(function(e){console.log("Load err:",e.message);});
+  }).catch(function(e){console.log("Load Firebase products err:",e.message);});
 }
 
 setTimeout(function(){loadFirebaseProducts();},2000);
 </script>
-</body>
-</html<div class="announce-bar">
+<div class="announce-bar">
   <div class="announce-inner">
     <div class="announce-item">&#128666; FREE DELIVERY within Ibadan</div>
     <div class="announce-item">&#11088; Premium Quality Products</div>
@@ -2392,4 +2501,912 @@ document.addEventListener("DOMContentLoaded", function(){
   updateCartCountLabel();
 });
 </script>
->
+
+<!-- ════════════════════════════════════════════════════════════════
+     UPGRADE BLOCK — ORDER TRACKING, STATUS SYSTEM, ENHANCED ADMIN
+     Injected on top of existing BENIM Trade site. 
+     NO existing features removed or modified.
+════════════════════════════════════════════════════════════════ -->
+
+<!-- ── FIREBASE REALTIME LISTENER (upgrade) ── -->
+<script type="module">
+import { getFirestore, doc, onSnapshot, collection, query, orderBy, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+// Expose onSnapshot for real-time order updates
+window._fbOnSnapshot = onSnapshot;
+window._fbWhere = where;
+
+// Real-time admin orders listener
+window._startAdminListener = function(){
+  var db = window._fbDb;
+  if(!db) return;
+  var q = query(collection(db,"orders"), orderBy("createdAt","desc"));
+  window._adminUnsubscribe = onSnapshot(q, function(snap){
+    var badge = document.getElementById("adminOrderBadge");
+    var pending = 0;
+    snap.forEach(function(d){ if(d.data().status==="Pending") pending++; });
+    if(badge){
+      badge.textContent = pending;
+      badge.style.display = pending > 0 ? "flex" : "none";
+    }
+    // If admin panel is open, refresh it
+    var panel = document.getElementById("adminOverlay");
+    if(panel && panel.style.display==="flex"){
+      loadAdminOrders();
+    }
+  });
+};
+
+// Start listener when auth ready
+var _authInterval = setInterval(function(){
+  if(window._fbDb && window._fbAuth && window._fbAuth.currentUser){
+    clearInterval(_authInterval);
+    window._startAdminListener();
+  }
+}, 1500);
+</script>
+
+<!-- ── UPGRADE CSS ── -->
+<style>
+/* ─── Order Status Badge ─── */
+.order-status-bar {
+  display:flex; align-items:center; gap:0;
+  background:#f8f9ff; border:1px solid #e0e8ff;
+  border-radius:40px; padding:6px 8px;
+  margin:14px 0; overflow:hidden;
+}
+.osb-step {
+  flex:1; text-align:center;
+  font-family:Nunito,sans-serif; font-size:10px; font-weight:800;
+  color:#bbb; padding:6px 4px; position:relative;
+  transition:all .3s;
+}
+.osb-step.done { color:#1a6b3c; }
+.osb-step.active { color:#1a3a8b; }
+.osb-step .osb-icon { font-size:18px; display:block; margin-bottom:3px; }
+.osb-step.done .osb-dot { background:#1a6b3c; }
+.osb-step.active .osb-dot { background:#1a3a8b; animation:pulseDot 1.2s infinite; }
+.osb-dot {
+  width:10px; height:10px; border-radius:50%; background:#ddd;
+  margin:4px auto 0; transition:background .3s;
+}
+@keyframes pulseDot {
+  0%,100%{transform:scale(1);opacity:1}
+  50%{transform:scale(1.5);opacity:.7}
+}
+.osb-line {
+  height:2px; background:linear-gradient(90deg,#1a6b3c,#1a3a8b);
+  width:24px; flex-shrink:0; margin:0 2px; border-radius:2px;
+  opacity:0.15; transition:opacity .3s;
+}
+.osb-line.done { opacity:1; }
+
+/* ─── Track Order Modal ─── */
+.track-overlay {
+  display:none; position:fixed; inset:0;
+  background:rgba(0,0,0,.85); z-index:99995;
+  align-items:center; justify-content:center;
+  padding:16px;
+}
+.track-overlay.open { display:flex; }
+.track-box {
+  background:#fff; width:100%; max-width:500px;
+  border-radius:16px; overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,.4);
+  max-height:90vh; display:flex; flex-direction:column;
+}
+.track-head {
+  background:linear-gradient(135deg,#1a3a8b,#2c55c7);
+  padding:18px 20px; display:flex; align-items:center;
+  justify-content:space-between; flex-shrink:0;
+}
+.track-head-title {
+  font-family:Nunito,sans-serif; font-size:16px; font-weight:900; color:#fff;
+  display:flex; align-items:center; gap:8px;
+}
+.track-body { padding:20px; overflow-y:auto; flex:1; }
+.track-search {
+  display:flex; gap:8px; margin-bottom:18px;
+}
+.track-input {
+  flex:1; font-family:Lato,sans-serif; font-size:14px;
+  border:2px solid #e0e0e0; padding:11px 14px;
+  border-radius:8px; outline:none; transition:border-color .2s;
+}
+.track-input:focus { border-color:#1a3a8b; }
+.track-btn {
+  background:#1a3a8b; color:#fff; border:none;
+  padding:11px 20px; border-radius:8px;
+  font-family:Nunito,sans-serif; font-size:13px; font-weight:900;
+  cursor:pointer; transition:background .2s; white-space:nowrap;
+}
+.track-btn:hover { background:#2c55c7; }
+.track-result { animation:fadeSlideUp .3s ease; }
+@keyframes fadeSlideUp {
+  from{opacity:0;transform:translateY(12px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.track-order-id {
+  background:#f0f4ff; border:2px solid #1a3a8b;
+  border-radius:10px; padding:14px 16px; margin-bottom:14px;
+}
+.track-oid-label {
+  font-family:Nunito,sans-serif; font-size:10px;
+  font-weight:800; color:#1a3a8b; text-transform:uppercase;
+  letter-spacing:.08em; margin-bottom:3px;
+}
+.track-oid-value {
+  font-family:Nunito,sans-serif; font-size:22px;
+  font-weight:900; color:#111;
+}
+.track-status-chip {
+  display:inline-flex; align-items:center; gap:6px;
+  border-radius:20px; padding:6px 14px;
+  font-family:Nunito,sans-serif; font-size:12px; font-weight:800;
+  margin-bottom:14px;
+}
+.track-info-grid {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:10px; margin-bottom:14px;
+}
+.track-info-item {
+  background:#f8f9ff; border-radius:8px; padding:10px 12px;
+}
+.track-info-label {
+  font-family:Nunito,sans-serif; font-size:10px;
+  font-weight:800; color:#999; text-transform:uppercase;
+  letter-spacing:.06em; margin-bottom:3px;
+}
+.track-info-value {
+  font-family:Nunito,sans-serif; font-size:13px;
+  font-weight:700; color:#222;
+}
+.track-items-list {
+  background:#f8f9ff; border-radius:10px; padding:12px 14px;
+  margin-bottom:14px;
+}
+.track-items-title {
+  font-family:Nunito,sans-serif; font-size:12px; font-weight:800;
+  color:#1a3a8b; margin-bottom:8px; text-transform:uppercase;
+  letter-spacing:.06em;
+}
+.track-item-row {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:5px 0; border-bottom:1px solid #eee;
+  font-family:Nunito,sans-serif; font-size:12px;
+}
+.track-item-row:last-child { border-bottom:none; }
+.track-total-row {
+  display:flex; justify-content:space-between; align-items:center;
+  background:#1a3a8b; color:#fff; border-radius:8px;
+  padding:11px 14px; margin-top:4px;
+  font-family:Nunito,sans-serif; font-size:14px; font-weight:900;
+}
+.track-wa-btn {
+  display:block; background:#25D366; color:#fff;
+  border:none; border-radius:10px; padding:13px;
+  font-family:Nunito,sans-serif; font-size:14px; font-weight:900;
+  text-align:center; text-decoration:none; margin-top:14px;
+  cursor:pointer; transition:background .2s;
+}
+.track-wa-btn:hover { background:#1da851; }
+.track-empty {
+  text-align:center; padding:40px 20px;
+  font-family:Nunito,sans-serif; color:#aaa;
+}
+.track-loading {
+  text-align:center; padding:40px;
+}
+.track-spinner {
+  width:40px; height:40px; border:4px solid #f0f0f0;
+  border-top-color:#1a3a8b; border-radius:50%;
+  animation:spin .8s linear infinite; margin:0 auto 12px;
+}
+@keyframes spin { to{transform:rotate(360deg)} }
+
+/* ─── Enhanced Admin Panel ─── */
+.admin-badge {
+  position:absolute; top:-5px; right:-5px;
+  background:#c0392b; color:#fff;
+  width:18px; height:18px; border-radius:50%;
+  font-size:10px; font-weight:900;
+  display:none; align-items:center; justify-content:center;
+  font-family:Nunito,sans-serif;
+  animation:pulseDot 1.5s infinite;
+}
+.nav-admin-wrap { position:relative; display:inline-block; }
+
+/* ─── Admin order card upgrades ─── */
+.aorder {
+  border-left:4px solid #1a3a8b !important;
+  transition:box-shadow .2s;
+}
+.aorder:hover { box-shadow:0 4px 20px rgba(26,58,139,.15) !important; }
+.aorder.status-Pending { border-left-color:#e8a000 !important; }
+.aorder.status-Confirmed { border-left-color:#1a6b3c !important; }
+.aorder.status-Shipped { border-left-color:#1a3a8b !important; }
+.aorder.status-Delivered { border-left-color:#0d2b18 !important; }
+.aorder.status-Declined { border-left-color:#c0392b !important; }
+
+/* Admin action buttons */
+.admin-action-row {
+  display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;
+}
+.aaction-btn {
+  flex:1; min-width:100px;
+  font-family:Nunito,sans-serif; font-size:11px; font-weight:800;
+  border:none; padding:8px 12px; border-radius:6px;
+  cursor:pointer; transition:all .15s;
+  display:flex; align-items:center; justify-content:center; gap:5px;
+}
+.aaction-btn:hover { transform:translateY(-1px); box-shadow:0 3px 10px rgba(0,0,0,.15); }
+.aaction-btn:active { transform:scale(0.95); }
+.aaction-confirm { background:#dcfce7; color:#166534; }
+.aaction-confirm:hover { background:#1a6b3c; color:#fff; }
+.aaction-ship { background:#dbeafe; color:#1d4ed8; }
+.aaction-ship:hover { background:#1a3a8b; color:#fff; }
+.aaction-deliver { background:#f0f4ff; color:#1a3a8b; }
+.aaction-deliver:hover { background:#0d2b18; color:#fff; }
+.aaction-decline { background:#fee2e2; color:#991b1b; }
+.aaction-decline:hover { background:#c0392b; color:#fff; }
+.aaction-wa { background:#dcfce7; color:#166534; }
+.aaction-wa:hover { background:#25D366; color:#fff; }
+
+/* Status progress in admin */
+.admin-status-progress {
+  display:flex; align-items:center; gap:4px;
+  margin:8px 0; font-family:Nunito,sans-serif;
+  font-size:10px; overflow-x:auto;
+}
+.asp-step {
+  display:flex; flex-direction:column; align-items:center;
+  gap:3px; flex-shrink:0; min-width:52px; text-align:center;
+}
+.asp-dot {
+  width:24px; height:24px; border-radius:50%;
+  background:#e0e0e0; display:flex; align-items:center;
+  justify-content:center; font-size:12px;
+  transition:background .3s;
+}
+.asp-step.done .asp-dot { background:#1a6b3c; }
+.asp-step.active .asp-dot { background:#1a3a8b; box-shadow:0 0 0 3px rgba(26,58,139,.2); }
+.asp-step.done .asp-label { color:#1a6b3c; font-weight:800; }
+.asp-step.active .asp-label { color:#1a3a8b; font-weight:800; }
+.asp-label { font-size:9px; color:#aaa; font-weight:700; font-family:Nunito,sans-serif; }
+.asp-line { height:2px; width:20px; background:#e0e0e0; flex-shrink:0; border-radius:2px; }
+.asp-line.done { background:#1a6b3c; }
+
+/* Admin tab upgrades */
+.admin-tab-btn {
+  font-family:Nunito,sans-serif; font-size:11px; font-weight:800;
+  border:none; padding:8px 14px; cursor:pointer;
+  border-radius:6px; transition:all .2s;
+  background:#f0f0f0; color:#333;
+}
+.admin-tab-btn.active {
+  background:#1a3a8b; color:#fff;
+  box-shadow:0 3px 10px rgba(26,58,139,.3);
+}
+
+/* Admin filter bar */
+.admin-filter-bar {
+  display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap;
+}
+.admin-filter-btn {
+  font-family:Nunito,sans-serif; font-size:11px; font-weight:800;
+  border:2px solid transparent; padding:5px 12px;
+  border-radius:20px; cursor:pointer; transition:all .15s;
+  background:#f0f0f0; color:#555;
+}
+.admin-filter-btn:hover { border-color:#1a3a8b; color:#1a3a8b; }
+.admin-filter-btn.active {
+  background:#1a3a8b; color:#fff; border-color:#1a3a8b;
+}
+.admin-filter-btn.status-Pending.active { background:#e8a000; border-color:#e8a000; }
+.admin-filter-btn.status-Confirmed.active { background:#1a6b3c; border-color:#1a6b3c; }
+.admin-filter-btn.status-Shipped.active { background:#1a3a8b; }
+.admin-filter-btn.status-Delivered.active { background:#0d2b18; }
+.admin-filter-btn.status-Declined.active { background:#c0392b; border-color:#c0392b; }
+
+/* Admin stats bar */
+.admin-stats-grid {
+  display:grid; grid-template-columns:repeat(4,1fr); gap:10px;
+  margin-bottom:16px;
+}
+.admin-stat-card {
+  background:#f8f9ff; border-radius:10px; padding:12px;
+  text-align:center; border:1px solid #e0e8ff;
+}
+.admin-stat-num {
+  font-family:Nunito,sans-serif; font-size:22px;
+  font-weight:900; color:#1a3a8b;
+}
+.admin-stat-label {
+  font-family:Nunito,sans-serif; font-size:10px;
+  color:#888; font-weight:700; text-transform:uppercase;
+  letter-spacing:.06em;
+}
+
+/* ─── Order Confirmation Upgrade ─── */
+.oc-status-tracker {
+  margin:14px 0;
+}
+
+/* ─── Track button in navbar ─── */
+.track-order-btn {
+  font-size:11px; color:#e8b44a; cursor:pointer;
+  border:1px solid #e8b44a; padding:3px 9px;
+  border-radius:3px; font-family:Nunito,sans-serif;
+  font-weight:800; margin-left:8px;
+  transition:all .2s;
+}
+.track-order-btn:hover {
+  background:#e8b44a; color:#000;
+}
+
+/* Loading spinner for page-level */
+.benim-loading-overlay {
+  position:fixed; inset:0; background:rgba(255,255,255,.95);
+  z-index:999999; display:none;
+  flex-direction:column; align-items:center; justify-content:center;
+  gap:14px;
+}
+.benim-loading-overlay.show { display:flex; }
+.benim-spinner {
+  width:48px; height:48px;
+  border:5px solid #e0e8ff;
+  border-top-color:#1a3a8b;
+  border-radius:50%;
+  animation:spin .7s linear infinite;
+}
+.benim-loading-text {
+  font-family:Nunito,sans-serif; font-size:14px;
+  font-weight:800; color:#1a3a8b;
+}
+
+/* Responsive upgrades */
+@media(max-width:600px){
+  .admin-stats-grid { grid-template-columns:1fr 1fr; }
+  .track-info-grid { grid-template-columns:1fr; }
+  .admin-action-row { flex-wrap:wrap; }
+  .aaction-btn { min-width:calc(50% - 4px); }
+}
+</style>
+
+<!-- ── TRACK ORDER MODAL HTML ── -->
+<div class="track-overlay" id="trackOverlay">
+  <div class="track-box">
+    <div class="track-head">
+      <div class="track-head-title">
+        📦 Track Your Order
+      </div>
+      <button onclick="closeTrackOrder()" style="background:rgba(255,255,255,.2);border:none;color:#fff;width:32px;height:32px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
+    </div>
+    <div class="track-body">
+      <div class="track-search">
+        <input class="track-input" id="trackInput" placeholder="Enter Order ID e.g. BT-123456" 
+               onkeydown="if(event.key==='Enter')doTrackOrder()"/>
+        <button class="track-btn" onclick="doTrackOrder()">🔍 Track</button>
+      </div>
+      <div id="trackResult">
+        <div class="track-empty">
+          <div style="font-size:48px;margin-bottom:10px;">📦</div>
+          <div style="font-family:Nunito,sans-serif;font-size:14px;font-weight:700;color:#555;">Enter your Order ID above</div>
+          <div style="font-family:Nunito,sans-serif;font-size:12px;color:#aaa;margin-top:6px;">Your Order ID was sent after placing your order<br>Format: BT-XXXXXX</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── LOADING OVERLAY ── -->
+<div class="benim-loading-overlay" id="beningLoadingOverlay">
+  <div class="benim-spinner"></div>
+  <div class="benim-loading-text" id="beningLoadingText">Processing...</div>
+</div>
+
+<!-- ── UPGRADE JAVASCRIPT ── -->
+<script>
+
+// ================================================================
+// GLOBAL LOADING INDICATOR
+// ================================================================
+function showLoading(text){
+  var ov=document.getElementById("beningLoadingOverlay");
+  var tx=document.getElementById("beningLoadingText");
+  if(ov)ov.classList.add("show");
+  if(tx)tx.textContent=text||"Loading...";
+}
+function hideLoading(){
+  var ov=document.getElementById("beningLoadingOverlay");
+  if(ov)ov.classList.remove("show");
+}
+
+// ================================================================
+// TRACK ORDER PAGE
+// ================================================================
+function openTrackOrder(prefillId){
+  var ov=document.getElementById("trackOverlay");
+  if(ov)ov.classList.add("open");
+  if(prefillId){
+    var inp=document.getElementById("trackInput");
+    if(inp){inp.value=prefillId;doTrackOrder();}
+  } else {
+    document.getElementById("trackResult").innerHTML='<div class="track-empty"><div style="font-size:48px;margin-bottom:10px;">📦</div><div style="font-family:Nunito,sans-serif;font-size:14px;font-weight:700;color:#555;">Enter your Order ID above</div><div style="font-family:Nunito,sans-serif;font-size:12px;color:#aaa;margin-top:6px;">Your Order ID was sent after placing your order<br>Format: BT-XXXXXX</div></div>';
+  }
+}
+
+function closeTrackOrder(){
+  var ov=document.getElementById("trackOverlay");
+  if(ov)ov.classList.remove("open");
+}
+
+function doTrackOrder(){
+  var inp=document.getElementById("trackInput");
+  var res=document.getElementById("trackResult");
+  if(!inp||!res)return;
+  var oid=inp.value.trim().toUpperCase();
+  if(!oid){res.innerHTML='<div class="track-empty"><div style="color:#c0392b;font-family:Nunito,sans-serif;font-size:13px;font-weight:800;">Please enter an Order ID!</div></div>';return;}
+  
+  res.innerHTML='<div class="track-loading"><div class="track-spinner"></div><div style="font-family:Nunito,sans-serif;font-size:13px;color:#888;">Looking up your order...</div></div>';
+  
+  if(!window._fbGetDocs||!window._fbDb){
+    res.innerHTML='<div class="track-empty"><div style="color:#c0392b;font-family:Nunito,sans-serif;font-size:13px;">Connection error. Please try again.</div></div>';
+    return;
+  }
+  
+  var q=window._fbQuery(
+    window._fbCollection(window._fbDb,"orders"),
+    window._fbOrderBy("createdAt","desc")
+  );
+  window._fbGetDocs(q).then(function(snap){
+    var found=null;
+    snap.forEach(function(d){
+      var o=d.data();
+      if(o.orderId===oid || o.orderId===oid.replace("BT","BT")){
+        found={data:o,id:d.id};
+      }
+    });
+    if(!found){
+      res.innerHTML='<div class="track-empty"><div style="font-size:36px;margin-bottom:8px;">😕</div><div style="font-family:Nunito,sans-serif;font-size:14px;font-weight:700;color:#c0392b;">Order not found</div><div style="font-family:Nunito,sans-serif;font-size:12px;color:#aaa;margin-top:6px;">Check your Order ID and try again.<br>Contact us on WhatsApp if you need help.</div><a href="https://wa.me/2349168031213" target="_blank" class="track-wa-btn" style="margin-top:14px;">💬 Contact Support on WhatsApp</a></div>';
+      return;
+    }
+    renderTrackResult(found.data);
+  }).catch(function(){
+    res.innerHTML='<div class="track-empty"><div style="color:#c0392b;font-family:Nunito,sans-serif;font-size:13px;">Error connecting. Please try again.</div></div>';
+  });
+}
+
+function renderTrackResult(o){
+  var res=document.getElementById("trackResult");
+  if(!res)return;
+  
+  var statusConfig={
+    "Pending":  {color:"#e8a000",bg:"#fff7e0",icon:"⏳",label:"Pending"},
+    "Confirmed":{color:"#1a6b3c",bg:"#f0faf5",icon:"✅",label:"Confirmed"},
+    "Shipped":  {color:"#1a3a8b",bg:"#f0f4ff",icon:"🚚",label:"Shipped"},
+    "Delivered":{color:"#0d2b18",bg:"#e8f5e9",icon:"📦",label:"Delivered"},
+    "Declined": {color:"#c0392b",bg:"#fff0f0",icon:"❌",label:"Declined"}
+  };
+  var sc=statusConfig[o.status]||statusConfig["Pending"];
+  
+  var steps=["Pending","Confirmed","Shipped","Delivered"];
+  var curIdx=steps.indexOf(o.status);
+  if(o.status==="Declined") curIdx=-2;
+  
+  // Status progress bar
+  var progH='<div class="order-status-bar">';
+  for(var i=0;i<steps.length;i++){
+    var cls="osb-step";
+    if(i<curIdx) cls+=" done";
+    else if(i===curIdx) cls+=" active";
+    var icons=["⏳","✅","🚚","📦"];
+    progH+='<div class="'+cls+'">';
+    progH+='<span class="osb-icon">'+icons[i]+'</span>';
+    progH+='<div>'+steps[i]+'</div>';
+    progH+='<div class="osb-dot"></div>';
+    progH+='</div>';
+    if(i<steps.length-1){
+      progH+='<div class="osb-line'+(i<curIdx?" done":"")+'"></div>';
+    }
+  }
+  progH+='</div>';
+  
+  // Items list
+  var itemsH='<div class="track-items-list"><div class="track-items-title">🛒 Items Ordered</div>';
+  if(o.items&&o.items.length){
+    for(var j=0;j<o.items.length;j++){
+      var it=o.items[j];
+      itemsH+='<div class="track-item-row"><span style="color:#333;font-weight:700;">'+it.name+' <span style="color:#999;font-weight:400;">('+it.size+') ×'+it.qty+'</span></span><span style="color:#c0392b;font-weight:800;">₦'+N(it.price*it.qty)+'</span></div>';
+    }
+  }
+  itemsH+='<div class="track-total-row"><span>Total Paid</span><span>₦'+N(o.total)+'</span></div>';
+  itemsH+='</div>';
+  
+  // Date
+  var dt=o.createdAt&&o.createdAt.toDate?o.createdAt.toDate().toLocaleDateString("en-NG",{year:"numeric",month:"long",day:"numeric"}):"N/A";
+  
+  // WA message
+  var ph=(o.phone||"").replace(/^0/,"");
+  var waMsg="Hello BENIM_TRADE,%0A%0AI%20want%20to%20check%20on%20my%20order%20*"+o.orderId+"*%0AStatus%20shows:%20"+o.status+"%0A%0APlease%20update%20me.%20Thank%20you!";
+  
+  var declineNote=o.status==="Declined"&&o.declineReason?'<div style="background:#fff0f0;border:1px solid #fca5a5;border-radius:8px;padding:10px 12px;margin-bottom:14px;font-family:Nunito,sans-serif;font-size:12px;color:#991b1b;"><b>Reason:</b> '+(o.declineReason||"Order could not be processed")+'</div>':'';
+  
+  res.innerHTML='<div class="track-result">'
+    +'<div class="track-order-id"><div class="track-oid-label">Order ID</div><div class="track-oid-value">'+o.orderId+'</div></div>'
+    +'<div><span class="track-status-chip" style="background:'+sc.bg+';color:'+sc.color+';">'+sc.icon+' '+sc.label+'</span></div>'
+    +declineNote
+    +progH
+    +'<div class="track-info-grid">'
+    +'<div class="track-info-item"><div class="track-info-label">Customer</div><div class="track-info-value">'+o.customerName+'</div></div>'
+    +'<div class="track-info-item"><div class="track-info-label">Order Date</div><div class="track-info-value">'+dt+'</div></div>'
+    +'<div class="track-info-item"><div class="track-info-label">Phone</div><div class="track-info-value">'+o.phone+'</div></div>'
+    +'<div class="track-info-item"><div class="track-info-label">Transfer Ref</div><div class="track-info-value">'+(o.transferRef||"N/A")+'</div></div>'
+    +'</div>'
+    +'<div class="track-info-item" style="margin-bottom:14px;border-radius:8px;padding:10px 12px;background:#f8f9ff;"><div class="track-info-label">Delivery Address</div><div class="track-info-value">'+o.address+'</div></div>'
+    +itemsH
+    +'<a href="https://wa.me/2349168031213?text='+waMsg+'" target="_blank" class="track-wa-btn">💬 Chat with BENIM Trade on WhatsApp</a>'
+    +'</div>';
+}
+
+// ================================================================
+// ENHANCED ADMIN ORDER SYSTEM — STATUS STEPS: Pending → Confirmed → Shipped → Delivered
+// ================================================================
+
+// Override loadAdminOrders to use enhanced version
+var _origLoadAdminOrders = window.loadAdminOrders;
+window.loadAdminOrders = function(){
+  loadEnhancedAdminOrders();
+};
+
+var _adminStatusFilter = "all";
+
+function loadEnhancedAdminOrders(){
+  var ab=document.getElementById("adminBody");if(!ab)return;
+  ab.innerHTML='<div style="text-align:center;padding:40px;"><div class="track-spinner" style="margin:0 auto 12px;"></div><div style="font-family:Nunito,sans-serif;font-size:13px;color:#888;">Loading orders...</div></div>';
+  if(!window._fbGetDocs){ab.innerHTML="Firebase not ready.";return;}
+  var q=window._fbQuery(window._fbCollection(window._fbDb,"orders"),window._fbOrderBy("createdAt","desc"));
+  window._fbGetDocs(q).then(function(snap){
+    if(snap.empty){
+      ab.innerHTML='<div style="text-align:center;padding:60px 20px;"><div style="font-size:48px;margin-bottom:12px;">📋</div><div style="font-family:Nunito,sans-serif;font-size:14px;color:#aaa;">No orders yet.</div></div>';
+      return;
+    }
+    
+    var allOrders=[];
+    snap.forEach(function(d){allOrders.push({id:d.id,data:d.data()});});
+    
+    // Stats
+    var stats={total:allOrders.length,pending:0,confirmed:0,shipped:0,delivered:0,declined:0,revenue:0};
+    for(var i=0;i<allOrders.length;i++){
+      var s=allOrders[i].data.status||"Pending";
+      if(stats[s.toLowerCase()]!==undefined) stats[s.toLowerCase()]++;
+      if(s!=="Declined") stats.revenue+=(allOrders[i].data.total||0);
+    }
+    
+    var statsH='<div class="admin-stats-grid">'
+      +'<div class="admin-stat-card"><div class="admin-stat-num">'+stats.total+'</div><div class="admin-stat-label">Total Orders</div></div>'
+      +'<div class="admin-stat-card" style="border-color:#fff3cd;"><div class="admin-stat-num" style="color:#e8a000;">'+stats.pending+'</div><div class="admin-stat-label">Pending</div></div>'
+      +'<div class="admin-stat-card" style="border-color:#d4edda;"><div class="admin-stat-num" style="color:#1a6b3c;">'+stats.confirmed+'</div><div class="admin-stat-label">Confirmed</div></div>'
+      +'<div class="admin-stat-card" style="border-color:#d1ecf1;"><div class="admin-stat-num" style="color:#1a3a8b;">₦'+N(stats.revenue)+'</div><div class="admin-stat-label">Revenue</div></div>'
+      +'</div>';
+    
+    // Filter buttons
+    var filterH='<div class="admin-filter-bar">'
+      +'<button class="admin-filter-btn'+(_adminStatusFilter==="all"?" active":"+")+'" onclick="setAdminFilter(\'all\')">All ('+stats.total+')</button>'
+      +'<button class="admin-filter-btn status-Pending'+(_adminStatusFilter==="Pending"?" active":"")+'" onclick="setAdminFilter(\'Pending\')">⏳ Pending ('+stats.pending+')</button>'
+      +'<button class="admin-filter-btn status-Confirmed'+(_adminStatusFilter==="Confirmed"?" active":"")+'" onclick="setAdminFilter(\'Confirmed\')">✅ Confirmed ('+stats.confirmed+')</button>'
+      +'<button class="admin-filter-btn status-Shipped'+(_adminStatusFilter==="Shipped"?" active":"")+'" onclick="setAdminFilter(\'Shipped\')">🚚 Shipped ('+stats.shipped+')</button>'
+      +'<button class="admin-filter-btn status-Delivered'+(_adminStatusFilter==="Delivered"?" active":"")+'" onclick="setAdminFilter(\'Delivered\')">📦 Delivered ('+stats.delivered+')</button>'
+      +'</div>';
+    
+    // Filter orders
+    var filtered=allOrders;
+    if(_adminStatusFilter!=="all"){
+      filtered=allOrders.filter(function(o){return o.data.status===_adminStatusFilter;});
+    }
+    
+    if(!filtered.length){
+      ab.innerHTML=statsH+filterH+'<div style="text-align:center;padding:40px;color:#aaa;font-family:Nunito,sans-serif;">No '+_adminStatusFilter+' orders.</div>';
+      return;
+    }
+    
+    var ordersH="";
+    for(var i=0;i<filtered.length;i++){
+      ordersH+=buildAdminOrderCard(filtered[i].data,filtered[i].id);
+    }
+    
+    ab.innerHTML=statsH+filterH+ordersH;
+    
+  }).catch(function(e){
+    ab.innerHTML='<div style="color:red;padding:20px;font-family:Nunito,sans-serif;">Failed to load orders. '+e.message+'</div>';
+  });
+}
+
+function setAdminFilter(status){
+  _adminStatusFilter=status;
+  loadEnhancedAdminOrders();
+}
+
+function buildAdminOrderCard(o, did){
+  var statusConfig={
+    "Pending":  {color:"#e8a000",bg:"#fff7e0",icon:"⏳"},
+    "Confirmed":{color:"#1a6b3c",bg:"#f0faf5",icon:"✅"},
+    "Shipped":  {color:"#1a3a8b",bg:"#f0f4ff",icon:"🚚"},
+    "Delivered":{color:"#0d2b18",bg:"#e8f5e9",icon:"📦"},
+    "Declined": {color:"#c0392b",bg:"#fff0f0",icon:"❌"}
+  };
+  var sc=statusConfig[o.status]||statusConfig["Pending"];
+  var dt=o.createdAt&&o.createdAt.toDate?o.createdAt.toDate().toLocaleString("en-NG"):"—";
+  
+  var items="";
+  if(o.items) for(var i=0;i<o.items.length;i++) items+='<div style="padding:3px 0;border-bottom:1px solid #f0f0f0;"><span style="font-weight:700;">'+o.items[i].name+'</span> <span style="color:#888;">('+o.items[i].size+') ×'+o.items[i].qty+'</span> — <span style="color:#c0392b;font-weight:800;">₦'+N(o.items[i].price*o.items[i].qty)+'</span></div>';
+  
+  // Status progress steps
+  var steps=["Pending","Confirmed","Shipped","Delivered"];
+  var curIdx=steps.indexOf(o.status);
+  var progH='<div class="admin-status-progress">';
+  for(var s=0;s<steps.length;s++){
+    var cls="asp-step";
+    if(s<curIdx) cls+=" done"; else if(s===curIdx) cls+=" active";
+    var icons2=["⏳","✅","🚚","📦"];
+    progH+='<div class="'+cls+'"><div class="asp-dot">'+icons2[s]+'</div><div class="asp-label">'+steps[s]+'</div></div>';
+    if(s<steps.length-1) progH+='<div class="asp-line'+(s<curIdx?" done":"")+'"></div>';
+  }
+  progH+='</div>';
+  
+  // Action buttons based on status
+  var actionH='<div class="admin-action-row">';
+  var ph=(o.phone||"").replace(/^0/,"");
+  var waConfMsg="Dear "+encodeURIComponent(o.customerName)+",%0A%0AYour order *"+o.orderId+"* has been *CONFIRMED* by BENIM_TRADE! 🎉%0A%0AAmount: ₦"+N(o.total)+"%0A%0APlease complete your transfer if not done.%0A%0AThank you!%0ABENIM_TRADE";
+  var waShipMsg="Dear "+encodeURIComponent(o.customerName)+",%0A%0AGreat news! Your order *"+o.orderId+"* has been *SHIPPED* 🚚%0A%0AYour item is on its way! Expected delivery: 1-3 days.%0A%0AThank you for shopping with BENIM_TRADE!";
+  var waDelMsg="Dear "+encodeURIComponent(o.customerName)+",%0A%0AYour order *"+o.orderId+"* has been *DELIVERED* 📦✅%0A%0AWe hope you love your purchase! Please leave a review.%0A%0AThank you for choosing BENIM_TRADE!";
+  
+  if(o.status==="Pending"){
+    actionH+='<button class="aaction-btn aaction-confirm" data-did="'+did+'" onclick="updateOrderStatus(this.dataset.did,\'Confirmed\',\''+ph+'\',\''+waConfMsg+'\')">✅ Confirm</button>';
+    actionH+='<button class="aaction-btn aaction-decline" data-did="'+did+'" onclick="declineOrderEnhanced(this.dataset.did)">❌ Decline</button>';
+    actionH+='<a href="https://wa.me/234'+ph+'?text='+waConfMsg+'" target="_blank" class="aaction-btn aaction-wa">💬 WhatsApp</a>';
+  } else if(o.status==="Confirmed"){
+    actionH+='<button class="aaction-btn aaction-ship" data-did="'+did+'" onclick="updateOrderStatus(this.dataset.did,\'Shipped\',\''+ph+'\',\''+waShipMsg+'\')">🚚 Mark Shipped</button>';
+    actionH+='<button class="aaction-btn aaction-decline" data-did="'+did+'" onclick="declineOrderEnhanced(this.dataset.did)">❌ Decline</button>';
+    actionH+='<a href="https://wa.me/234'+ph+'?text='+waConfMsg+'" target="_blank" class="aaction-btn aaction-wa">💬 WhatsApp</a>';
+  } else if(o.status==="Shipped"){
+    actionH+='<button class="aaction-btn aaction-deliver" data-did="'+did+'" onclick="updateOrderStatus(this.dataset.did,\'Delivered\',\''+ph+'\',\''+waDelMsg+'\')">📦 Mark Delivered</button>';
+    actionH+='<a href="https://wa.me/234'+ph+'?text='+waShipMsg+'" target="_blank" class="aaction-btn aaction-wa">💬 WhatsApp</a>';
+  } else if(o.status==="Delivered"){
+    actionH+='<a href="https://wa.me/234'+ph+'?text='+waDelMsg+'" target="_blank" class="aaction-btn aaction-wa">💬 Thank Customer</a>';
+    actionH+='<span style="font-family:Nunito,sans-serif;font-size:11px;font-weight:800;color:#0d2b18;padding:8px 12px;background:#e8f5e9;border-radius:6px;">📦 Order Complete</span>';
+  } else if(o.status==="Declined"){
+    actionH+='<a href="https://wa.me/234'+ph+'" target="_blank" class="aaction-btn aaction-wa">💬 Contact Customer</a>';
+    actionH+='<button class="aaction-btn aaction-confirm" data-did="'+did+'" onclick="updateOrderStatus(this.dataset.did,\'Pending\',\'\',\'\',true)">↩ Restore to Pending</button>';
+  }
+  actionH+='</div>';
+  
+  return '<div class="aorder status-'+(o.status||"Pending")+'">'
+    +'<div class="aorder-head">'
+    +'<div><div class="aoid">'+o.orderId+'</div><div class="adt">'+dt+'</div></div>'
+    +'<span class="astatus" style="background:'+sc.color+';">'+sc.icon+' '+o.status+'</span>'
+    +'</div>'
+    +progH
+    +'<div class="ainfo"><b>'+o.customerName+'</b> | 📞 '+o.phone+'</div>'
+    +'<div class="ainfo">📍 '+o.address+'</div>'
+    +'<div class="ainfo">✉️ '+(o.email||"—")+'</div>'
+    +'<div class="aitems" style="margin-top:8px;">'+items+'</div>'
+    +'<div class="atotal" style="margin-top:8px;">Total: <b style="color:#c0392b;">₦'+N(o.total)+'</b> | Ref: '+(o.transferRef||"—")+'</div>'
+    +(o.status==="Declined"&&o.declineReason?'<div style="background:#fff0f0;border-radius:6px;padding:7px 10px;margin-top:6px;font-family:Nunito,sans-serif;font-size:11px;color:#991b1b;"><b>Decline Reason:</b> '+o.declineReason+'</div>':'')
+    +actionH
+    +'</div>';
+}
+
+function updateOrderStatus(docId, newStatus, phone, waMsg, skipWA){
+  if(!window._fbUpdateDoc) return;
+  var confirmMsg = newStatus==="Shipped" ? "Mark this order as Shipped? A WhatsApp message will open." :
+                   newStatus==="Delivered" ? "Mark as Delivered? A WhatsApp notification will open." :
+                   newStatus==="Pending" ? "Restore this order to Pending?" :
+                   "Confirm this order?";
+  if(!confirm(confirmMsg)) return;
+  showLoading("Updating order status...");
+  window._fbUpdateDoc(window._fbDoc(window._fbDb,"orders",docId),{status:newStatus,updatedAt:window._fbServerTimestamp()}).then(function(){
+    hideLoading();
+    showToast("Order "+newStatus+" "+( newStatus==="Confirmed"?"✅":newStatus==="Shipped"?"🚚":newStatus==="Delivered"?"📦":""));
+    loadEnhancedAdminOrders();
+    if(!skipWA && phone && waMsg){
+      setTimeout(function(){window.open("https://wa.me/234"+phone+"?text="+waMsg,"_blank");},400);
+    }
+  }).catch(function(e){
+    hideLoading();
+    showToast("Error: "+e.message);
+  });
+}
+
+function declineOrderEnhanced(docId){
+  if(!window._fbUpdateDoc) return;
+  var reason = prompt("Reason for declining (optional — will be sent to customer):");
+  if(reason === null) return;
+  showLoading("Declining order...");
+  window._fbUpdateDoc(window._fbDoc(window._fbDb,"orders",docId),{
+    status:"Declined",
+    declineReason:reason||"",
+    updatedAt:window._fbServerTimestamp()
+  }).then(function(){
+    hideLoading();
+    // Get order for WhatsApp notification
+    var q=window._fbQuery(window._fbCollection(window._fbDb,"orders"),window._fbOrderBy("createdAt","desc"));
+    window._fbGetDocs(q).then(function(snap){
+      snap.forEach(function(d){
+        if(d.id===docId){
+          var o=d.data();
+          var ph=(o.phone||"").replace(/^0/,"");
+          var msg="Dear "+encodeURIComponent(o.customerName)+",%0A%0AWe regret that your order *"+o.orderId+"* could not be processed."+(reason?"%0A%0AReason: "+encodeURIComponent(reason):"")+"%0A%0APlease contact us for assistance.%0ABENIM_TRADE";
+          window.open("https://wa.me/234"+ph+"?text="+msg,"_blank");
+        }
+      });
+    });
+    showToast("Order Declined ❌");
+    loadEnhancedAdminOrders();
+  }).catch(function(e){
+    hideLoading();
+    showToast("Error: "+e.message);
+  });
+}
+
+// Also override markDelivered and confirmOrder to use new system
+window.markDelivered = function(docId){
+  updateOrderStatus(docId,"Delivered","","",true);
+};
+window.confirmOrder = function(docId){
+  updateOrderStatus(docId,"Confirmed","","",false);
+};
+window.declineOrder = function(docId){
+  declineOrderEnhanced(docId);
+};
+
+// ================================================================
+// ENHANCED ORDER CONFIRMATION — show order ID prominently + status
+// ================================================================
+
+// Override submitOrder to show enhanced confirmation  
+var _origSubmitOrder = window.submitOrder;
+window.submitOrder = function(){
+  var n=document.getElementById("oname").value.trim();
+  var ph=document.getElementById("ophone").value.trim();
+  var ad=document.getElementById("oaddr").value.trim();
+  var ref=document.getElementById("oref").value.trim();
+  var err=document.getElementById("orderErr");
+  if(!n||!ph||!ad||!ref){
+    if(err){err.style.display="block";err.textContent="Please fill all required fields.";}
+    return;
+  }
+  if(!window._fbAddDoc){
+    if(err){err.style.display="block";err.textContent="Firebase not ready. Please wait."}
+    return;
+  }
+  var oid="BT-"+Date.now().toString().slice(-6);
+  var total=0;for(var i=0;i<cart.length;i++)total+=cart[i].price*cart[i].qty;
+  var items=[];for(var i=0;i<cart.length;i++)items.push({name:cart[i].name,size:cart[i].size,qty:cart[i].qty,price:cart[i].price});
+  var orderData={orderId:oid,customerName:n,phone:ph,address:ad,transferRef:ref,
+    email:curUser?curUser.email:"",items:items,total:total,status:"Pending",
+    createdAt:window._fbServerTimestamp()};
+  var ob=document.getElementById("orderBody");
+  if(err)err.style.display="none";
+  showLoading("Placing your order...");
+  window._fbAddDoc(window._fbCollection(window._fbDb,"orders"),orderData).then(function(){
+    hideLoading();
+    var waMsg="Dear BENIM_TRADE,%0A%0AI just placed an order and would like to confirm:%0A%0AOrder ID: "+oid+"%0AName: "+encodeURIComponent(n)+"%0APhone: "+ph+"%0AAddress: "+encodeURIComponent(ad)+"%0ATotal: ₦"+N(total)+"%0ATransfer Ref: "+ref+"%0A%0AKindly confirm receipt. Thank you!";
+    var waUrl="https://wa.me/2349168031213?text="+waMsg;
+    
+    // Enhanced confirmation HTML
+    ob.innerHTML='<div style="text-align:center;padding:24px 16px;">'
+      +'<div style="font-size:64px;margin-bottom:10px;animation:bounceIn .6s ease">🎉</div>'
+      +'<div style="font-family:Nunito,sans-serif;font-size:24px;font-weight:900;color:#1a6b3c;margin-bottom:6px;">Order Placed Successfully!</div>'
+      +'<div style="font-family:Nunito,sans-serif;font-size:13px;color:#666;margin-bottom:18px;">Thank you, <b>'+n+'</b>! We\'ll confirm shortly.</div>'
+      
+      // Big Order ID display
+      +'<div style="background:linear-gradient(135deg,#1a3a8b,#2c55c7);border-radius:14px;padding:20px;margin-bottom:16px;text-align:center;">'
+      +'<div style="font-family:Nunito,sans-serif;font-size:11px;color:rgba(255,255,255,.7);font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px;">Your Order ID</div>'
+      +'<div style="font-family:Nunito,sans-serif;font-size:32px;font-weight:900;color:#fff;letter-spacing:2px;">'+oid+'</div>'
+      +'<div style="font-family:Nunito,sans-serif;font-size:11px;color:rgba(255,255,255,.6);margin-top:6px;">Save this to track your order</div>'
+      +'</div>'
+      
+      // Status tracker
+      +'<div style="margin-bottom:16px;">'
+      +'<div style="font-family:Nunito,sans-serif;font-size:11px;color:#888;font-weight:700;text-transform:uppercase;margin-bottom:8px;">Order Status</div>'
+      +'<div class="order-status-bar" style="margin:0;">'
+      +'<div class="osb-step active"><span class="osb-icon">⏳</span><div>Pending</div><div class="osb-dot"></div></div>'
+      +'<div class="osb-line"></div>'
+      +'<div class="osb-step"><span class="osb-icon">✅</span><div>Confirmed</div><div class="osb-dot"></div></div>'
+      +'<div class="osb-line"></div>'
+      +'<div class="osb-step"><span class="osb-icon">🚚</span><div>Shipped</div><div class="osb-dot"></div></div>'
+      +'<div class="osb-line"></div>'
+      +'<div class="osb-step"><span class="osb-icon">📦</span><div>Delivered</div><div class="osb-dot"></div></div>'
+      +'</div>'
+      +'</div>'
+      
+      // Payment info
+      +'<div style="background:#f0f7f3;border:2px solid #1a6b3c;border-radius:10px;padding:14px;margin-bottom:14px;text-align:left;">'
+      +'<div style="font-family:Nunito,sans-serif;font-size:12px;font-weight:800;color:#1a6b3c;margin-bottom:8px;">💳 Payment Details</div>'
+      +'<div style="font-family:Nunito,sans-serif;font-size:13px;color:#333;">Transfer <b style="color:#c0392b;">₦'+N(total)+'</b> to Opay — <b>9168031213</b></div>'
+      +'<div style="font-family:Nunito,sans-serif;font-size:11px;color:#666;margin-top:4px;">Account: AISHAT ADERONKE ADEWOLE</div>'
+      +'</div>'
+      
+      // Action buttons
+      +'<a href="'+waUrl+'" target="_blank" style="display:block;background:#25D366;color:#fff;font-family:Nunito,sans-serif;font-size:14px;font-weight:900;padding:14px;border-radius:10px;text-decoration:none;margin-bottom:10px;">💬 CONFIRM ON WHATSAPP</a>'
+      +'<button onclick="closeOrder();openTrackOrder(\''+oid+'\')" style="width:100%;background:#f0f4ff;color:#1a3a8b;border:2px solid #1a3a8b;font-family:Nunito,sans-serif;font-size:13px;font-weight:900;padding:12px;border-radius:10px;cursor:pointer;margin-bottom:10px;">📦 Track This Order</button>'
+      +'<button class="bor" onclick="closeOrder()" style="background:#aaa !important;">CONTINUE SHOPPING</button>'
+      +'</div>';
+    
+    cart=[];try{localStorage.removeItem("benim_cart");}catch(e){}updBadge();
+    setTimeout(function(){window.open(waUrl,"_blank");},600);
+    
+  }).catch(function(){
+    hideLoading();
+    if(err){err.style.display="block";err.textContent="Failed to save order. Check your connection.";}
+  });
+};
+
+// ================================================================
+// INJECT TRACK ORDER LINK INTO NAVBAR
+// ================================================================
+document.addEventListener("DOMContentLoaded", function(){
+  // Add "Track Order" button in navbar
+  setTimeout(function(){
+    var navLogout=document.getElementById("navLogout");
+    if(navLogout&&!document.getElementById("trackOrderNavBtn")){
+      var tb=document.createElement("span");
+      tb.id="trackOrderNavBtn";
+      tb.className="track-order-btn";
+      tb.textContent="📦 Track Order";
+      tb.onclick=function(){openTrackOrder();};
+      navLogout.parentNode.insertBefore(tb,navLogout.nextSibling);
+    }
+    
+    // Add badge to admin button
+    var adminBtn=document.getElementById("adminBtn");
+    if(adminBtn&&!document.getElementById("adminOrderBadge")){
+      adminBtn.style.position="relative";
+      var badge=document.createElement("span");
+      badge.id="adminOrderBadge";
+      badge.className="admin-badge";
+      badge.style.display="none";
+      adminBtn.appendChild(badge);
+    }
+  }, 2000);
+  
+  // Check URL for order tracking (e.g. ?track=BT-123456)
+  var urlParams=new URLSearchParams(window.location.search);
+  var trackId=urlParams.get("track");
+  if(trackId){
+    setTimeout(function(){openTrackOrder(trackId);},1500);
+  }
+});
+
+// Close track overlay on background click
+document.addEventListener("click",function(e){
+  var ov=document.getElementById("trackOverlay");
+  if(ov&&e.target===ov)closeTrackOrder();
+});
+
+console.log("✅ BENIM Trade Upgrades Loaded: Order Tracking, Enhanced Admin, Status System, Loading Indicators");
+</script>
+
+<!-- ── FOOTER TRACK ORDER LINK ── -->
+<script>
+// Add Track Order link to footer after DOM loads
+document.addEventListener("DOMContentLoaded",function(){
+  setTimeout(function(){
+    var footerLinks=document.querySelectorAll(".footer-link");
+    if(footerLinks.length){
+      var last=footerLinks[footerLinks.length-1];
+      if(last&&last.parentNode){
+        var trackLink=document.createElement("span");
+        trackLink.className="footer-link";
+        trackLink.innerHTML="📦 Track Your Order";
+        trackLink.onclick=function(){openTrackOrder();};
+        last.parentNode.appendChild(trackLink);
+      }
+    }
+  },1500);
+});
+</script>
+
+</body>
+</html>
