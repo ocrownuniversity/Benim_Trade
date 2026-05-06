@@ -352,11 +352,14 @@ function renderProducts(){
 function openDetailById(id){
   if(typeof addToRecent==='function') addToRecent(id);
   openDetail(id);
+  window._detailOpen = true;
+  try{ history.pushState({route:'product',params:id},'',window.location.pathname+'#product-'+id); }catch(e){}
+  setTimeout(function(){ if(typeof injectDetailExtras==='function') injectDetailExtras(id); },160);
 }
 function openDetail(id){
   var p=null;
   for(var i=0;i<PRODUCTS.length;i++){if(PRODUCTS[i].id===id){p=PRODUCTS[i];break;}}
-  if(!p)return;
+  if(!p){ console.warn('openDetail: product not found',id); return; }
   var disc=Math.round((1-p.price/p.old)*100);
   var catL={women:"Women's Fashion",men:"Men's Fashion",kids:"Kids' Wear",accessories:"Accessories",shoes:"Shoes",bags:"Bags"};
   if(!detailSelSize[id])detailSelSize[id]=p.sizes[0];
@@ -370,7 +373,8 @@ function openDetail(id){
   var tags=["Fast Delivery","Genuine Product","Easy Returns"];
   if(p.bonus)tags.unshift("+20% Cashback");
   var tgH="";for(var t=0;t<tags.length;t++)tgH+='<span class="dtag">'+tags[t]+'</span>';
-  var imgB=p.img?'<img src="'+p.img+'" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display=\'none\'">'
+  var imgB=p.img
+    ?'<img src="'+p.img+'" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentNode.innerHTML=\'<div style=font-size:80px;text-align:center>'+p.emoji+'</div>\'">'
     :'<div style="font-size:80px;text-align:center;">'+p.emoji+'</div>';
   var descs={
     women:"A stunning addition to any wardrobe. Made from premium fabric. Perfect for outings, parties and special occasions.",
@@ -380,14 +384,15 @@ function openDetail(id){
     shoes:"Handcrafted for comfort and style. Durable soles and a perfect fit for all-day wear.",
     bags:"Stylish and spacious with strong zips and stitching. Perfect for daily use and travel."
   };
-  var ob=document.getElementById("detailBody");if(!ob)return;
+  var ob=document.getElementById("detailBody");
+  if(!ob){ console.warn('openDetail: #detailBody not found'); return; }
   ob.innerHTML=
     '<div class="dimg-big">'
     +(p.bonus?'<div class="dbns-big">+20% BONUS</div>':'')
     +(p.badge?'<div class="dbdg-big b-'+p.bc+'">'+p.badge+'</div>':'')
     +imgB+'</div>'
     +'<div class="dinf-wrap">'
-    +'<div class="dcat-label">'+catL[p.cat]+'</div>'
+    +'<div class="dcat-label">'+(catL[p.cat]||p.cat)+'</div>'
     +'<div class="dname-big">'+p.name+'</div>'
     +'<div class="dbrand-line">by <b>'+p.brand+'</b></div>'
     +'<div class="drating-row">'+stH+'<span class="drat-num">'+p.rating+'</span><span class="drev-num">('+p.reviews+' reviews)</span></div>'
@@ -397,16 +402,22 @@ function openDetail(id){
     +'<div class="dsz-row" id="dszRow'+id+'">'+szH+'</div>'
     +'<div class="dtags-row">'+tgH+'</div>'
     +'<div class="dstock">&#9989; In Stock &mdash; Ready to Ship</div>'
-    +'<div style="display:flex;align-items:center;gap:12px;margin:14px 0;"><span style="font-size:13px;font-weight:700;color:#555;">Qty:</span><button onclick="detQtyChange('+id+',-1)" style="width:34px;height:34px;font-size:20px;border-radius:8px;border:2px solid #ddd;background:#fff;cursor:pointer;font-weight:800;">&#8722;</button><span id="detQty'+id+'" style="font-size:17px;font-weight:800;min-width:30px;text-align:center;">1</span><button onclick="detQtyChange('+id+',1)" style="width:34px;height:34px;font-size:20px;border-radius:8px;border:2px solid #ddd;background:#fff;cursor:pointer;font-weight:800;">+</button></div>'
+    +'<div style="display:flex;align-items:center;gap:12px;margin:14px 0;">'
+    +'<span style="font-size:13px;font-weight:700;color:#555;">Qty:</span>'
+    +'<button onclick="detQtyChange('+id+',-1)" style="width:34px;height:34px;font-size:20px;border-radius:8px;border:2px solid #ddd;background:#fff;cursor:pointer;font-weight:800;">&#8722;</button>'
+    +'<span id="detQty'+id+'" style="font-size:17px;font-weight:800;min-width:30px;text-align:center;">1</span>'
+    +'<button onclick="detQtyChange('+id+',1)" style="width:34px;height:34px;font-size:20px;border-radius:8px;border:2px solid #ddd;background:#fff;cursor:pointer;font-weight:800;">+</button>'
+    +'</div>'
     +'<div class="dbtn-row">'
     +'<button class="datcbtn" onclick="addCartFromDetailFeedback('+id+',this)">&#128722; ADD TO CART</button>'
     +'<button class="dbybtn" onclick="addCartFromDetail('+id+');closeDetail();checkoutOrLogin()">&#9889; BUY NOW</button>'
     +'</div>'
     +'<div class="ddesc"><div class="ddesc-title">Product Description</div>'
-    +'<div class="ddesc-body">'+(descs[p.cat]||descs.women)+'</div></div>'
-    +'</div>'
-    +'<div class="related-section"><div style="font-family:Nunito,sans-serif;font-size:15px;font-weight:900;color:#1a3a8b;margin-bottom:12px;">You May Also Like</div><div class="related-scroll" id="relatedGrid"></div></div>';
-  var ov=document.getElementById("detailOverlay");if(ov)ov.classList.add("open");
+    +'<div class="ddesc-body">'+(p.desc||descs[p.cat]||descs.women)+'</div></div>'
+    +'</div>';
+  var ov=document.getElementById("detailOverlay");
+  if(ov){ ov.classList.add("open"); }
+  else { console.warn('openDetail: #detailOverlay not found'); }
   buildRelated(p.cat,p.id);
 }
 function closeDetail(){var ov=document.getElementById("detailOverlay");if(ov)ov.classList.remove("open");}
@@ -2497,15 +2508,8 @@ function updateCartCountLabel(){
 }
 
 // ================================================================
-// TRACK NAVIGATION FOR BACK BUTTON
+// NAVIGATION HISTORY (Back Button)
 // ================================================================
-// Track when product detail opens
-var _origOpenDetail = null;
-window.addEventListener("DOMContentLoaded", function(){
-  if(window.openDetail){
-    _origOpenDetail = window.openDetail;
-  }
-});
 
 document.addEventListener("DOMContentLoaded", function(){
   updateBackBtn();
@@ -4122,16 +4126,7 @@ document.addEventListener('click',function(e){
   if(sg&&e.target===sg)closeSizeGuide();
 });
 
-// Inject size guide link into product detail
-var _origOpenDetail = window.openDetail;
-window.openDetail = function(id){
-  _origOpenDetail.call(this,id);
-  // After detail opens, inject size guide link + reviews + social share
-  setTimeout(function(){
-    injectDetailExtras(id);
-  },150);
-};
-
+// Detail extras injected after open
 function injectDetailExtras(id){
   var p=null; for(var i=0;i<PRODUCTS.length;i++){if(PRODUCTS[i].id===id){p=PRODUCTS[i];break;}} if(!p)return;
   var szLabel=document.querySelector('.dsz-label');
@@ -4569,16 +4564,15 @@ document.addEventListener('keydown', function(e){
 document.addEventListener('DOMContentLoaded', function(){
 
   // ---------- HISTORY SYSTEM ----------
-  // Track whether a detail panel is open
-  var _detailOpen = false;
+  // Use window._detailOpen so openDetailById (defined globally) can set it
+  window._detailOpen = false;
 
   // Replace current history entry as the "home" base state
-  // This ensures pressing Back from home never exits the site
   try{
     history.replaceState({route:'home'}, '', window.location.pathname);
   }catch(e){}
 
-  // Push a new state (used when navigating forward)
+  // Push a new state
   function navPush(route, params){
     try{
       var state = {route: route, params: params||null};
@@ -4593,20 +4587,11 @@ document.addEventListener('DOMContentLoaded', function(){
     navPush(cat === 'all' ? 'home' : 'cat-' + cat);
   };
 
-  // Wrap openDetail to record history
-  var _origOD = window.openDetail;
-  window.openDetail = function(id){
-    _origOD.call(this, id);
-    _detailOpen = true;
-    navPush('product', id);
-  };
-
-  // Wrap closeDetail — NO history.back() call here; just close the panel
+  // Wrap closeDetail to clear flag
   var _origCD = window.closeDetail;
   window.closeDetail = function(){
     _origCD.call(this);
-    _detailOpen = false;
-    // Go back one step in history to keep URL clean, but only if we pushed one
+    window._detailOpen = false;
     try{
       if(window.location.hash && window.location.hash.indexOf('#product') === 0){
         history.pushState({route:'home'}, '', window.location.pathname);
@@ -4620,11 +4605,10 @@ document.addEventListener('DOMContentLoaded', function(){
     var route = state.route || 'home';
 
     // If a detail panel is open, close it instead of leaving the page
-    if(_detailOpen){
+    if(window._detailOpen){
       var det = document.getElementById('detailOverlay');
       if(det) det.classList.remove('open');
-      _detailOpen = false;
-      // Push a replacement home state so Back still works next time
+      window._detailOpen = false;
       try{ history.pushState({route:'home'}, '', window.location.pathname); }catch(e){}
       return;
     }
@@ -4667,8 +4651,9 @@ document.addEventListener('DOMContentLoaded', function(){
     if(route === 'product' && state.params){
       var pid = parseInt(state.params);
       if(!isNaN(pid)){
-        _origOD.call(window, pid);
-        _detailOpen = true;
+        openDetail(pid);
+        window._detailOpen = true;
+        setTimeout(function(){ if(typeof injectDetailExtras==='function') injectDetailExtras(pid); },160);
       }
       return;
     }
