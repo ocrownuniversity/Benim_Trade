@@ -1826,7 +1826,22 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
   </div>
 </div>
 
-<!-- Toast Container -->
+<!-- ORDER DETAIL MODAL -->
+<div class="modal-overlay" id="modal-order-detail">
+  <div class="modal" style="max-width:520px">
+    <div class="modal-header">
+      <span class="modal-title">📦 Order Details</span>
+      <button class="modal-close" onclick="closeModal('modal-order-detail')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body" id="order-detail-body" style="padding:0">
+      <!-- filled by JS -->
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('modal-order-detail')">Close</button>
+      <button class="btn-primary" id="order-detail-update-btn"><i class="fas fa-edit"></i> Update Status</button>
+    </div>
+  </div>
+</div>
 <div id="toast-container"></div>
 
 <!-- ====== FIREBASE + APP SCRIPT ====== -->
@@ -3163,6 +3178,8 @@ window.loadAdminOrders = async function() {
     const rows = snap.docs.map(d=>{
       const o = d.data();
       totalRevenue += o.total||0;
+      const itemCount = (o.items||[]).reduce((s,x)=>s+(x.qty||1),0);
+      const statusKey = o.status==='out_for_delivery'?'out':o.status||'pending';
       return `<tr>
         <td style="font-size:11px;font-weight:800">${o.orderId||d.id.slice(0,8)}</td>
         <td style="font-size:12px">
@@ -3171,11 +3188,12 @@ window.loadAdminOrders = async function() {
           ${(o.phone||(o.address&&o.address.phone)) ? `<div style="font-size:11px;color:var(--green)"><i class="fab fa-whatsapp"></i> ${o.phone||(o.address&&o.address.phone)}</div>` : ''}
         </td>
         <td style="font-weight:800">₦${(o.total||0).toLocaleString()}</td>
-        <td style="font-size:12px">${(o.items||[]).map(x=>`${x.name}${x.qty>1?' ×'+x.qty:''}`).join('<br>')}</td>
+        <td style="font-size:12px"><span style="background:var(--gray-100);padding:2px 8px;border-radius:99px;font-weight:700;font-size:11px">${itemCount} item${itemCount!==1?'s':''}</span></td>
         <td style="font-size:12px">${o.payment==='bank'?'🏦 Bank':'💵 POD'}</td>
-        <td><span class="order-status ${'status-'+(o.status==='out_for_delivery'?'out':o.status||'pending')}">${(o.status||'').replace(/_/g,' ').replace(/\b\w/g,l=>l.toUpperCase())||'Pending'}</span></td>
-        <td>
-          <button class="btn-success" style="font-size:12px;padding:6px 10px" onclick="openStatusModal('${d.id}','${o.status||'pending'}','${o.userEmail||''}')"><i class="fas fa-edit"></i> Update</button>
+        <td><span class="order-status status-${statusKey}">${(o.status||'pending').replace(/_/g,' ').replace(/\b\w/g,l=>l.toUpperCase())}</span></td>
+        <td style="display:flex;flex-direction:column;gap:5px;padding:8px 6px">
+          <button style="background:var(--orange);color:#fff;border:none;border-radius:6px;font-size:11px;font-weight:700;padding:5px 8px;cursor:pointer;white-space:nowrap" onclick="viewOrderDetails('${d.id}')"><i class="fas fa-eye"></i> Details</button>
+          <button class="btn-success" style="font-size:11px;padding:5px 8px;white-space:nowrap" onclick="openStatusModal('${d.id}','${o.status||'pending'}','${o.userEmail||''}')"><i class="fas fa-edit"></i> Update</button>
         </td>
       </tr>`;
     });
@@ -3190,6 +3208,96 @@ window.openStatusModal = function(orderId, status, email) {
   document.getElementById('status-select').value = status;
   document.getElementById('status-customer-info').textContent = 'Customer: '+email;
   openModal('modal-status');
+};
+
+window.viewOrderDetails = async function(docId) {
+  const body = document.getElementById('order-detail-body');
+  body.innerHTML = '<div style="padding:30px;text-align:center;color:var(--gray-400)"><i class="fas fa-spinner fa-spin" style="font-size:24px"></i><p style="margin-top:10px;font-size:13px">Loading order...</p></div>';
+  openModal('modal-order-detail');
+  try {
+    const snap = await getDoc(doc(db,'orders',docId));
+    if(!snap.exists()) { body.innerHTML = '<p style="padding:20px;color:var(--red)">Order not found.</p>'; return; }
+    const o = snap.data();
+    const addr = o.address || {};
+    const items = o.items || [];
+    const statusKey = o.status==='out_for_delivery'?'out':o.status||'pending';
+    const statusColors = {pending:'#92400e',confirmed:'#1e40af',processing:'#6b21a8',out:'#0f766e',delivered:'#15803d',cancelled:'#991b1b'};
+    const statusBg = {pending:'#fef3c7',confirmed:'#dbeafe',processing:'#f3e8ff',out:'#ccfbf1',delivered:'#dcfce7',cancelled:'#fee2e2'};
+
+    body.innerHTML = `
+      <!-- ORDER HEADER -->
+      <div style="padding:16px;border-bottom:1px solid var(--gray-100)">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+          <div>
+            <div style="font-size:11px;color:var(--gray-400);font-weight:700;text-transform:uppercase;letter-spacing:.5px">Order ID</div>
+            <div style="font-size:15px;font-weight:900;color:var(--orange)">${o.orderId||docId.slice(0,10)}</div>
+          </div>
+          <span style="background:${statusBg[statusKey]||'#f3f4f6'};color:${statusColors[statusKey]||'#374151'};font-size:12px;font-weight:800;padding:5px 12px;border-radius:99px">${(o.status||'pending').replace(/_/g,' ').replace(/\b\w/g,l=>l.toUpperCase())}</span>
+        </div>
+        <div style="font-size:12px;color:var(--gray-400);margin-top:4px">${o.createdAt ? new Date(o.createdAt.toDate()).toLocaleString('en-NG',{dateStyle:'medium',timeStyle:'short'}) : ''}</div>
+      </div>
+
+      <!-- ITEMS -->
+      <div style="padding:16px;border-bottom:1px solid var(--gray-100)">
+        <div style="font-size:12px;font-weight:800;text-transform:uppercase;color:var(--gray-500);letter-spacing:.5px;margin-bottom:10px">🛍️ Items Ordered</div>
+        ${items.length ? items.map(item=>`
+          <div style="display:flex;gap:10px;align-items:flex-start;padding:10px;background:var(--gray-50);border-radius:8px;margin-bottom:8px">
+            ${item.image ? `<img src="${item.image}" style="width:52px;height:52px;object-fit:cover;border-radius:6px;flex-shrink:0" onerror="this.style.display='none'">` : '<div style="width:52px;height:52px;background:var(--gray-200);border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--gray-400);font-size:18px"><i class=\"fas fa-box\"></i></div>'}
+            <div style="flex:1;min-width:0">
+              <div style="font-size:13px;font-weight:800;color:var(--gray-800);margin-bottom:4px;line-height:1.3">${item.name||'Product'}</div>
+              <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:5px">
+                ${item.size ? `<span style="background:#fff;border:1px solid var(--gray-200);border-radius:4px;font-size:11px;font-weight:700;padding:2px 7px;color:var(--gray-700)">Size: ${item.size}</span>` : ''}
+                ${item.color||item.colour ? `<span style="background:#fff;border:1px solid var(--gray-200);border-radius:4px;font-size:11px;font-weight:700;padding:2px 7px;color:var(--gray-700)">Colour: ${item.color||item.colour}</span>` : ''}
+                ${item.variant ? `<span style="background:#fff;border:1px solid var(--gray-200);border-radius:4px;font-size:11px;font-weight:700;padding:2px 7px;color:var(--gray-700)">${item.variant}</span>` : ''}
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <span style="font-size:12px;color:var(--gray-500)">Qty: <strong style="color:var(--gray-800)">${item.qty||1}</strong></span>
+                <span style="font-size:13px;font-weight:900;color:var(--orange)">₦${((item.price||0)*(item.qty||1)).toLocaleString()}</span>
+              </div>
+            </div>
+          </div>`).join('') : '<p style="font-size:13px;color:var(--gray-400)">No items found</p>'}
+      </div>
+
+      <!-- CUSTOMER & DELIVERY -->
+      <div style="padding:16px;border-bottom:1px solid var(--gray-100)">
+        <div style="font-size:12px;font-weight:800;text-transform:uppercase;color:var(--gray-500);letter-spacing:.5px;margin-bottom:10px">👤 Customer & Delivery</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div style="background:var(--gray-50);border-radius:8px;padding:10px">
+            <div style="font-size:10px;font-weight:700;color:var(--gray-400);text-transform:uppercase;margin-bottom:3px">Name</div>
+            <div style="font-size:13px;font-weight:700">${addr.name||o.buyerName||'—'}</div>
+          </div>
+          <div style="background:var(--gray-50);border-radius:8px;padding:10px">
+            <div style="font-size:10px;font-weight:700;color:var(--gray-400);text-transform:uppercase;margin-bottom:3px">Phone</div>
+            <div style="font-size:13px;font-weight:700">${addr.phone||o.phone||'—'}</div>
+          </div>
+          <div style="background:var(--gray-50);border-radius:8px;padding:10px;grid-column:1/-1">
+            <div style="font-size:10px;font-weight:700;color:var(--gray-400);text-transform:uppercase;margin-bottom:3px">Delivery Address</div>
+            <div style="font-size:13px;font-weight:700">${[addr.street,addr.city,addr.state].filter(Boolean).join(', ')||'—'}</div>
+          </div>
+          ${addr.note ? `<div style="background:#fffbeb;border-radius:8px;padding:10px;grid-column:1/-1;border:1px solid #fde68a">
+            <div style="font-size:10px;font-weight:700;color:var(--yellow);text-transform:uppercase;margin-bottom:3px">📝 Note</div>
+            <div style="font-size:13px">${addr.note}</div>
+          </div>` : ''}
+        </div>
+      </div>
+
+      <!-- PAYMENT SUMMARY -->
+      <div style="padding:16px">
+        <div style="font-size:12px;font-weight:800;text-transform:uppercase;color:var(--gray-500);letter-spacing:.5px;margin-bottom:10px">💰 Payment Summary</div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span style="color:var(--gray-500)">Payment Method</span><span style="font-weight:700">${o.payment==='bank'?'🏦 Bank Transfer (Opay)':'💵 Pay on Delivery'}</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span style="color:var(--gray-500)">Subtotal</span><span style="font-weight:700">₦${((o.total||0)-(o.deliveryFee||0)).toLocaleString()}</span></div>
+        ${(o.deliveryFee||0)>0 ? `<div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span style="color:var(--gray-500)">Delivery Fee</span><span style="font-weight:700">₦${(o.deliveryFee||0).toLocaleString()}</span></div>` : ''}
+        <div style="display:flex;justify-content:space-between;font-size:15px;font-weight:900;border-top:2px solid var(--gray-200);padding-top:10px;margin-top:4px"><span>Total</span><span style="color:var(--orange)">₦${(o.total||0).toLocaleString()}</span></div>
+      </div>`;
+
+    // Wire up the Update Status button in the modal footer
+    document.getElementById('order-detail-update-btn').onclick = () => {
+      closeModal('modal-order-detail');
+      openStatusModal(docId, o.status||'pending', o.userEmail||'');
+    };
+  } catch(e) {
+    body.innerHTML = `<p style="padding:20px;color:var(--red)">Error loading order: ${e.message}</p>`;
+  }
 };
 
 window.updateOrderStatus = async function() {
