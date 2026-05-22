@@ -860,7 +860,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
           <button class="btn-wish" id="detail-wish-btn" onclick="toggleWishlistDetail()"><i class="fas fa-heart"></i></button>
         </div>
         <div style="background:var(--gray-50);border-radius:8px;padding:12px;font-size:13px;color:var(--gray-600)">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><i class="fas fa-truck" style="color:var(--orange)"></i> Free delivery on orders above &#8358;5,000</div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><i class="fas fa-truck" style="color:var(--orange)"></i> Free delivery on orders above &#8358;150,000</div>
           <div style="display:flex;align-items:center;gap:8px"><i class="fas fa-shield-alt" style="color:var(--green)"></i> Secure payment & buyer protection</div>
         </div>
       </div>
@@ -1866,7 +1866,10 @@ const ADMIN_EMAIL = 'shopwitbenim@gmail.com';
 
 // ===== STATE SHIPPING FEES =====
 const STATE_SHIPPING_FEES = {"Lagos": 2500, "Abuja": 3500, "FCT": 3500, "Ogun": 3500, "Oyo": 1500, "Osun": 2000, "Ondo": 3500, "Ekiti": 3500, "Edo": 4500, "Delta": 4500, "Rivers": 4500, "Bayelsa": 5000, "Anambra": 4500, "Enugu": 4500, "Imo": 4500, "Abia": 5000, "Ebonyi": 5000, "Cross River": 5500, "Akwa Ibom": 5000, "Kano": 5000, "Kaduna": 5000, "Katsina": 5500, "Sokoto": 6000, "Kebbi": 6000, "Zamfara": 6000, "Niger": 5500, "Kwara": 3500, "Kogi": 5000, "Benue": 5500, "Plateau": 5500, "Nassarawa": 5000, "Taraba": 6000, "Adamawa": 6000, "Borno": 6500, "Yobe": 6500, "Gombe": 6000, "Bauchi": 6000, "Jigawa": 6000};
-function getShippingFee(stateName) {
+const FREE_SHIPPING_THRESHOLD = 150000;
+function getShippingFee(stateName, cartTotal) {
+  // FREE shipping on orders ≥ ₦150,000
+  if (cartTotal !== undefined && cartTotal >= FREE_SHIPPING_THRESHOLD) return 0;
   if (!stateName) return 3500;
   if (STATE_SHIPPING_FEES[stateName] !== undefined) return STATE_SHIPPING_FEES[stateName];
   const lower = stateName.toLowerCase();
@@ -2434,13 +2437,19 @@ window.renderCart = function() {
     </div>
   `).join('');
   const subtotal = cart.reduce((s,x)=>s+(x.price*x.qty),0);
-  const estimatedFee = getShippingFee(window._checkoutSelectedState || '');
+  const estimatedFee = getShippingFee(window._checkoutSelectedState || '', subtotal);
   const grandTotal = subtotal + estimatedFee;
-  document.getElementById('cart-subtotal').textContent = '\u20a6'+subtotal.toLocaleString();
+  document.getElementById('cart-subtotal').textContent = '₦'+subtotal.toLocaleString();
   const cartDel = document.getElementById('cart-delivery');
-  cartDel.textContent = '\u20a6'+estimatedFee.toLocaleString()+' (est.)';
-  cartDel.style.color = 'var(--gray-600)';
-  cartDel.title = 'Exact shipping fee based on your delivery state at checkout';
+  if (estimatedFee === 0) {
+    cartDel.textContent = 'FREE 🎉';
+    cartDel.style.color = 'var(--green)';
+    cartDel.title = 'Free shipping on orders above ₦150,000';
+  } else {
+    cartDel.textContent = '₦'+estimatedFee.toLocaleString()+' (est.)';
+    cartDel.style.color = 'var(--gray-600)';
+    cartDel.title = 'Exact fee based on delivery state. Free on orders above ₦150,000';
+  }
   document.getElementById('cart-total').textContent = '\u20a6'+grandTotal.toLocaleString();
 };
 
@@ -2474,11 +2483,13 @@ async function loadCheckout() {
     } else {
       addrDiv.innerHTML = snap.docs.map((d,i)=>{
         const a = d.data();
-        const sFee = getShippingFee(a.state||'');
+        const subT = cart.reduce((s,x)=>s+(x.price*x.qty),0);
+        const sFee = getShippingFee(a.state||'', subT);
+        const feeLabel = sFee === 0 ? '<span style="color:var(--green)">FREE 🎉</span>' : '₦'+sFee.toLocaleString();
         return `<div class="address-card${i===0?' selected':''}" onclick="selectAddr(this,'${d.id}')" data-addr-id="${d.id}">
           <h4>${a.name} &mdash; ${a.phone}</h4>
           <p>${a.street}, ${a.city}, ${a.state}</p>
-          <span style="font-size:11px;color:var(--orange);font-weight:700;margin-top:4px;display:block"><i class="fas fa-truck"></i> Shipping to ${a.state||'this address'}: \u20a6${sFee.toLocaleString()}</span>
+          <span style="font-size:11px;color:var(--orange);font-weight:700;margin-top:4px;display:block"><i class="fas fa-truck"></i> Shipping to ${a.state||'this address'}: ${feeLabel}</span>
         </div>`;
       }).join('');
       if(snap.docs.length) {
@@ -2487,14 +2498,15 @@ async function loadCheckout() {
       }
     }
   } catch(e) { addrDiv.innerHTML = ''; }
-  // Render order summary — state-based shipping
+  // Render order summary — state-based shipping with free threshold
   const sumDiv = document.getElementById('checkout-items-summary');
   const subtotal = cart.reduce((s,x)=>s+(x.price*x.qty),0);
-  const deliveryFee = getShippingFee(window._checkoutSelectedState || '');
+  const deliveryFee = getShippingFee(window._checkoutSelectedState || '', subtotal);
   const grandTotal = subtotal + deliveryFee;
+  const isFree = deliveryFee === 0;
   sumDiv.innerHTML = cart.map(x=>`<div class="summary-row"><span>${x.name} × ${x.qty}</span><span>₦${(x.price*x.qty).toLocaleString()}</span></div>`).join('') +
-    `<div class="summary-row"><span>Shipping Fee <span id="checkout-state-label" style="font-size:11px;color:var(--gray-400)">${window._checkoutSelectedState ? '('+window._checkoutSelectedState+')' : ''}</span></span><span id="checkout-delivery-val">₦${deliveryFee.toLocaleString()}</span></div>` +
-    `<div id="checkout-delivery-note" style="font-size:11px;color:var(--gray-400);margin-top:-6px;margin-bottom:4px"><i class="fas fa-map-marker-alt"></i> Based on your delivery state</div>`;
+    `<div class="summary-row"><span>Shipping Fee <span id="checkout-state-label" style="font-size:11px;color:var(--gray-400)">${window._checkoutSelectedState ? '('+window._checkoutSelectedState+')' : ''}</span></span><span id="checkout-delivery-val" style="color:${isFree?'var(--green)':'inherit'};font-weight:${isFree?'800':'400'}">${isFree?'FREE 🎉':'₦'+deliveryFee.toLocaleString()}</span></div>` +
+    `<div id="checkout-delivery-note" style="font-size:11px;color:var(--gray-400);margin-top:-6px;margin-bottom:4px"><i class="fas fa-map-marker-alt"></i> ${isFree ? 'Free shipping — order above ₦150,000 ✅' : 'Based on delivery state · Free above ₦150,000'}</div>`;
   document.getElementById('checkout-total').innerHTML = '₦'+grandTotal.toLocaleString();
   window._checkoutDeliveryFee = deliveryFee;
   window._checkoutGrandTotal = grandTotal;
@@ -2510,15 +2522,18 @@ window.selectAddr = async function(el, id) {
       const a = snap.data();
       window._checkoutSelectedState = a.state || '';
       const subtotal = cart.reduce((s,x)=>s+(x.price*x.qty),0);
-      const fee = getShippingFee(a.state || '');
+      const fee = getShippingFee(a.state || '', subtotal);
       const total = subtotal + fee;
+      const isFree = fee === 0;
       window._checkoutDeliveryFee = fee;
       const feeEl = document.getElementById('checkout-delivery-val');
       const lblEl = document.getElementById('checkout-state-label');
       const totEl = document.getElementById('checkout-total');
-      if (feeEl) feeEl.textContent = '\u20a6' + fee.toLocaleString();
+      const noteEl = document.getElementById('checkout-delivery-note');
+      if (feeEl) { feeEl.textContent = isFree ? 'FREE 🎉' : '₦' + fee.toLocaleString(); feeEl.style.color = isFree ? 'var(--green)' : 'inherit'; feeEl.style.fontWeight = isFree ? '800' : '400'; }
       if (lblEl) lblEl.textContent = a.state ? '(' + a.state + ')' : '';
-      if (totEl) totEl.innerHTML = '\u20a6' + total.toLocaleString();
+      if (totEl) totEl.innerHTML = '₦' + total.toLocaleString();
+      if (noteEl) noteEl.textContent = isFree ? '✅ Free shipping — order above ₦150,000' : 'Based on delivery state · Free above ₦150,000';
     }
   } catch(e) {}
 };
