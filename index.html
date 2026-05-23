@@ -1283,10 +1283,9 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
     <div id="admin-banners" class="admin-tab-content hidden">
       <div class="admin-card">
         <div class="admin-card-title">
-          <span>Homepage Slider Banners</span>
-          <button class="btn-primary" onclick="showAddBannerModal()"><i class="fas fa-plus"></i> Add Banner</button>
+          <span>🖼️ Homepage Slider — All 5 Slides</span>
         </div>
-        <p style="font-size:13px;color:var(--gray-500);margin-bottom:14px">All 5 slides are always shown. Click <strong>Edit</strong> on any slide to customise its title, image, and button. Click <strong>Reset</strong> to restore the original default.</p>
+        <p style="font-size:13px;color:var(--gray-500);margin-bottom:14px">All 5 slides are always shown below. Click <strong>Edit</strong> on any slide to change its title, image, colours and button. Click <strong>Reset</strong> to restore the original default text.</p>
         <div id="admin-banners-list"></div>
       </div>
     </div>
@@ -4115,10 +4114,11 @@ async function renderSlider() {
 
 window.loadAdminBanners = async function() {
   const list = document.getElementById('admin-banners-list');
-  list.innerHTML = '<p style="color:var(--gray-400);font-size:13px"><i class="fas fa-spinner fa-spin"></i> Loading...</p>';
+  list.innerHTML = '<p style="color:var(--gray-400);font-size:13px;padding:10px"><i class="fas fa-spinner fa-spin"></i> Loading all 5 slides...</p>';
   const banners = await loadBanners();
+  console.log('Loaded banners:', banners.length, banners.map(b=>b.slotId));
   const bgLabels = {'slide-1':'🟠 Orange','slide-2':'🌑 Dark Navy','slide-3':'🔵 Blue/Purple','slide-green':'🟢 Green','slide-dark':'⚫ Dark'};
-  list.innerHTML = banners.map(b=>{
+  list.innerHTML = `<p style="font-size:12px;color:var(--green);font-weight:700;margin-bottom:10px"><i class="fas fa-check-circle"></i> Showing all ${banners.length} slides</p>` + banners.map(b=>{
     const isCustom = !!b.firestoreId;
     return `<div class="banner-card">
       ${b.image ? `<img class="banner-preview" src="${b.image}" onerror="this.src='';this.style.display='none'"><div class="banner-preview-empty" style="display:none">🖼️</div>` : '<div class="banner-preview-empty">🖼️<span style="font-size:11px;margin-top:4px;display:block;color:var(--gray-400)">No image</span></div>'}
@@ -4132,8 +4132,13 @@ window.loadAdminBanners = async function() {
         <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px">${b.subtitle||'—'}</div>
         <div style="font-size:11px;color:var(--gray-400)">Button: "${b.btnText||'Shop Now'}" → ${b.btnAction||'all'}</div>
         <div class="banner-card-actions">
-          <button class="btn-primary" style="font-size:12px;padding:6px 14px" onclick="editBannerSlot('${b.slotId}')"><i class="fas fa-edit"></i> Edit</button>
-          ${isCustom?`<button style="font-size:12px;padding:6px 14px;background:var(--red);color:#fff;border:none;border-radius:6px;font-weight:700;cursor:pointer" onclick="resetBannerSlot('${b.slotId}','${b.firestoreId}')"><i class="fas fa-undo"></i> Reset</button>`:''}
+          <button class="btn-primary" style="font-size:12px;padding:6px 14px" onclick="editBannerSlot('${b.slotId}')"><i class="fas fa-edit"></i> Edit Slide ${b.order}</button>
+          ${isCustom?`<button style="font-size:12px;padding:6px 14px;background:var(--red);color:#fff;border:none;border-radius:6px;font-weight:700;cursor:pointer" onclick="resetBannerSlot('${b.slotId}','${b.firestoreId||b.slotId}')"><i class="fas fa-undo"></i> Reset</button>`:''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+};
         </div>
       </div>
     </div>`;
