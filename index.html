@@ -32,9 +32,41 @@
   --radius: 8px;
   --radius-lg: 12px;
   --radius-xl: 16px;
+  --bg: #f5f5f5;
+  --surface: #ffffff;
+  --surface2: #f9fafb;
+  --border: #e5e7eb;
+  --text: #1f2937;
+  --text-muted: #6b7280;
 }
+body.dark-mode {
+  --bg: #0f0f0f;
+  --surface: #1a1a1a;
+  --surface2: #242424;
+  --border: #2e2e2e;
+  --text: #f0f0f0;
+  --text-muted: #9ca3af;
+  --gray-50: #1a1a1a;
+  --gray-100: #242424;
+  --gray-200: #2e2e2e;
+  --gray-300: #3a3a3a;
+  --gray-400: #6b7280;
+  --gray-500: #9ca3af;
+  --gray-600: #b0b8c4;
+  --gray-700: #d1d5db;
+  --gray-800: #f0f0f0;
+  --gray-900: #f9fafb;
+  --white: #1a1a1a;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.3);
+  --shadow: 0 2px 8px rgba(0,0,0,.4);
+  --shadow-md: 0 4px 16px rgba(0,0,0,.5);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,.6);
+}
+/* Dark mode toggle button */
+#dark-mode-btn{background:none;border:none;font-size:18px;cursor:pointer;padding:6px;border-radius:50%;transition:.2s;display:flex;align-items:center;justify-content:center;color:var(--gray-600)}
+#dark-mode-btn:hover{background:var(--gray-100)}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Nunito',sans-serif;background:#f5f5f5;color:var(--gray-800);min-height:100vh}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .3s,color .3s}
 a{text-decoration:none;color:inherit}
 button{cursor:pointer;border:none;outline:none;font-family:inherit}
 input,select,textarea{font-family:inherit;outline:none}
@@ -304,7 +336,7 @@ img{max-width:100%;display:block}
 @keyframes toastIn{from{opacity:0;transform:translateX(50px)}to{opacity:1;transform:translateX(0)}}
 
 /* ====== CHATBOT ====== */
-#chatbot-btn{position:fixed;bottom:20px;left:20px;z-index:1500;background:var(--orange);color:#fff;width:54px;height:54px;border-radius:50%;border:none;font-size:22px;cursor:pointer;box-shadow:var(--shadow-md);transition:.2s;display:flex;align-items:center;justify-content:center}
+#chatbot-btn{position:fixed;bottom:72px;right:14px;z-index:1500;background:var(--orange);color:#fff;width:46px;height:46px;border-radius:50%;border:none;font-size:18px;cursor:pointer;box-shadow:var(--shadow-md);transition:.2s;display:flex;align-items:center;justify-content:center}
 #chatbot-btn:hover{transform:scale(1.1)}
 #chatbot-window{position:fixed;bottom:84px;left:20px;z-index:1500;background:#fff;border-radius:16px;box-shadow:var(--shadow-lg);width:320px;max-height:440px;display:flex;flex-direction:column;overflow:hidden;transition:.25s;opacity:0;pointer-events:none;transform:translateY(10px)}
 #chatbot-window.open{opacity:1;pointer-events:all;transform:translateY(0)}
@@ -390,19 +422,26 @@ body{padding-bottom:70px}
 .hero-slider{position:relative;overflow:hidden;border-radius:12px;margin:10px 14px;height:190px}
 @media(min-width:480px){.hero-slider{height:220px}}
 @media(min-width:768px){.hero-slider{height:320px;margin:16px 20px}}
-.slides-container{display:flex;transition:transform .5s ease;height:100%}
-.slide{min-width:100%;height:100%;display:flex;align-items:center;padding:24px 28px;position:relative;overflow:hidden}
-.slide-1{background:linear-gradient(120deg,var(--orange) 0%,#ff9640 100%)}
+.slides-container{display:flex;transition:transform .5s cubic-bezier(.4,0,.2,1);height:100%;will-change:transform}
+.slide{min-width:100%;width:100%;height:100%;display:flex;align-items:center;padding:22px 24px;position:relative;overflow:hidden;flex-shrink:0;box-sizing:border-box}
+.slide-1{background:linear-gradient(110deg,#e8420a 0%,#ff7a3c 100%)}
 .slide-2{background:linear-gradient(120deg,#1a1a2e,#16213e)}
 .slide-3{background:linear-gradient(120deg,#0f3460,#533483)}
-.slide-content{z-index:1;flex:1}
-.slide-content h2{font-size:clamp(18px,4vw,32px);font-weight:900;line-height:1.2;margin-bottom:8px;color:#fff;font-family:'Poppins',sans-serif}
-.slide-content p{font-size:clamp(11px,2vw,15px);opacity:.92;margin-bottom:14px;color:rgba(255,255,255,.9)}
-.slide-btn{display:inline-block;background:#fff;color:var(--orange);padding:9px 22px;border-radius:6px;font-weight:900;font-size:12px;cursor:pointer;border:none;transition:.2s;letter-spacing:.3px;text-transform:uppercase}
+.slide-content{z-index:2;max-width:52%;min-width:0;flex-shrink:0}
+.slide-content h2{font-size:clamp(16px,4.5vw,28px);font-weight:900;line-height:1.2;margin-bottom:6px;color:#fff;font-family:'Poppins',sans-serif;word-break:break-word}
+.slide-content p{font-size:clamp(10px,2.5vw,13px);opacity:.92;margin-bottom:12px;color:rgba(255,255,255,.9);line-height:1.4;word-break:break-word}
+.slide-btn{display:inline-block;background:#fff;color:var(--orange);padding:8px 18px;border-radius:6px;font-weight:900;font-size:11px;cursor:pointer;border:none;transition:.2s;letter-spacing:.3px;text-transform:uppercase;white-space:nowrap}
 .slide-btn:hover{transform:scale(1.04)}
-.slider-dots{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:5px}
-.dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.45);cursor:pointer;transition:.2s}
-.dot.active{background:#fff;width:18px;border-radius:4px}
+.slide-img{position:absolute;right:0;top:0;height:100%;width:50%;object-fit:cover;object-position:center top;pointer-events:none;z-index:1}
+.slide-img-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.6) 0%,rgba(0,0,0,.35) 50%,rgba(0,0,0,.05) 100%);z-index:1}
+.banner-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:14px}
+.banner-preview{width:100%;height:120px;object-fit:cover;display:block}
+.banner-preview-empty{width:100%;height:120px;display:flex;align-items:center;justify-content:center;background:linear-gradient(120deg,var(--gray-100),var(--gray-200));color:var(--gray-400);font-size:32px}
+.banner-card-body{padding:12px}
+.banner-card-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.slider-dots{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:3}
+.dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.45);cursor:pointer;transition:.3s}
+.dot.active{background:#fff;width:20px;border-radius:4px}
 .slider-prev,.slider-next{display:none}
 
 /* ====== BOTTOM NAV ref image style ====== */
@@ -460,21 +499,30 @@ body{padding-bottom:70px}
 .faq-item.open .faq-a{display:block}
 
 /* ===== SPLASH SCREEN ===== */
-#splash-screen{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;overflow:hidden;transition:opacity .7s ease,transform .7s ease}
-#splash-screen.fade-out{opacity:0;pointer-events:none;transform:scale(1.04)}
-.splash-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 40% 30%,#3a1a00 0%,#1a0a00 40%,#0d0500 100%)}
-.splash-bg::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 60% 70%,rgba(200,120,10,.18) 0%,transparent 70%)}
-.splash-content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;padding:24px}
-.splash-brand{font-family:'Poppins',sans-serif;font-size:48px;font-weight:900;letter-spacing:10px;color:#c8780a;text-shadow:0 0 40px rgba(200,120,10,.7),0 0 80px rgba(200,120,10,.3),0 2px 4px rgba(0,0,0,.6);margin-bottom:14px;animation:splashFadeUp .8s cubic-bezier(.34,1.56,.64,1) .3s both}
-.splash-tagline{font-family:'Poppins',sans-serif;font-size:15px;font-weight:600;color:rgba(220,170,80,.9);text-align:center;margin-bottom:36px;animation:splashFadeUp .7s ease .6s both;line-height:1.5}
+#splash-screen{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;overflow:hidden;transition:opacity .8s ease,transform .8s ease}
+#splash-screen.fade-out{opacity:0;pointer-events:none;transform:scale(1.06)}
+.splash-bg{position:absolute;inset:0;background:#0d0500}
+.splash-bg::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 40%,#2a0e00 0%,#0d0500 65%)}
+.splash-bg::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 50% at 50% 50%,rgba(232,80,10,.13) 0%,transparent 70%)}
+.splash-particles{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.splash-particle{position:absolute;border-radius:50%;animation:particleDrift linear infinite}
+@keyframes particleDrift{0%{transform:translateY(100vh) scale(0);opacity:0}10%{opacity:1}90%{opacity:.5}100%{transform:translateY(-20vh) scale(1);opacity:0}}
+.splash-content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;padding:24px;text-align:center}
+.splash-glow-ring{position:absolute;width:260px;height:260px;border-radius:50%;border:1px solid rgba(232,80,10,.15);box-shadow:0 0 60px rgba(232,80,10,.1),inset 0 0 60px rgba(232,80,10,.05);animation:ringPulse 3s ease-in-out infinite}
+.splash-glow-ring2{position:absolute;width:340px;height:340px;border-radius:50%;border:1px solid rgba(232,80,10,.07);animation:ringPulse 3s ease-in-out infinite .8s}
+@keyframes ringPulse{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.05);opacity:1}}
+.splash-icon{font-size:38px;margin-bottom:10px;animation:splashFadeUp .6s cubic-bezier(.34,1.56,.64,1) .2s both;filter:drop-shadow(0 0 20px rgba(232,80,10,.8))}
+.splash-brand{font-family:'Poppins',sans-serif;font-size:64px;font-weight:900;letter-spacing:14px;background:linear-gradient(135deg,#e8500a 0%,#ff8c42 40%,#ffd060 60%,#ff8c42 80%,#e8500a 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-shadow:none;filter:drop-shadow(0 0 30px rgba(232,80,10,.5));margin-bottom:6px;animation:splashFadeUp .8s cubic-bezier(.34,1.56,.64,1) .35s both}
+.splash-divider{width:60px;height:2px;background:linear-gradient(90deg,transparent,#e8500a,#ffd060,#e8500a,transparent);margin:10px auto 14px;border-radius:99px;animation:splashFadeUp .6s ease .55s both}
+.splash-tagline{font-family:'Poppins',sans-serif;font-size:13px;font-weight:500;color:rgba(255,200,120,.7);text-align:center;margin-bottom:8px;animation:splashFadeUp .7s ease .65s both;line-height:1.6;letter-spacing:2px;text-transform:uppercase}
 .splash-tagline strong{color:#ffd060;font-weight:800}
-.splash-loader{width:220px;display:flex;flex-direction:column;align-items:center;gap:8px;animation:splashFadeUp .7s ease .8s both}
-.splash-bar{width:100%;height:3px;background:rgba(200,120,10,.2);border-radius:99px;overflow:hidden}
-.splash-fill{height:100%;width:0%;background:linear-gradient(90deg,#a05010,#e8900a,#ffd060,#e8900a);border-radius:99px;transition:width .12s ease;box-shadow:0 0 8px rgba(232,144,10,.7)}
-.splash-pct{font-family:'Poppins',sans-serif;font-size:11px;font-weight:700;color:rgba(200,150,80,.6);letter-spacing:1px}
-@keyframes splashPop{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
-@keyframes splashFadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-@keyframes splashGlowPulse{0%,100%{opacity:.6;transform:scale(1)}50%{opacity:1;transform:scale(1.12)}}
+.splash-sub{font-family:'Poppins',sans-serif;font-size:11px;color:rgba(200,130,60,.5);letter-spacing:1px;text-transform:uppercase;margin-bottom:36px;animation:splashFadeUp .6s ease .75s both}
+.splash-loader{width:200px;display:flex;flex-direction:column;align-items:center;gap:8px;animation:splashFadeUp .7s ease .85s both}
+.splash-bar{width:100%;height:2px;background:rgba(232,80,10,.15);border-radius:99px;overflow:hidden}
+.splash-fill{height:100%;width:0%;background:linear-gradient(90deg,#a03008,#e8500a,#ffd060,#e8500a,#a03008);background-size:200%;border-radius:99px;transition:width .12s ease;box-shadow:0 0 10px rgba(232,80,10,.8);animation:shimmer 1.5s linear infinite}
+@keyframes shimmer{0%{background-position:100%}100%{background-position:-100%}}
+.splash-pct{font-family:'Poppins',sans-serif;font-size:10px;font-weight:700;color:rgba(200,120,60,.5);letter-spacing:2px}
+@keyframes splashFadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
 
 /* Delivery Type Toggle */
@@ -517,14 +565,9 @@ body{padding-bottom:70px}
 .header-search-btn{background:transparent!important;color:#aaa!important;border:none!important;font-size:16px!important;padding:0!important;display:flex!important;align-items:center!important;cursor:pointer!important}
 .header-search-btn:hover{color:#e8420a!important}
 
-/* HERO SLIDER */
-.hero-slider{border-radius:10px!important;margin:0 14px 0!important;height:180px!important;overflow:hidden!important}
+/* HERO SLIDER — mobile tweaks only */
+.hero-slider{border-radius:10px!important;margin:0 14px 0!important;height:180px!important}
 @media(min-width:480px){.hero-slider{height:210px!important}}
-.slide{padding:20px 24px!important;align-items:center!important;justify-content:flex-start!important}
-.slide-1{background:linear-gradient(110deg,#e8420a 0%,#ff7a3c 100%)!important}
-.slide-content h2{font-size:21px!important;font-weight:900!important;text-align:left!important;font-family:'Poppins',sans-serif!important;line-height:1.2!important}
-.slide-content p{font-size:12px!important;text-align:left!important;margin-bottom:14px!important}
-.slide-btn{padding:8px 20px!important;border-radius:6px!important;font-size:12px!important;font-weight:800!important;text-transform:uppercase!important;letter-spacing:.5px!important}
 .slider-prev,.slider-next{display:none!important}
 .slider-dots{bottom:8px!important}
 
@@ -593,12 +636,18 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
 <!-- SPLASH SCREEN -->
 <div id="splash-screen">
   <div class="splash-bg"></div>
+  <div class="splash-particles" id="splash-particles"></div>
   <div class="splash-content">
+    <div class="splash-glow-ring"></div>
+    <div class="splash-glow-ring2"></div>
+    <div class="splash-icon">🛍️</div>
     <div class="splash-brand">BENIM</div>
-    <div class="splash-tagline">Where smart <strong>TRADE</strong> begins.</div>
+    <div class="splash-divider"></div>
+    <div class="splash-tagline">Where Smart <strong>TRADE</strong> Begins</div>
+    <div class="splash-sub">Quality · Speed · Trust</div>
     <div class="splash-loader">
       <div class="splash-bar"><div class="splash-fill" id="splash-fill"></div></div>
-      <div class="splash-pct" id="splash-pct">0%</div>
+      <div class="splash-pct" id="splash-pct">LOADING...</div>
     </div>
   </div>
 </div>
@@ -615,6 +664,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
       <img id="site-logo" src="IMG-20260507-WA0041_1_.jpg" alt="Benim" class="header-logo" onclick="navigate('home')" onerror="this.style.display='none'" style="display:none;margin-left:6px">
     </div>
     <div class="header-icons" style="display:flex;align-items:center;gap:4px">
+      <button id="dark-mode-btn" onclick="toggleDarkMode()" title="Toggle dark/light mode">🌙</button>
       <button class="hicon" onclick="navigate('profile')" title="Account"><i class="fas fa-user-circle"></i><span class="badge hidden" id="wish-count">0</span></button>
       <button class="hicon" onclick="navigate('cart')" title="Cart" style="position:relative"><i class="fas fa-shopping-cart"></i><span class="badge hidden" id="cart-count">0</span></button>
     </div>
@@ -699,27 +749,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
   <!-- Hero Slider -->
   <div class="hero-slider">
     <div class="slides-container" id="slides">
-      <div class="slide slide-1">
-        <div class="slide-content">
-          <h2>Shop Smart.<br>Dress Better.</h2>
-          <p>Premium fashion at honest prices.</p>
-          <button class="slide-btn" onclick="filterByCategory('all')">Shop Now</button>
-        </div>
-      </div>
-      <div class="slide slide-2">
-        <div class="slide-content">
-          <h2>Hot Deals<br>Every Day</h2>
-          <p>Unbeatable prices on top brands</p>
-          <button class="slide-btn" onclick="filterByCategory('all')">Explore Deals</button>
-        </div>
-      </div>
-      <div class="slide slide-3">
-        <div class="slide-content">
-          <h2>Flash Sale<br>Is Live 🔥</h2>
-          <p>Limited time offers &mdash; grab before it's gone</p>
-          <button class="slide-btn" onclick="filterByCategory('all')">View Flash Sale</button>
-        </div>
-      </div>
+      <!-- Slides rendered by JS from Firestore / defaults -->
     </div>
     <button class="slider-prev" onclick="changeSlide(-1)"><i class="fas fa-chevron-left"></i></button>
     <button class="slider-next" onclick="changeSlide(1)"><i class="fas fa-chevron-right"></i></button>
@@ -1160,7 +1190,19 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
       <button class="admin-tab" onclick="switchAdminTab('orders',this)">Orders</button>
       <button class="admin-tab" onclick="switchAdminTab('users',this)">Users</button>
       <button class="admin-tab" onclick="switchAdminTab('reviews',this)">Reviews</button>
+      <button class="admin-tab" onclick="switchAdminTab('banners',this)">🖼️ Banners</button>
       <button class="admin-tab" onclick="switchAdminTab('chats',this)">Chat Sessions</button>
+    </div>
+    <!-- Banners Tab -->
+    <div id="admin-banners" class="admin-tab-content hidden">
+      <div class="admin-card">
+        <div class="admin-card-title">
+          <span>Homepage Slider Banners</span>
+          <button class="btn-primary" onclick="showAddBannerModal()"><i class="fas fa-plus"></i> Add Banner</button>
+        </div>
+        <p style="font-size:13px;color:var(--gray-500);margin-bottom:14px">Add, edit or delete the 3 sliding banners on your homepage. Each banner has a title, subtitle, button text, button action, and optional product image.</p>
+        <div id="admin-banners-list"></div>
+      </div>
     </div>
     <!-- Products Tab -->
     <div id="admin-products" class="admin-tab-content">
@@ -1822,6 +1864,71 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
     <div class="modal-footer">
       <button class="btn-secondary" onclick="closeModal('modal-status')">Cancel</button>
       <button class="btn-primary" onclick="updateOrderStatus()"><i class="fas fa-check"></i> Update Status</button>
+    </div>
+  </div>
+</div>
+
+<!-- BANNER ADD/EDIT MODAL -->
+<div class="modal-overlay" id="modal-banner">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-header">
+      <span class="modal-title" id="banner-modal-title">Add Banner</span>
+      <button class="modal-close" onclick="closeModal('modal-banner')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:14px">
+      <input type="hidden" id="banner-edit-id">
+      <div>
+        <label class="form-label">Slide Title *</label>
+        <input class="form-input" id="banner-title" placeholder="e.g. Mega Savings on Top Deals">
+      </div>
+      <div>
+        <label class="form-label">Subtitle</label>
+        <input class="form-input" id="banner-subtitle" placeholder="e.g. Shop the best offers selected for you.">
+      </div>
+      <div>
+        <label class="form-label">Button Text</label>
+        <input class="form-input" id="banner-btn-text" placeholder="e.g. Shop Now">
+      </div>
+      <div>
+        <label class="form-label">Button Links To</label>
+        <select class="form-input" id="banner-btn-action">
+          <option value="all">All Products</option>
+          <option value="Men's Fashion">Men's Fashion</option>
+          <option value="Women's Fashion">Women's Fashion</option>
+          <option value="Electronics">Electronics</option>
+          <option value="Beauty">Beauty</option>
+          <option value="Baby Products">Baby Products</option>
+          <option value="Home & Kitchen">Home & Kitchen</option>
+        </select>
+      </div>
+      <div>
+        <label class="form-label">Background Style</label>
+        <select class="form-input" id="banner-bg">
+          <option value="slide-1">Orange (Default)</option>
+          <option value="slide-2">Dark Navy</option>
+          <option value="slide-3">Deep Blue/Purple</option>
+          <option value="slide-green">Green</option>
+          <option value="slide-dark">Dark</option>
+        </select>
+      </div>
+      <div>
+        <label class="form-label">Product Image URL <span style="color:var(--gray-400);font-weight:400">(optional — paste a direct image link)</span></label>
+        <input class="form-input" id="banner-image" placeholder="https://example.com/image.jpg">
+        <div id="banner-img-preview" style="margin-top:8px;display:none"><img id="banner-img-preview-img" style="width:100%;max-height:120px;object-fit:cover;border-radius:8px;border:1px solid var(--gray-200)"></div>
+        <p style="font-size:11px;color:var(--gray-400);margin-top:6px"><i class="fas fa-info-circle"></i> Tip: upload your image to <strong>imgbb.com</strong> or <strong>imgur.com</strong> for free, then paste the direct link here.</p>
+      </div>
+      <div>
+        <label class="form-label">Display Order</label>
+        <select class="form-input" id="banner-order">
+          <option value="1">Slide 1 (First)</option>
+          <option value="2">Slide 2 (Second)</option>
+          <option value="3">Slide 3 (Third)</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('modal-banner')">Cancel</button>
+      <button class="btn-primary" onclick="saveBanner()"><i class="fas fa-save"></i> Save Banner</button>
     </div>
   </div>
 </div>
@@ -2800,11 +2907,32 @@ window.placeOrder = async function() {
     const orderRef = await addDoc(collection(db,'orders'), orderData);
     lastOrderId = orderRef.id;
     // Clear cart BEFORE notifications (so items don't appear empty)
-    const itemNames = itemsCopy.map(x=>x.name).join(', ');
+    const itemNames = itemsCopy.map(x=>{
+      let detail = x.name;
+      if(x.size) detail += ` (Size: ${x.size})`;
+      if(x.colour||x.color) detail += ` (Colour: ${x.colour||x.color})`;
+      if(x.qty>1) detail += ` ×${x.qty}`;
+      return detail;
+    }).join('\n');
     const addrStr = [addr.street,addr.city,addr.state].filter(Boolean).join(', ');
     cart = [];
     await saveCart();
     updateCartBadge();
+    // Reduce stock for each item in Firestore
+    for(const item of itemsCopy) {
+      if(!item.productId && !item.id) continue;
+      const pid = item.productId || item.id;
+      try {
+        const pRef = doc(db,'products',pid);
+        const pSnap = await getDoc(pRef);
+        if(pSnap.exists()) {
+          const currentStock = Number(pSnap.data().stock || 0);
+          const newStock = Math.max(0, currentStock - (item.qty||1));
+          const currentSold = Number(pSnap.data().soldCount || 0);
+          await updateDoc(pRef, { stock: newStock, soldCount: currentSold + (item.qty||1) });
+        }
+      } catch(e) { console.warn('Stock update failed for', pid, e); }
+    }
     // Notify ADMIN first (gets the browser popup, most important)
     notifyAdminWhatsApp(orderId, addr.name||currentUser.email.split('@')[0], currentUser.email, itemNames, subtotal, deliveryFee, selectedPayment, addrStr, addr.phone||'');
     // Notify BUYER after a short delay (secondary popup — buyer gets receipt on screen anyway)
@@ -2997,6 +3125,16 @@ window.renderWishlist = async function() {
 };
 
 // ===== SEARCH =====
+window.toggleDarkMode = function() {
+  const isDark = document.body.classList.toggle('dark-mode');
+  document.getElementById('dark-mode-btn').textContent = isDark ? '☀️' : '🌙';
+  localStorage.setItem('benim-theme', isDark ? 'dark' : 'light');
+};
+// Restore saved theme on load
+(function(){
+  const saved = localStorage.getItem('benim-theme');
+  if(saved === 'dark') { document.body.classList.add('dark-mode'); const btn = document.getElementById('dark-mode-btn'); if(btn) btn.textContent = '☀️'; }
+})();
 window.handleSearchKey = function(e) {
   if(e.key==='Enter') doSearch();
 };
@@ -3434,6 +3572,7 @@ window.switchAdminTab = function(tab, btn) {
   else if(tab==='users') loadAdminUsers();
   else if(tab==='reviews') loadAdminReviews();
   else if(tab==='chats') loadAdminChats();
+  else if(tab==='banners') loadAdminBanners();
 };
 
 
@@ -3821,38 +3960,184 @@ function notifyAdminWhatsApp(orderId, customerName, customerEmail, items, total,
     `👤 *Customer:* ${customerName}\n` +
     `📧 *Email:* ${customerEmail}\n` +
     (cleanBuyerPhone ? `📱 *Phone:* ${buyerPhone}\n` : '') +
-    `📦 *Items:* ${items}\n` +
+    `\n📦 *Items Ordered:*\n${items}\n\n` +
     `💰 *Subtotal:* ₦${Number(total||0).toLocaleString()}\n` +
-    (Number(deliveryFee)>0 ? `🚚 *Delivery Fee:* ₦${Number(deliveryFee).toLocaleString()}\n` : `🚚 *Delivery:* FREE\n`) +
+    (Number(deliveryFee)>0 ? `🚚 *Delivery Fee:* ₦${Number(deliveryFee).toLocaleString()}\n` : `🚚 *Delivery:* FREE ✅\n`) +
     `💵 *Grand Total:* ₦${grandTotal.toLocaleString()}\n` +
     `💳 *Payment:* ${payment==='bank'?'Bank Transfer (Opay)':'Pay on Delivery'}\n` +
     `📍 *Address:* ${address}\n\n` +
-    `👉 Go to Admin Panel → Orders to confirm this order.`
+    `👉 Go to Admin Panel → Orders to confirm.`
   );
   window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${msg}`, '_blank');
 }
 
 // ===== SLIDER =====
+// ===== BANNER / SLIDER MANAGEMENT =====
+const DEFAULT_BANNERS = [
+  { id:'default-1', order:1, title:'Shop Smart.<br>Dress Better.', subtitle:'Premium fashion at honest prices.', btnText:'Shop Now', btnAction:'all', bg:'slide-1', image:'' },
+  { id:'default-2', order:2, title:'Hot Deals<br>Every Day', subtitle:'Unbeatable prices on top brands', btnText:'Explore Deals', btnAction:'all', bg:'slide-2', image:'' },
+  { id:'default-3', order:3, title:'Flash Sale<br>Is Live \uD83D\uDD25', subtitle:'Limited time offers — grab before it\'s gone', btnText:'View Flash Sale', btnAction:'all', bg:'slide-3', image:'' }
+];
+const SLIDE_BG_EXTRA = {
+  'slide-green':'background:linear-gradient(120deg,#16a34a,#22c55e)',
+  'slide-dark':'background:linear-gradient(120deg,#111827,#1f2937)'
+};
+async function loadBanners() {
+  try {
+    const snap = await getDocs(query(collection(db,'banners'),orderBy('order','asc')));
+    if(snap.empty) return DEFAULT_BANNERS;
+    const saved = snap.docs.map(d=>({id:d.id,...d.data()}));
+    // Merge: for each default slot (1,2,3), use saved version if exists, else use default
+    const merged = DEFAULT_BANNERS.map(def => {
+      const match = saved.find(s => Number(s.order) === Number(def.order));
+      return match || def;
+    });
+    // Also add any extra banners beyond slot 3
+    const extras = saved.filter(s => Number(s.order) > 3);
+    return [...merged, ...extras];
+  } catch(e) { return DEFAULT_BANNERS; }
+}
+async function renderSlider() {
+  const banners = await loadBanners();
+  const container = document.getElementById('slides');
+  if(!container) return;
+  container.innerHTML = banners.map(b=>`
+    <div class="slide ${b.bg||'slide-1'}" ${SLIDE_BG_EXTRA[b.bg]?`style="${SLIDE_BG_EXTRA[b.bg]}"`:''}>
+      ${b.image?`<img class="slide-img" src="${b.image}" alt="${(b.title||'').replace(/<[^>]+>/g,'')}" onerror="this.style.display='none'">` : ''}
+      ${b.image?'<div class="slide-img-overlay"></div>':''}
+      <div class="slide-content">
+        <h2>${b.title||''}</h2>
+        <p>${b.subtitle||''}</p>
+        <button class="slide-btn" onclick="filterByCategory('${b.btnAction||'all'}')">${b.btnText||'Shop Now'}</button>
+      </div>
+    </div>`).join('');
+  currentSlide = 0;
+  initSlider();
+}
+window.loadAdminBanners = async function() {
+  const list = document.getElementById('admin-banners-list');
+  list.innerHTML = '<p style="color:var(--gray-400);font-size:13px"><i class="fas fa-spinner fa-spin"></i> Loading...</p>';
+  const banners = await loadBanners();
+  list.innerHTML = banners.map(b=>{
+    const isCustom = !b.id.startsWith('default');
+    const bgLabel = {'slide-1':'Orange','slide-2':'Dark Navy','slide-3':'Blue/Purple','slide-green':'Green','slide-dark':'Dark'}[b.bg]||b.bg||'Orange';
+    return `<div class="banner-card">
+      ${b.image ? `<img class="banner-preview" src="${b.image}" onerror="this.src='';this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="banner-preview-empty" style="display:none">🖼️</div>` : '<div class="banner-preview-empty">🖼️<span style="font-size:11px;margin-top:6px;display:block;color:var(--gray-400)">No image set</span></div>'}
+      <div class="banner-card-body">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+          <span style="background:var(--orange);color:#fff;font-size:10px;font-weight:800;padding:2px 7px;border-radius:99px">Slide ${b.order}</span>
+          ${isCustom ? '<span style="background:#dcfce7;color:#16a34a;font-size:10px;font-weight:800;padding:2px 7px;border-radius:99px">✓ Customised</span>' : '<span style="background:var(--gray-100);color:var(--gray-500);font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px">Default</span>'}
+          <span style="background:var(--gray-100);color:var(--gray-600);font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px">${bgLabel}</span>
+        </div>
+        <div style="font-size:14px;font-weight:800;margin-bottom:3px;color:var(--text)">${(b.title||'').replace(/<br>/g,' ')}</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-bottom:3px">${b.subtitle||'—'}</div>
+        <div style="font-size:11px;color:var(--gray-400)">Button: "${b.btnText||'Shop Now'}" → ${b.btnAction||'all'}</div>
+        <div class="banner-card-actions">
+          <button class="btn-primary" style="font-size:12px;padding:6px 14px" onclick="editBanner('${b.id}')"><i class="fas fa-edit"></i> Edit</button>
+          ${isCustom ? `<button style="font-size:12px;padding:6px 14px;background:var(--red);color:#fff;border:none;border-radius:6px;font-weight:700;cursor:pointer" onclick="deleteBanner('${b.id}')"><i class="fas fa-trash"></i> Reset to Default</button>` : ''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+};
+window.showAddBannerModal = function() {
+  document.getElementById('banner-edit-id').value='';
+  document.getElementById('banner-title').value='';
+  document.getElementById('banner-subtitle').value='';
+  document.getElementById('banner-btn-text').value='Shop Now';
+  document.getElementById('banner-btn-action').value='all';
+  document.getElementById('banner-bg').value='slide-1';
+  document.getElementById('banner-image').value='';
+  document.getElementById('banner-img-preview').style.display='none';
+  document.getElementById('banner-order').value='1';
+  document.getElementById('banner-modal-title').textContent='Add Banner';
+  openModal('modal-banner');
+};
+window.editBanner = async function(id) {
+  let banner = id.startsWith('default') ? DEFAULT_BANNERS.find(b=>b.id===id) : null;
+  if(!banner) { try { const s=await getDoc(doc(db,'banners',id)); banner=s.exists()?{id:s.id,...s.data()}:null; } catch(e){} }
+  if(!banner) return showToast('Banner not found','error');
+  document.getElementById('banner-edit-id').value=id;
+  document.getElementById('banner-title').value=(banner.title||'').replace(/<br>/g,'\n');
+  document.getElementById('banner-subtitle').value=banner.subtitle||'';
+  document.getElementById('banner-btn-text').value=banner.btnText||'Shop Now';
+  document.getElementById('banner-btn-action').value=banner.btnAction||'all';
+  document.getElementById('banner-bg').value=banner.bg||'slide-1';
+  document.getElementById('banner-image').value=banner.image||'';
+  document.getElementById('banner-order').value=String(banner.order||1);
+  const prev=document.getElementById('banner-img-preview');
+  if(banner.image){document.getElementById('banner-img-preview-img').src=banner.image;prev.style.display='block';}else{prev.style.display='none';}
+  document.getElementById('banner-modal-title').textContent='Edit Banner';
+  openModal('modal-banner');
+};
+window.saveBanner = async function() {
+  const editId=document.getElementById('banner-edit-id').value;
+  const data={
+    title:document.getElementById('banner-title').value.trim().replace(/\n/g,'<br>'),
+    subtitle:document.getElementById('banner-subtitle').value.trim(),
+    btnText:document.getElementById('banner-btn-text').value.trim()||'Shop Now',
+    btnAction:document.getElementById('banner-btn-action').value,
+    bg:document.getElementById('banner-bg').value,
+    image:document.getElementById('banner-image').value.trim(),
+    order:Number(document.getElementById('banner-order').value)||1,
+    updatedAt:serverTimestamp()
+  };
+  if(!data.title) return showToast('Title is required','error');
+  try {
+    if(editId&&!editId.startsWith('default')) await updateDoc(doc(db,'banners',editId),data);
+    else await addDoc(collection(db,'banners'),data);
+    closeModal('modal-banner');
+    showToast('Banner saved!','success');
+    await renderSlider();
+    loadAdminBanners();
+  } catch(e) { showToast('Error: '+e.message,'error'); }
+};
+window.deleteBanner = async function(id) {
+  if(!confirm('Delete this banner?')) return;
+  try {
+    await deleteDoc(doc(db,'banners',id));
+    showToast('Banner deleted','success');
+    await renderSlider();
+    loadAdminBanners();
+  } catch(e) { showToast('Error deleting banner','error'); }
+};
+// Live image preview in banner modal
+document.addEventListener('input',e=>{
+  if(e.target.id==='banner-image'){
+    const url=e.target.value.trim();
+    const prev=document.getElementById('banner-img-preview');
+    const img=document.getElementById('banner-img-preview-img');
+    if(url){img.src=url;prev.style.display='block';}else{prev.style.display='none';}
+  }
+});
+
 function initSlider() {
-  const slides = document.querySelector('.slides-container');
-  const totalSlides = document.querySelectorAll('.slide').length;
+  if(sliderInterval) clearInterval(sliderInterval);
+  const totalSlides = document.querySelectorAll('#slides .slide').length;
   const dotsContainer = document.getElementById('slider-dots');
+  if(!dotsContainer || !totalSlides) return;
   dotsContainer.innerHTML = Array(totalSlides).fill('').map((_,i)=>`<div class="dot${i===0?' active':''}" onclick="goToSlide(${i})"></div>`).join('');
-  sliderInterval = setInterval(()=>changeSlide(1), 4000);
+  updateSlider();
+  sliderInterval = setInterval(()=>changeSlide(1), 4500);
 }
 
 window.changeSlide = function(dir) {
-  const totalSlides = document.querySelectorAll('.slide').length;
+  const totalSlides = document.querySelectorAll('#slides .slide').length;
+  if(!totalSlides) return;
   currentSlide = (currentSlide + dir + totalSlides) % totalSlides;
   updateSlider();
 };
 window.goToSlide = function(i) { currentSlide = i; updateSlider(); };
 function updateSlider() {
-  document.getElementById('slides').style.transform = `translateX(-${currentSlide*100}%)`;
-  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===currentSlide));
+  const slidesEl = document.getElementById('slides');
+  if(!slidesEl) return;
+  const sliderWidth = slidesEl.parentElement.offsetWidth;
+  slidesEl.style.transform = `translateX(-${currentSlide * sliderWidth}px)`;
+  document.querySelectorAll('#slider-dots .dot').forEach((d,i)=>d.classList.toggle('active',i===currentSlide));
 }
 
 // ===== COUNTDOWN =====
+window.addEventListener('resize', ()=>{ if(document.getElementById('slides')) updateSlider(); });
 function startCountdown() {
   const end = new Date(); end.setHours(23,59,59,999);
   function update() {
@@ -4004,7 +4289,7 @@ window.showToast = function(message, type='success') {
 
 // ===== INIT =====
 async function init() {
-  initSlider();
+  renderSlider(); // loads banners from Firestore (or defaults) and inits slider
   startCountdown();
   renderSkeletons('flash-grid',4);
   renderSkeletons('featured-grid',8);
@@ -4028,7 +4313,18 @@ init();
   const fill   = document.getElementById('splash-fill');
   const pct    = document.getElementById('splash-pct');
   if (!splash) return;
-  // Normal load — always show splash
+  // Generate floating particles
+  const pc = document.getElementById('splash-particles');
+  if (pc) {
+    const colors = ['rgba(232,80,10,.6)','rgba(255,140,66,.5)','rgba(255,208,96,.4)','rgba(180,60,10,.5)'];
+    for(let i=0;i<18;i++){
+      const p = document.createElement('div');
+      p.className = 'splash-particle';
+      const size = Math.random()*4+2;
+      p.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${Math.random()*6+5}s;animation-delay:${Math.random()*4}s;box-shadow:0 0 ${size*2}px ${colors[0]}`;
+      pc.appendChild(p);
+    }
+  }
   let tick = 0;
   const steps = 87;
   const timer = setInterval(() => {
@@ -4036,13 +4332,13 @@ init();
     const raw = tick / steps;
     const progress = Math.min(100, Math.round((1 - Math.pow(1 - raw, 2)) * 100));
     if (fill) fill.style.width = progress + '%';
-    if (pct)  pct.textContent  = progress + '%';
+    if (pct)  pct.textContent  = progress < 100 ? 'LOADING...' : 'READY ✓';
     if (tick >= steps) {
       clearInterval(timer);
       setTimeout(() => {
         splash.classList.add('fade-out');
-        setTimeout(() => { splash.style.display = 'none'; }, 750);
-      }, 250);
+        setTimeout(() => { splash.style.display = 'none'; }, 800);
+      }, 300);
     }
   }, 30);
 })();
