@@ -1283,9 +1283,10 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
     <div id="admin-banners" class="admin-tab-content hidden">
       <div class="admin-card">
         <div class="admin-card-title">
-          <span>🖼️ Homepage Slider — All 5 Slides</span>
+          <span>Homepage Slider Banners</span>
+          <button class="btn-primary" onclick="showAddBannerModal()"><i class="fas fa-plus"></i> Add Banner</button>
         </div>
-        <p style="font-size:13px;color:var(--gray-500);margin-bottom:14px">All 5 slides are always shown below. Click <strong>Edit</strong> on any slide to change its title, image, colours and button. Click <strong>Reset</strong> to restore the original default text.</p>
+        <p style="font-size:13px;color:var(--gray-500);margin-bottom:14px">Add, edit or delete the 3 sliding banners on your homepage. Each banner has a title, subtitle, button text, button action, and optional product image.</p>
         <div id="admin-banners-list"></div>
       </div>
     </div>
@@ -2003,13 +2004,11 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
         <p style="font-size:11px;color:var(--gray-400);margin-top:6px"><i class="fas fa-info-circle"></i> Tip: upload your image to <strong>imgbb.com</strong> or <strong>imgur.com</strong> for free, then paste the direct link here.</p>
       </div>
       <div>
-        <label class="form-label">Display Order (Slide Position)</label>
+        <label class="form-label">Display Order</label>
         <select class="form-input" id="banner-order">
           <option value="1">Slide 1 (First)</option>
           <option value="2">Slide 2 (Second)</option>
           <option value="3">Slide 3 (Third)</option>
-          <option value="4">Slide 4 (Fourth)</option>
-          <option value="5">Slide 5 (Fifth)</option>
         </select>
       </div>
     </div>
@@ -4074,23 +4073,12 @@ const SLIDE_BG_EXTRA = {
 };
 
 // Load all 5 slots: use Firestore value if saved, otherwise use default
-// Handles both new docs (with slotId) and old docs (matched by order number)
 async function loadBanners() {
   try {
     const snap = await getDocs(collection(db,'banners'));
-    const savedBySlot = {};
-    const savedByOrder = {};
-    snap.docs.forEach(d => {
-      const s = d.data();
-      const entry = {firestoreId: d.id, ...s};
-      if(s.slotId) savedBySlot[s.slotId] = entry;
-      else if(s.order) savedByOrder[String(s.order)] = entry; // old format fallback
-    });
-    return DEFAULT_BANNERS.map(def => {
-      if(savedBySlot[def.slotId]) return {...def, ...savedBySlot[def.slotId]};
-      if(savedByOrder[String(def.order)]) return {...def, ...savedByOrder[String(def.order)], slotId: def.slotId};
-      return {...def};
-    });
+    const saved = {};
+    snap.docs.forEach(d => { const s = d.data(); if(s.slotId) saved[s.slotId] = {firestoreId:d.id,...s}; });
+    return DEFAULT_BANNERS.map(def => saved[def.slotId] ? {...def,...saved[def.slotId]} : {...def});
   } catch(e) { return DEFAULT_BANNERS.map(d=>({...d})); }
 }
 
@@ -4114,11 +4102,10 @@ async function renderSlider() {
 
 window.loadAdminBanners = async function() {
   const list = document.getElementById('admin-banners-list');
-  list.innerHTML = '<p style="color:var(--gray-400);font-size:13px;padding:10px"><i class="fas fa-spinner fa-spin"></i> Loading all 5 slides...</p>';
+  list.innerHTML = '<p style="color:var(--gray-400);font-size:13px"><i class="fas fa-spinner fa-spin"></i> Loading...</p>';
   const banners = await loadBanners();
-  console.log('Loaded banners:', banners.length, banners.map(b=>b.slotId));
   const bgLabels = {'slide-1':'🟠 Orange','slide-2':'🌑 Dark Navy','slide-3':'🔵 Blue/Purple','slide-green':'🟢 Green','slide-dark':'⚫ Dark'};
-  list.innerHTML = `<p style="font-size:12px;color:var(--green);font-weight:700;margin-bottom:10px"><i class="fas fa-check-circle"></i> Showing all ${banners.length} slides</p>` + banners.map(b=>{
+  list.innerHTML = banners.map(b=>{
     const isCustom = !!b.firestoreId;
     return `<div class="banner-card">
       ${b.image ? `<img class="banner-preview" src="${b.image}" onerror="this.src='';this.style.display='none'"><div class="banner-preview-empty" style="display:none">🖼️</div>` : '<div class="banner-preview-empty">🖼️<span style="font-size:11px;margin-top:4px;display:block;color:var(--gray-400)">No image</span></div>'}
@@ -4132,13 +4119,8 @@ window.loadAdminBanners = async function() {
         <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px">${b.subtitle||'—'}</div>
         <div style="font-size:11px;color:var(--gray-400)">Button: "${b.btnText||'Shop Now'}" → ${b.btnAction||'all'}</div>
         <div class="banner-card-actions">
-          <button class="btn-primary" style="font-size:12px;padding:6px 14px" onclick="editBannerSlot('${b.slotId}')"><i class="fas fa-edit"></i> Edit Slide ${b.order}</button>
-          ${isCustom?`<button style="font-size:12px;padding:6px 14px;background:var(--red);color:#fff;border:none;border-radius:6px;font-weight:700;cursor:pointer" onclick="resetBannerSlot('${b.slotId}','${b.firestoreId||b.slotId}')"><i class="fas fa-undo"></i> Reset</button>`:''}
-        </div>
-      </div>
-    </div>`;
-  }).join('');
-};
+          <button class="btn-primary" style="font-size:12px;padding:6px 14px" onclick="editBannerSlot('${b.slotId}')"><i class="fas fa-edit"></i> Edit</button>
+          ${isCustom?`<button style="font-size:12px;padding:6px 14px;background:var(--red);color:#fff;border:none;border-radius:6px;font-weight:700;cursor:pointer" onclick="resetBannerSlot('${b.slotId}','${b.firestoreId}')"><i class="fas fa-undo"></i> Reset</button>`:''}
         </div>
       </div>
     </div>`;
@@ -4184,8 +4166,13 @@ window.saveBanner = async function() {
   };
   if(!data.title) return showToast('Title is required','error');
   try {
-    // Use slotId as the Firestore document ID — always 1 doc per slot, no duplicates
-    await setDoc(doc(db,'banners',slotId), data);
+    // Check if a Firestore doc already exists for this slot
+    const snap = await getDocs(query(collection(db,'banners'),where('slotId','==',slotId)));
+    if(!snap.empty) {
+      await updateDoc(doc(db,'banners',snap.docs[0].id), data);
+    } else {
+      await addDoc(collection(db,'banners'), data);
+    }
     closeModal('modal-banner');
     showToast('Slide saved! ✅','success');
     await renderSlider();
@@ -4196,12 +4183,8 @@ window.saveBanner = async function() {
 window.resetBannerSlot = async function(slotId, firestoreId) {
   if(!confirm('Reset this slide back to default?')) return;
   try {
-    // Try deleting by slotId (new format) first, then by firestoreId (old format)
-    try { await deleteDoc(doc(db,'banners',slotId)); } catch(e){}
-    if(firestoreId && firestoreId !== slotId) {
-      try { await deleteDoc(doc(db,'banners',firestoreId)); } catch(e){}
-    }
-    showToast('Reset to default ✅','success');
+    await deleteDoc(doc(db,'banners',firestoreId));
+    showToast('Reset to default','success');
     await renderSlider();
     loadAdminBanners();
   } catch(e) { showToast('Error resetting slide','error'); }
