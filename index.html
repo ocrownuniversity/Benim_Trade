@@ -4059,30 +4059,29 @@ function notifyAdminWhatsApp(orderId, customerName, customerEmail, items, total,
 
 // ===== SLIDER =====
 // ===== BANNER / SLIDER MANAGEMENT =====
+// 5 default slots — always shown. Firestore overrides by slotId field.
 const DEFAULT_BANNERS = [
-  { id:'default-1', order:1, title:'Shop Smart.<br>Dress Better.', subtitle:'Premium fashion at honest prices.', btnText:'Shop Now', btnAction:'all', bg:'slide-1', image:'' },
-  { id:'default-2', order:2, title:'Hot Deals<br>Every Day', subtitle:'Unbeatable prices on top brands', btnText:'Explore Deals', btnAction:'all', bg:'slide-2', image:'' },
-  { id:'default-3', order:3, title:'Flash Sale<br>Is Live \uD83D\uDD25', subtitle:'Limited time offers — grab before it\'s gone', btnText:'View Flash Sale', btnAction:'all', bg:'slide-3', image:'' }
+  { slotId:'slot-1', order:1, title:'Shop Smart.<br>Dress Better.', subtitle:'Premium fashion at honest prices.', btnText:'Shop Now', btnAction:'all', bg:'slide-1', image:'' },
+  { slotId:'slot-2', order:2, title:'Hot Deals<br>Every Day', subtitle:'Unbeatable prices on top brands', btnText:'Explore Deals', btnAction:'all', bg:'slide-2', image:'' },
+  { slotId:'slot-3', order:3, title:'Flash Sale<br>Is Live \uD83D\uDD25', subtitle:'Limited time offers — grab before it\'s gone', btnText:'View Flash Sale', btnAction:'all', bg:'slide-3', image:'' },
+  { slotId:'slot-4', order:4, title:'New Arrivals', subtitle:'Fresh styles added every week', btnText:'Shop New', btnAction:'all', bg:'slide-green', image:'' },
+  { slotId:'slot-5', order:5, title:'Exclusive Offers', subtitle:'Members-only deals just for you', btnText:'Claim Now', btnAction:'all', bg:'slide-dark', image:'' }
 ];
 const SLIDE_BG_EXTRA = {
   'slide-green':'background:linear-gradient(120deg,#16a34a,#22c55e)',
   'slide-dark':'background:linear-gradient(120deg,#111827,#1f2937)'
 };
+
+// Load all 5 slots: use Firestore value if saved, otherwise use default
 async function loadBanners() {
   try {
-    const snap = await getDocs(query(collection(db,'banners'),orderBy('order','asc')));
-    if(snap.empty) return DEFAULT_BANNERS;
-    const saved = snap.docs.map(d=>({id:d.id,...d.data()}));
-    // Merge: for each default slot (1,2,3), use saved version if exists, else use default
-    const merged = DEFAULT_BANNERS.map(def => {
-      const match = saved.find(s => Number(s.order) === Number(def.order));
-      return match || def;
-    });
-    // Also add any extra banners beyond slot 3
-    const extras = saved.filter(s => Number(s.order) > 3);
-    return [...merged, ...extras];
-  } catch(e) { return DEFAULT_BANNERS; }
+    const snap = await getDocs(collection(db,'banners'));
+    const saved = {};
+    snap.docs.forEach(d => { const s = d.data(); if(s.slotId) saved[s.slotId] = {firestoreId:d.id,...s}; });
+    return DEFAULT_BANNERS.map(def => saved[def.slotId] ? {...def,...saved[def.slotId]} : {...def});
+  } catch(e) { return DEFAULT_BANNERS.map(d=>({...d})); }
 }
+
 async function renderSlider() {
   const banners = await loadBanners();
   const container = document.getElementById('slides');
@@ -4100,93 +4099,101 @@ async function renderSlider() {
   currentSlide = 0;
   initSlider();
 }
+
 window.loadAdminBanners = async function() {
   const list = document.getElementById('admin-banners-list');
   list.innerHTML = '<p style="color:var(--gray-400);font-size:13px"><i class="fas fa-spinner fa-spin"></i> Loading...</p>';
   const banners = await loadBanners();
+  const bgLabels = {'slide-1':'🟠 Orange','slide-2':'🌑 Dark Navy','slide-3':'🔵 Blue/Purple','slide-green':'🟢 Green','slide-dark':'⚫ Dark'};
   list.innerHTML = banners.map(b=>{
-    const isCustom = !b.id.startsWith('default');
-    const bgLabel = {'slide-1':'Orange','slide-2':'Dark Navy','slide-3':'Blue/Purple','slide-green':'Green','slide-dark':'Dark'}[b.bg]||b.bg||'Orange';
+    const isCustom = !!b.firestoreId;
     return `<div class="banner-card">
-      ${b.image ? `<img class="banner-preview" src="${b.image}" onerror="this.src='';this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="banner-preview-empty" style="display:none">🖼️</div>` : '<div class="banner-preview-empty">🖼️<span style="font-size:11px;margin-top:6px;display:block;color:var(--gray-400)">No image set</span></div>'}
+      ${b.image ? `<img class="banner-preview" src="${b.image}" onerror="this.src='';this.style.display='none'"><div class="banner-preview-empty" style="display:none">🖼️</div>` : '<div class="banner-preview-empty">🖼️<span style="font-size:11px;margin-top:4px;display:block;color:var(--gray-400)">No image</span></div>'}
       <div class="banner-card-body">
-        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
-          <span style="background:var(--orange);color:#fff;font-size:10px;font-weight:800;padding:2px 7px;border-radius:99px">Slide ${b.order}</span>
-          ${isCustom ? '<span style="background:#dcfce7;color:#16a34a;font-size:10px;font-weight:800;padding:2px 7px;border-radius:99px">✓ Customised</span>' : '<span style="background:var(--gray-100);color:var(--gray-500);font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px">Default</span>'}
-          <span style="background:var(--gray-100);color:var(--gray-600);font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px">${bgLabel}</span>
+        <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-bottom:6px">
+          <span style="background:var(--orange);color:#fff;font-size:10px;font-weight:800;padding:2px 8px;border-radius:99px">Slide ${b.order}</span>
+          <span style="background:${isCustom?'#dcfce7':'var(--gray-100)'};color:${isCustom?'#16a34a':'var(--gray-500)'};font-size:10px;font-weight:800;padding:2px 8px;border-radius:99px">${isCustom?'✓ Customised':'Default'}</span>
+          <span style="background:var(--gray-100);color:var(--gray-600);font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px">${bgLabels[b.bg]||b.bg}</span>
         </div>
-        <div style="font-size:14px;font-weight:800;margin-bottom:3px;color:var(--text)">${(b.title||'').replace(/<br>/g,' ')}</div>
-        <div style="font-size:12px;color:var(--text-muted);margin-bottom:3px">${b.subtitle||'—'}</div>
+        <div style="font-size:14px;font-weight:800;margin-bottom:2px;color:var(--text)">${(b.title||'').replace(/<br>/g,' ')}</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px">${b.subtitle||'—'}</div>
         <div style="font-size:11px;color:var(--gray-400)">Button: "${b.btnText||'Shop Now'}" → ${b.btnAction||'all'}</div>
         <div class="banner-card-actions">
-          <button class="btn-primary" style="font-size:12px;padding:6px 14px" onclick="editBanner('${b.id}')"><i class="fas fa-edit"></i> Edit</button>
-          ${isCustom ? `<button style="font-size:12px;padding:6px 14px;background:var(--red);color:#fff;border:none;border-radius:6px;font-weight:700;cursor:pointer" onclick="deleteBanner('${b.id}')"><i class="fas fa-trash"></i> Reset to Default</button>` : ''}
+          <button class="btn-primary" style="font-size:12px;padding:6px 14px" onclick="editBannerSlot('${b.slotId}')"><i class="fas fa-edit"></i> Edit</button>
+          ${isCustom?`<button style="font-size:12px;padding:6px 14px;background:var(--red);color:#fff;border:none;border-radius:6px;font-weight:700;cursor:pointer" onclick="resetBannerSlot('${b.slotId}','${b.firestoreId}')"><i class="fas fa-undo"></i> Reset</button>`:''}
         </div>
       </div>
     </div>`;
   }).join('');
 };
+
 window.showAddBannerModal = function() {
-  document.getElementById('banner-edit-id').value='';
-  document.getElementById('banner-title').value='';
-  document.getElementById('banner-subtitle').value='';
-  document.getElementById('banner-btn-text').value='Shop Now';
-  document.getElementById('banner-btn-action').value='all';
-  document.getElementById('banner-bg').value='slide-1';
-  document.getElementById('banner-image').value='';
-  document.getElementById('banner-img-preview').style.display='none';
-  document.getElementById('banner-order').value='1';
-  document.getElementById('banner-modal-title').textContent='Add Banner';
+  // "Add Banner" just means edit — we always have 5 slots. Show a slot picker instead.
+  showToast('All 5 slides are shown below — click Edit on any slide to customise it.','info');
+};
+
+window.editBannerSlot = async function(slotId) {
+  const banners = await loadBanners();
+  const b = banners.find(x=>x.slotId===slotId);
+  if(!b) return showToast('Slide not found','error');
+  document.getElementById('banner-edit-id').value = slotId; // store slotId
+  document.getElementById('banner-title').value = (b.title||'').replace(/<br>/g,'\n');
+  document.getElementById('banner-subtitle').value = b.subtitle||'';
+  document.getElementById('banner-btn-text').value = b.btnText||'Shop Now';
+  document.getElementById('banner-btn-action').value = b.btnAction||'all';
+  document.getElementById('banner-bg').value = b.bg||'slide-1';
+  document.getElementById('banner-image').value = b.image||'';
+  document.getElementById('banner-order').value = String(b.order||1);
+  const prev = document.getElementById('banner-img-preview');
+  if(b.image){document.getElementById('banner-img-preview-img').src=b.image;prev.style.display='block';}else{prev.style.display='none';}
+  document.getElementById('banner-modal-title').textContent = `Edit Slide ${b.order}`;
   openModal('modal-banner');
 };
-window.editBanner = async function(id) {
-  let banner = id.startsWith('default') ? DEFAULT_BANNERS.find(b=>b.id===id) : null;
-  if(!banner) { try { const s=await getDoc(doc(db,'banners',id)); banner=s.exists()?{id:s.id,...s.data()}:null; } catch(e){} }
-  if(!banner) return showToast('Banner not found','error');
-  document.getElementById('banner-edit-id').value=id;
-  document.getElementById('banner-title').value=(banner.title||'').replace(/<br>/g,'\n');
-  document.getElementById('banner-subtitle').value=banner.subtitle||'';
-  document.getElementById('banner-btn-text').value=banner.btnText||'Shop Now';
-  document.getElementById('banner-btn-action').value=banner.btnAction||'all';
-  document.getElementById('banner-bg').value=banner.bg||'slide-1';
-  document.getElementById('banner-image').value=banner.image||'';
-  document.getElementById('banner-order').value=String(banner.order||1);
-  const prev=document.getElementById('banner-img-preview');
-  if(banner.image){document.getElementById('banner-img-preview-img').src=banner.image;prev.style.display='block';}else{prev.style.display='none';}
-  document.getElementById('banner-modal-title').textContent='Edit Banner';
-  openModal('modal-banner');
-};
+
 window.saveBanner = async function() {
-  const editId=document.getElementById('banner-edit-id').value;
-  const data={
-    title:document.getElementById('banner-title').value.trim().replace(/\n/g,'<br>'),
-    subtitle:document.getElementById('banner-subtitle').value.trim(),
-    btnText:document.getElementById('banner-btn-text').value.trim()||'Shop Now',
-    btnAction:document.getElementById('banner-btn-action').value,
-    bg:document.getElementById('banner-bg').value,
-    image:document.getElementById('banner-image').value.trim(),
-    order:Number(document.getElementById('banner-order').value)||1,
-    updatedAt:serverTimestamp()
+  const slotId = document.getElementById('banner-edit-id').value;
+  if(!slotId) return showToast('No slide selected','error');
+  const data = {
+    slotId,
+    title: document.getElementById('banner-title').value.trim().replace(/\n/g,'<br>'),
+    subtitle: document.getElementById('banner-subtitle').value.trim(),
+    btnText: document.getElementById('banner-btn-text').value.trim()||'Shop Now',
+    btnAction: document.getElementById('banner-btn-action').value,
+    bg: document.getElementById('banner-bg').value,
+    image: document.getElementById('banner-image').value.trim(),
+    order: Number(document.getElementById('banner-order').value)||1,
+    updatedAt: serverTimestamp()
   };
   if(!data.title) return showToast('Title is required','error');
   try {
-    if(editId&&!editId.startsWith('default')) await updateDoc(doc(db,'banners',editId),data);
-    else await addDoc(collection(db,'banners'),data);
+    // Check if a Firestore doc already exists for this slot
+    const snap = await getDocs(query(collection(db,'banners'),where('slotId','==',slotId)));
+    if(!snap.empty) {
+      await updateDoc(doc(db,'banners',snap.docs[0].id), data);
+    } else {
+      await addDoc(collection(db,'banners'), data);
+    }
     closeModal('modal-banner');
-    showToast('Banner saved!','success');
+    showToast('Slide saved! ✅','success');
     await renderSlider();
     loadAdminBanners();
   } catch(e) { showToast('Error: '+e.message,'error'); }
 };
-window.deleteBanner = async function(id) {
-  if(!confirm('Delete this banner?')) return;
+
+window.resetBannerSlot = async function(slotId, firestoreId) {
+  if(!confirm('Reset this slide back to default?')) return;
   try {
-    await deleteDoc(doc(db,'banners',id));
-    showToast('Banner deleted','success');
+    await deleteDoc(doc(db,'banners',firestoreId));
+    showToast('Reset to default','success');
     await renderSlider();
     loadAdminBanners();
-  } catch(e) { showToast('Error deleting banner','error'); }
+  } catch(e) { showToast('Error resetting slide','error'); }
 };
+
+// Keep old deleteBanner alias just in case
+window.deleteBanner = window.resetBannerSlot;
+window.editBanner = window.editBannerSlot;
+
 // Live image preview in banner modal
 document.addEventListener('input',e=>{
   if(e.target.id==='banner-image'){
