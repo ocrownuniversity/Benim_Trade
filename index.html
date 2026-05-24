@@ -748,7 +748,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
   <div class="pwa-banner-icon-fallback" style="display:none">🛍️</div>
   <div class="pwa-banner-text">
     <div class="pwa-banner-title">Install Benim Shop App</div>
-    <div class="pwa-banner-sub" id="pwa-banner-sub">Add to home screen for faster shopping</div>
+    <div class="pwa-banner-sub" id="pwa-banner-sub">Free · No app store needed</div>
   </div>
   <button class="pwa-install-btn" id="pwa-install-btn">📲 Install</button>
   <button class="pwa-dismiss-btn" onclick="dismissPWABanner()" title="Dismiss">✕</button>
@@ -1384,6 +1384,36 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
       <button class="admin-tab" onclick="switchAdminTab('reviews',this)">Reviews</button>
       <button class="admin-tab" onclick="switchAdminTab('banners',this)">🖼️ Banners</button>
       <button class="admin-tab" onclick="switchAdminTab('chats',this)">Chat Sessions</button>
+    </div>
+    <div class="admin-tabs">
+      <button class="admin-tab active" onclick="switchAdminTab('products',this)">Products</button>
+      <button class="admin-tab" onclick="switchAdminTab('orders',this)">Orders</button>
+      <button class="admin-tab" onclick="switchAdminTab('analytics',this)">📊 Analytics</button>
+      <button class="admin-tab" onclick="switchAdminTab('coupons',this)">🏷️ Coupons</button>
+      <button class="admin-tab" onclick="switchAdminTab('users',this)">Users</button>
+      <button class="admin-tab" onclick="switchAdminTab('reviews',this)">Reviews</button>
+      <button class="admin-tab" onclick="switchAdminTab('banners',this)">🖼️ Banners</button>
+      <button class="admin-tab" onclick="switchAdminTab('chats',this)">Chat Sessions</button>
+    </div>
+    <!-- COUPONS & LOYALTY TAB -->
+    <div id="admin-coupons" class="admin-tab-content hidden">
+      <div class="admin-card">
+        <div class="admin-card-title">
+          <span>🏷️ Coupon Codes</span>
+          <button class="btn-primary" onclick="showCouponModal()"><i class="fas fa-plus"></i> New Coupon</button>
+        </div>
+        <p style="font-size:12px;color:var(--gray-500);margin-bottom:14px">Create and manage coupon codes with expiry date, usage limit, and minimum order amount.</p>
+        <div id="admin-coupons-list"><p style="color:var(--gray-400);font-size:13px"><i class="fas fa-spinner fa-spin"></i> Loading...</p></div>
+      </div>
+      <div class="admin-card" style="margin-top:14px">
+        <div class="admin-card-title">⭐ Loyalty Points</div>
+        <p style="font-size:12px;color:var(--gray-500);margin-bottom:14px">Search a customer to view or adjust their loyalty points balance.</p>
+        <div style="display:flex;gap:8px;margin-bottom:14px">
+          <input class="form-input" id="loyalty-search-email" placeholder="Search by email" style="flex:1">
+          <button class="btn-primary" style="padding:10px 14px;white-space:nowrap" onclick="searchLoyaltyUser()"><i class="fas fa-search"></i></button>
+        </div>
+        <div id="loyalty-user-result"></div>
+      </div>
     </div>
     <!-- Analytics Tab -->
     <div id="admin-analytics" class="admin-tab-content hidden">
@@ -2087,6 +2117,55 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
     <div class="modal-footer">
       <button class="btn-secondary" onclick="closeModal('modal-status')">Cancel</button>
       <button class="btn-primary" onclick="updateOrderStatus()"><i class="fas fa-check"></i> Update Status</button>
+    </div>
+  </div>
+</div>
+
+<!-- COUPON ADD/EDIT MODAL -->
+<div class="modal-overlay" id="modal-coupon">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-header">
+      <span class="modal-title" id="coupon-modal-title">Create Coupon</span>
+      <button class="modal-close" onclick="closeModal('modal-coupon')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:14px">
+      <input type="hidden" id="coupon-edit-id">
+      <div>
+        <label class="form-label">Coupon Code * <span style="color:var(--gray-400);font-weight:400">(e.g. SAVE500, BLACKFRIDAY)</span></label>
+        <input class="form-input" id="coupon-code-input" placeholder="YOURCODE" style="text-transform:uppercase;font-weight:800;letter-spacing:2px">
+      </div>
+      <div>
+        <label class="form-label">Discount Type</label>
+        <select class="form-input" id="coupon-type-input" onchange="toggleCouponValueLabel()">
+          <option value="percent">Percentage Off (e.g. 10%)</option>
+          <option value="fixed">Fixed Amount Off (e.g. ₦500)</option>
+          <option value="shipping">Free Shipping</option>
+        </select>
+      </div>
+      <div id="coupon-value-wrap">
+        <label class="form-label" id="coupon-value-label">Discount Value *</label>
+        <input class="form-input" id="coupon-value-input" type="number" min="1" placeholder="e.g. 10">
+      </div>
+      <div>
+        <label class="form-label">Minimum Order Amount (₦) <span style="color:var(--gray-400);font-weight:400">optional</span></label>
+        <input class="form-input" id="coupon-minorder-input" type="number" min="0" placeholder="e.g. 5000 — leave empty for no minimum">
+      </div>
+      <div>
+        <label class="form-label">Usage Limit <span style="color:var(--gray-400);font-weight:400">optional — max times this code can be used</span></label>
+        <input class="form-input" id="coupon-limit-input" type="number" min="1" placeholder="e.g. 100 — leave empty for unlimited">
+      </div>
+      <div>
+        <label class="form-label">Expiry Date <span style="color:var(--gray-400);font-weight:400">optional</span></label>
+        <input class="form-input" id="coupon-expiry-input" type="date">
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <input type="checkbox" id="coupon-active-input" style="width:18px;height:18px;accent-color:var(--orange)" checked>
+        <label for="coupon-active-input" style="font-size:13px;font-weight:700;cursor:pointer">Active (customers can use this coupon)</label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('modal-coupon')">Cancel</button>
+      <button class="btn-primary" onclick="saveCoupon()"><i class="fas fa-save"></i> Save Coupon</button>
     </div>
   </div>
 </div>
@@ -3154,6 +3233,10 @@ window.placeOrder = async function() {
     lastOrderId = orderRef.id;
     // Award loyalty points (2% of order as points)
     awardLoyaltyPoints(orderId, grandTotal);
+    // Increment coupon usage count
+    if(appliedCoupon && appliedCoupon.firestoreId) {
+      try { await updateDoc(doc(db,'coupons',appliedCoupon.firestoreId), { usageCount: (appliedCoupon.usageCount||0)+1 }); } catch(e) {}
+    }
     // Clear cart BEFORE notifications (so items don't appear empty)
     const itemNames = itemsCopy.map(x=>{
       let detail = x.name;
@@ -3844,6 +3927,7 @@ window.switchAdminTab = function(tab, btn) {
   else if(tab==='chats') loadAdminChats();
   else if(tab==='banners') loadAdminBanners();
   else if(tab==='analytics') loadAnalytics();
+  else if(tab==='coupons') loadAdminCoupons();
 };
 
 
@@ -4599,27 +4683,35 @@ async function init() {
   if(hash && hash !== 'home' && hash !== '__guard__' && document.getElementById('page-'+hash)) navigate(hash);
 }
 
-// ===== COUPON SYSTEM =====
-const COUPONS = {
-  'BENIM10': { type:'percent', value:10, label:'10% off' },
-  'BENIM20': { type:'percent', value:20, label:'20% off' },
-  'SAVE500': { type:'fixed', value:500, label:'₦500 off' },
-  'SAVE1000': { type:'fixed', value:1000, label:'₦1,000 off' },
-  'NEWUSER': { type:'percent', value:15, label:'15% off for new users' },
-  'FREESHIP': { type:'shipping', value:0, label:'Free shipping' }
-};
+// ===== COUPON SYSTEM (Firestore-based) =====
 let appliedCoupon = null;
-window.applyCoupon = function() {
+window.applyCoupon = async function() {
   const code = (document.getElementById('coupon-input').value||'').trim().toUpperCase();
   const msg = document.getElementById('coupon-msg');
   msg.style.display = 'block';
   if(!code) { msg.style.color='var(--red)'; msg.textContent='Enter a coupon code'; return; }
-  const coupon = COUPONS[code];
-  if(!coupon) { msg.style.color='var(--red)'; msg.textContent='Invalid coupon code'; appliedCoupon=null; updateCheckoutTotal(); return; }
-  appliedCoupon = { code, ...coupon };
-  msg.style.color='var(--green)'; msg.textContent='✅ Coupon applied: '+coupon.label;
-  updateCheckoutTotal();
-  showToast('Coupon '+code+' applied! '+coupon.label,'success');
+  msg.style.color='var(--gray-400)'; msg.textContent='Checking...';
+  try {
+    // Look up coupon in Firestore
+    const q = query(collection(db,'coupons'), where('code','==',code), where('active','==',true));
+    const snap = await getDocs(q);
+    if(snap.empty) { msg.style.color='var(--red)'; msg.textContent='Invalid or inactive coupon code'; appliedCoupon=null; updateCheckoutTotal(); return; }
+    const couponDoc = snap.docs[0];
+    const c = couponDoc.data();
+    // Check expiry
+    if(c.expiry && new Date(c.expiry) < new Date()) { msg.style.color='var(--red)'; msg.textContent='This coupon has expired'; appliedCoupon=null; updateCheckoutTotal(); return; }
+    // Check usage limit
+    if(c.limit && (c.usageCount||0) >= c.limit) { msg.style.color='var(--red)'; msg.textContent='This coupon has reached its usage limit'; appliedCoupon=null; updateCheckoutTotal(); return; }
+    // Check minimum order
+    const subtotal = cart.reduce((s,x)=>s+(x.price*x.qty),0);
+    if(c.minOrder && subtotal < c.minOrder) { msg.style.color='var(--red)'; msg.textContent='Minimum order of ₦'+Number(c.minOrder).toLocaleString()+' required for this coupon'; appliedCoupon=null; updateCheckoutTotal(); return; }
+    // All good!
+    const label = c.type==='percent' ? c.value+'% off' : c.type==='fixed' ? '₦'+Number(c.value).toLocaleString()+' off' : 'Free Shipping';
+    appliedCoupon = { code, ...c, firestoreId: couponDoc.id };
+    msg.style.color='var(--green)'; msg.textContent='✅ Coupon applied: '+label;
+    updateCheckoutTotal();
+    showToast('Coupon '+code+' applied! '+label,'success');
+  } catch(e) { msg.style.color='var(--red)'; msg.textContent='Error checking coupon. Try again.'; }
 };
 
 // ===== LOYALTY POINTS =====
@@ -4714,7 +4806,167 @@ function renderRecentlyViewed() {
   renderProductGrid('recently-viewed-grid', items);
 }
 
-// ===== CANCEL ORDER =====
+// ===== ADMIN COUPON MANAGEMENT =====
+window.toggleCouponValueLabel = function() {
+  const type = document.getElementById('coupon-type-input').value;
+  const wrap = document.getElementById('coupon-value-wrap');
+  const lbl = document.getElementById('coupon-value-label');
+  if(type==='shipping') { wrap.style.display='none'; }
+  else { wrap.style.display='block'; lbl.textContent = type==='percent' ? 'Percentage Off (%)' : 'Fixed Amount Off (₦)'; }
+};
+
+window.showCouponModal = function() {
+  document.getElementById('coupon-edit-id').value = '';
+  document.getElementById('coupon-code-input').value = '';
+  document.getElementById('coupon-type-input').value = 'percent';
+  document.getElementById('coupon-value-input').value = '';
+  document.getElementById('coupon-minorder-input').value = '';
+  document.getElementById('coupon-limit-input').value = '';
+  document.getElementById('coupon-expiry-input').value = '';
+  document.getElementById('coupon-active-input').checked = true;
+  document.getElementById('coupon-modal-title').textContent = 'Create Coupon';
+  toggleCouponValueLabel();
+  openModal('modal-coupon');
+};
+
+window.loadAdminCoupons = async function() {
+  const list = document.getElementById('admin-coupons-list');
+  list.innerHTML = '<p style="color:var(--gray-400);font-size:13px"><i class="fas fa-spinner fa-spin"></i> Loading...</p>';
+  try {
+    const snap = await getDocs(collection(db,'coupons'));
+    if(snap.empty) {
+      list.innerHTML = '<div style="text-align:center;padding:24px;color:var(--gray-400)"><i class="fas fa-tag" style="font-size:28px;display:block;margin-bottom:8px"></i><p style="font-size:13px">No coupons yet. Create your first one!</p></div>';
+      return;
+    }
+    const coupons = snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>a.code.localeCompare(b.code));
+    const typeLabel = {percent:'% off', fixed:'₦ off', shipping:'Free Shipping'};
+    list.innerHTML = coupons.map(c=>{
+      const expired = c.expiry && new Date(c.expiry) < new Date();
+      const usageDisplay = c.usageCount||0;
+      const limitDisplay = c.limit ? (usageCount+'/'+c.limit) : (usageDisplay+'/∞');
+      const statusColor = !c.active ? 'var(--gray-400)' : expired ? 'var(--red)' : 'var(--green)';
+      const statusText = !c.active ? 'Inactive' : expired ? 'Expired' : 'Active';
+      return '<div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px">'+
+        '<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px">'+
+          '<div>'+
+            '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">'+
+              '<span style="font-size:16px;font-weight:900;letter-spacing:2px;color:var(--orange)">'+c.code+'</span>'+
+              '<span style="background:'+statusColor+';color:#fff;font-size:10px;font-weight:800;padding:2px 8px;border-radius:99px">'+statusText+'</span>'+
+            '</div>'+
+            '<div style="font-size:13px;font-weight:700;color:var(--text)">'+
+              (c.type==='shipping' ? 'Free Shipping' : (c.type==='percent' ? c.value+'% off' : '₦'+Number(c.value||0).toLocaleString()+' off'))+
+              (c.minOrder ? ' • Min order ₦'+Number(c.minOrder).toLocaleString() : '')+
+            '</div>'+
+            '<div style="font-size:11px;color:var(--gray-400);margin-top:3px">'+
+              'Used: '+(c.usageCount||0)+(c.limit ? '/'+c.limit : ' times')+
+              (c.expiry ? ' • Expires: '+new Date(c.expiry).toLocaleDateString('en-NG',{day:'numeric',month:'short',year:'numeric'}) : '')+
+            '</div>'+
+          '</div>'+
+          '<div style="display:flex;gap:6px">'+
+            '<button class="btn-primary" style="font-size:12px;padding:6px 12px" onclick="editCoupon(\''+c.id+'\')"><i class="fas fa-edit"></i></button>'+
+            '<button style="background:var(--red);color:#fff;border:none;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer;font-weight:700" onclick="deleteCoupon(\''+c.id+'\',\''+c.code+'\')"><i class="fas fa-trash"></i></button>'+
+          '</div>'+
+        '</div>'+
+      '</div>';
+    }).join('');
+  } catch(e) { list.innerHTML = '<p style="color:var(--red);font-size:13px">Error: '+e.message+'</p>'; }
+};
+
+window.editCoupon = async function(id) {
+  try {
+    const snap = await getDoc(doc(db,'coupons',id));
+    if(!snap.exists()) return;
+    const c = snap.data();
+    document.getElementById('coupon-edit-id').value = id;
+    document.getElementById('coupon-code-input').value = c.code||'';
+    document.getElementById('coupon-type-input').value = c.type||'percent';
+    document.getElementById('coupon-value-input').value = c.value||'';
+    document.getElementById('coupon-minorder-input').value = c.minOrder||'';
+    document.getElementById('coupon-limit-input').value = c.limit||'';
+    document.getElementById('coupon-expiry-input').value = c.expiry||'';
+    document.getElementById('coupon-active-input').checked = c.active !== false;
+    document.getElementById('coupon-modal-title').textContent = 'Edit Coupon — '+c.code;
+    toggleCouponValueLabel();
+    openModal('modal-coupon');
+  } catch(e) { showToast('Error loading coupon','error'); }
+};
+
+window.saveCoupon = async function() {
+  const code = (document.getElementById('coupon-code-input').value||'').trim().toUpperCase().replace(/\s/g,'');
+  if(!code) return showToast('Enter a coupon code','error');
+  const type = document.getElementById('coupon-type-input').value;
+  const value = type==='shipping' ? 0 : Number(document.getElementById('coupon-value-input').value||0);
+  if(type!=='shipping' && (!value||value<=0)) return showToast('Enter a valid discount value','error');
+  const editId = document.getElementById('coupon-edit-id').value;
+  const data = {
+    code, type, value,
+    minOrder: Number(document.getElementById('coupon-minorder-input').value||0)||0,
+    limit: Number(document.getElementById('coupon-limit-input').value||0)||0,
+    expiry: document.getElementById('coupon-expiry-input').value||'',
+    active: document.getElementById('coupon-active-input').checked,
+    usageCount: 0,
+    updatedAt: serverTimestamp()
+  };
+  try {
+    if(editId) {
+      const existing = await getDoc(doc(db,'coupons',editId));
+      data.usageCount = existing.exists() ? (existing.data().usageCount||0) : 0;
+      await setDoc(doc(db,'coupons',editId), data);
+    } else {
+      data.createdAt = serverTimestamp();
+      await addDoc(collection(db,'coupons'), data);
+    }
+    closeModal('modal-coupon');
+    showToast('Coupon saved! ✅','success');
+    loadAdminCoupons();
+  } catch(e) { showToast('Error saving coupon: '+e.message,'error'); }
+};
+
+window.deleteCoupon = async function(id, code) {
+  if(!confirm('Delete coupon '+code+'?')) return;
+  try { await deleteDoc(doc(db,'coupons',id)); showToast('Coupon deleted','success'); loadAdminCoupons(); }
+  catch(e) { showToast('Error deleting','error'); }
+};
+
+// ===== LOYALTY POINTS ADMIN =====
+window.searchLoyaltyUser = async function() {
+  const email = document.getElementById('loyalty-search-email').value.trim().toLowerCase();
+  if(!email) return showToast('Enter an email address','error');
+  const result = document.getElementById('loyalty-user-result');
+  result.innerHTML = '<p style="color:var(--gray-400);font-size:13px"><i class="fas fa-spinner fa-spin"></i> Searching...</p>';
+  try {
+    const q = query(collection(db,'users'), where('email','==',email));
+    const snap = await getDocs(q);
+    if(snap.empty) { result.innerHTML = '<p style="color:var(--red);font-size:13px">No user found with that email.</p>'; return; }
+    const d = snap.docs[0];
+    const u = d.data();
+    const pts = u.loyaltyPoints||0;
+    result.innerHTML = '<div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px">'+
+      '<div style="font-size:14px;font-weight:800;margin-bottom:4px">'+u.name+'</div>'+
+      '<div style="font-size:12px;color:var(--gray-500);margin-bottom:12px">'+u.email+'</div>'+
+      '<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">'+
+        '<span style="font-size:22px;font-weight:900;color:var(--orange)">'+pts.toLocaleString()+'</span>'+
+        '<span style="font-size:12px;color:var(--gray-500)">points = ₦'+pts.toLocaleString()+' value</span>'+
+      '</div>'+
+      '<div style="display:flex;gap:8px;flex-wrap:wrap">'+
+        '<input class="form-input" id="loyalty-adjust-val" type="number" placeholder="Points to add/deduct" style="flex:1;min-width:100px">'+
+        '<button class="btn-primary" style="font-size:12px;padding:8px 12px" onclick="adjustLoyalty(\''+d.id+'\','+pts+',1)"><i class="fas fa-plus"></i> Add</button>'+
+        '<button style="background:var(--red);color:#fff;border:none;border-radius:6px;font-size:12px;padding:8px 12px;font-weight:700;cursor:pointer" onclick="adjustLoyalty(\''+d.id+'\','+pts+',-1)"><i class="fas fa-minus"></i> Deduct</button>'+
+      '</div>'+
+    '</div>';
+  } catch(e) { result.innerHTML = '<p style="color:var(--red);font-size:13px">Error: '+e.message+'</p>'; }
+};
+
+window.adjustLoyalty = async function(userId, current, direction) {
+  const val = Number(document.getElementById('loyalty-adjust-val').value||0);
+  if(!val||val<=0) return showToast('Enter a valid point amount','error');
+  const newPts = Math.max(0, current + (direction * val));
+  try {
+    await updateDoc(doc(db,'users',userId), { loyaltyPoints: newPts });
+    showToast((direction>0?'Added ':'Deducted ')+val+' points. New balance: '+newPts,'success');
+    searchLoyaltyUser();
+  } catch(e) { showToast('Error updating points','error'); }
+};
 window.cancelOrder = async function(docId, orderId) {
   if(!confirm('Cancel order '+orderId+'? This cannot be undone.')) return;
   try {
@@ -4930,8 +5182,7 @@ window.showManualInstallGuide = function() {
   const sub = document.getElementById('pwa-banner-sub');
   if(sub) {
     if(_isIOS) sub.textContent = 'Tap Install → follow 2 simple steps';
-    else if(_pwaInstallEvent || _isAndroid) sub.textContent = 'Tap Install — works like a real app!';
-    else sub.textContent = 'Add to home screen for faster shopping';
+    else sub.textContent = 'Free · No app store needed';
   }
 })();
 
