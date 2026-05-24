@@ -1,84 +1,57 @@
-// BENIM Warehouse Service Worker v1.0
-var CACHE_NAME = "benim-warehouse-v1";
-var OFFLINE_URL = "/Benim_Trade/";
-
-var urlsToCache = [
-  "/Benim_Trade/",
-  "/Benim_Trade/index.html",
-  "/Benim_Trade/manifest.json",
-  "/Benim_Trade/icon-192.png",
-  "/Benim_Trade/icon-512.png"
+const CACHE_NAME = 'benim-v1';
+const ASSETS = [
+  './',
+  './index.html',
+  './manifest.json',
+  'https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Poppins:wght@400;500;600;700&display=swap',
+  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css'
 ];
 
-// Install - cache files
-self.addEventListener("install", function(event){
-  console.log("BENIM SW: Installing...");
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(function(cache){
-      console.log("BENIM SW: Caching files");
-      return cache.addAll(urlsToCache);
-    })
+// Install: cache core assets
+self.addEventListener('install', e => {
+  e.waitUntil(
+    caches.open(CACHE_NAME).then(cache => {
+      return Promise.allSettled(ASSETS.map(url => cache.add(url).catch(() => {})));
+    }).then(() => self.skipWaiting())
   );
-  self.skipWaiting();
 });
 
-// Activate - clean old caches
-self.addEventListener("activate", function(event){
-  console.log("BENIM SW: Activating...");
-  event.waitUntil(
-    caches.keys().then(function(cacheNames){
-      return Promise.all(
-        cacheNames.filter(function(name){
-          return name !== CACHE_NAME;
-        }).map(function(name){
-          console.log("BENIM SW: Deleting old cache", name);
-          return caches.delete(name);
-        })
-      );
-    })
+// Activate: remove old caches
+self.addEventListener('activate', e => {
+  e.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
+    ).then(() => self.clients.claim())
   );
-  self.clients.claim();
 });
 
-// Fetch - serve from cache, fallback to network
-self.addEventListener("fetch", function(event){
-  event.respondWith(
-    caches.match(event.request).then(function(response){
-      if(response){
-        return response;
-      }
-      return fetch(event.request).then(function(networkResponse){
-        // Cache new requests dynamically
-        if(networkResponse && networkResponse.status === 200 && event.request.method === "GET"){
-          var responseClone = networkResponse.clone();
-          caches.open(CACHE_NAME).then(function(cache){
-            cache.put(event.request, responseClone);
-          });
+// Fetch: network first for Firebase/API, cache fallback for everything else
+self.addEventListener('fetch', e => {
+  const url = new URL(e.request.url);
+
+  // Never intercept Firebase, Google APIs, or cross-origin requests
+  if (
+    url.hostname.includes('firebase') ||
+    url.hostname.includes('google') ||
+    url.hostname.includes('gstatic') ||
+    url.hostname.includes('googleapis') ||
+    url.hostname.includes('firebaseapp') ||
+    url.hostname.includes('firebasestorage') ||
+    e.request.method !== 'GET'
+  ) {
+    return;
+  }
+
+  // For same-origin requests: network first, fall back to cache
+  e.respondWith(
+    fetch(e.request)
+      .then(res => {
+        if (res && res.status === 200) {
+          const clone = res.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(e.request, clone));
         }
-        return networkResponse;
-      });
-    }).catch(function(){
-      // Offline fallback
-      return caches.match(OFFLINE_URL);
-    })
+        return res;
+      })
+      .catch(() => caches.match(e.request))
   );
-});
-
-// Push notifications (future use)
-self.addEventListener("push", function(event){
-  var options = {
-    body: event.data ? event.data.text() : "New update from BENIM Warehouse!",
-    icon: "/Benim_Trade/icon-192.png",
-    badge: "/Benim_Trade/icon-192.png",
-    vibrate: [100, 50, 100],
-    data: {url: "/Benim_Trade/"}
-  };
-  event.waitUntil(
-    self.registration.showNotification("BENIM Warehouse", options)
-  );
-});
-
-self.addEventListener("notificationclick", function(event){
-  event.notification.close();
-  event.waitUntil(clients.openWindow(event.notification.data.url));
 });

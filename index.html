@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Benim Shop</title>
+<meta name="description" content="Benim — Your trusted online shopping destination. Quality products, fast delivery, great prices.">
+<meta name="theme-color" content="#e8420a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Benim Shop">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
@@ -65,6 +75,19 @@ body.dark-mode {
 /* Dark mode toggle button */
 #dark-mode-btn{background:none;border:none;font-size:18px;cursor:pointer;padding:6px;border-radius:50%;transition:.2s;display:flex;align-items:center;justify-content:center;color:var(--gray-600)}
 #dark-mode-btn:hover{background:var(--gray-100)}
+
+/* ===== PWA INSTALL BANNER ===== */
+#pwa-install-banner{position:fixed;top:0;left:0;right:0;z-index:99998;background:linear-gradient(135deg,#1a0800,#2d1000);color:#fff;padding:10px 14px;display:flex;align-items:center;gap:10px;box-shadow:0 2px 12px rgba(0,0,0,.4);transform:translateY(-100%);transition:transform .4s cubic-bezier(.34,1.56,.64,1);border-bottom:2px solid var(--orange)}
+#pwa-install-banner.show{transform:translateY(0)}
+.pwa-banner-icon{width:40px;height:40px;border-radius:10px;object-fit:cover;flex-shrink:0;border:2px solid rgba(232,80,10,.5)}
+.pwa-banner-icon-fallback{width:40px;height:40px;border-radius:10px;background:var(--orange);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.pwa-banner-text{flex:1;min-width:0}
+.pwa-banner-title{font-size:13px;font-weight:900;color:#fff;font-family:'Poppins',sans-serif}
+.pwa-banner-sub{font-size:11px;color:rgba(255,200,150,.8);margin-top:1px}
+.pwa-install-btn{background:var(--orange);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap;font-family:'Poppins',sans-serif;letter-spacing:.3px}
+.pwa-install-btn:active{transform:scale(.97)}
+.pwa-dismiss-btn{background:none;border:none;color:rgba(255,255,255,.5);font-size:18px;cursor:pointer;padding:4px;flex-shrink:0;line-height:1}
+.pwa-dismiss-btn:hover{color:#fff}
 
 /* ===== COMPREHENSIVE DARK MODE ===== */
 body.dark-mode,body.dark-mode .page,body.dark-mode #app{background:#0f0f0f;color:#f0f0f0}
@@ -719,6 +742,52 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
 </style>
 </head>
 <body>
+<!-- PWA INSTALL BANNER -->
+<div id="pwa-install-banner">
+  <img class="pwa-banner-icon" src="icon-192.png" alt="Benim" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+  <div class="pwa-banner-icon-fallback" style="display:none">🛍️</div>
+  <div class="pwa-banner-text">
+    <div class="pwa-banner-title">Install Benim Shop App</div>
+    <div class="pwa-banner-sub" id="pwa-banner-sub">Add to home screen for faster shopping</div>
+  </div>
+  <button class="pwa-install-btn" id="pwa-install-btn">📲 Install</button>
+  <button class="pwa-dismiss-btn" onclick="dismissPWABanner()" title="Dismiss">✕</button>
+</div>
+
+<!-- iOS INSTALL GUIDE MODAL -->
+<div class="modal-overlay" id="modal-ios-install">
+  <div class="modal" style="max-width:360px">
+    <div class="modal-header">
+      <span class="modal-title">📲 Install Benim App</span>
+      <button class="modal-close" onclick="closeModal('modal-ios-install')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body" style="padding:20px">
+      <p style="font-size:13px;color:var(--gray-600);margin-bottom:16px;line-height:1.6">Follow these 2 steps to install Benim Shop on your iPhone/iPad:</p>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:flex-start;gap:12px;background:var(--gray-50);border-radius:10px;padding:12px">
+          <div style="width:32px;height:32px;background:var(--orange);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px;flex-shrink:0">1</div>
+          <div>
+            <div style="font-weight:800;font-size:13px;margin-bottom:4px">Tap the Share button</div>
+            <div style="font-size:12px;color:var(--gray-500)">Tap the <strong>Share</strong> icon (box with arrow) at the bottom of Safari</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;background:var(--gray-50);border-radius:10px;padding:12px">
+          <div style="width:32px;height:32px;background:var(--orange);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px;flex-shrink:0">2</div>
+          <div>
+            <div style="font-weight:800;font-size:13px;margin-bottom:4px">Tap "Add to Home Screen"</div>
+            <div style="font-size:12px;color:var(--gray-500)">Scroll down in the menu and tap <strong>"Add to Home Screen"</strong> then tap <strong>Add</strong></div>
+          </div>
+        </div>
+      </div>
+      <div style="background:#fff3e0;border-radius:8px;padding:10px;margin-top:14px;border-left:3px solid var(--orange)">
+        <p style="font-size:11px;color:var(--orange);font-weight:700">⚠️ Must use Safari browser on iOS for this to work</p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-primary" onclick="closeModal('modal-ios-install')">Got it!</button>
+    </div>
+  </div>
+</div>
 <!-- SPLASH SCREEN -->
 <div id="splash-screen">
   <div class="splash-bg"></div>
@@ -820,6 +889,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
     <div class="sidebar-item" onclick="navigate('shipping-policy');toggleSidebar()"><i class="fas fa-shipping-fast"></i> Shipping Policy</div>
     <div class="sidebar-item" onclick="navigate('privacy-policy');toggleSidebar()"><i class="fas fa-shield-alt"></i> Privacy Policy</div>
     <div class="sidebar-item" onclick="navigate('terms');toggleSidebar()"><i class="fas fa-file-contract"></i> Terms & Conditions</div>
+    <div class="sidebar-item" onclick="document.getElementById('pwa-install-btn').click();toggleSidebar()" style="color:var(--orange);font-weight:800;border-top:1px solid var(--gray-100);margin-top:6px;padding-top:12px"><i class="fas fa-download" style="color:var(--orange)"></i> 📲 Install App</div>
   </div>
 
   <div class="sidebar-section" id="sb-logout-section" style="display:none">
@@ -1283,10 +1353,9 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
     <div id="admin-banners" class="admin-tab-content hidden">
       <div class="admin-card">
         <div class="admin-card-title">
-          <span>Homepage Slider Banners</span>
-          <button class="btn-primary" onclick="showAddBannerModal()"><i class="fas fa-plus"></i> Add Banner</button>
+          <span>🖼️ Homepage Slider — All 5 Slides</span>
         </div>
-        <p style="font-size:13px;color:var(--gray-500);margin-bottom:14px">Add, edit or delete the 3 sliding banners on your homepage. Each banner has a title, subtitle, button text, button action, and optional product image.</p>
+        <p style="font-size:13px;color:var(--gray-500);margin-bottom:14px">All 5 slides are always shown below. Click <strong>Edit</strong> on any slide to change its title, image, colours and button. Click <strong>Reset</strong> to restore the original default text.</p>
         <div id="admin-banners-list"></div>
       </div>
     </div>
@@ -2004,11 +2073,13 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
         <p style="font-size:11px;color:var(--gray-400);margin-top:6px"><i class="fas fa-info-circle"></i> Tip: upload your image to <strong>imgbb.com</strong> or <strong>imgur.com</strong> for free, then paste the direct link here.</p>
       </div>
       <div>
-        <label class="form-label">Display Order</label>
+        <label class="form-label">Display Order (Slide Position)</label>
         <select class="form-input" id="banner-order">
           <option value="1">Slide 1 (First)</option>
           <option value="2">Slide 2 (Second)</option>
           <option value="3">Slide 3 (Third)</option>
+          <option value="4">Slide 4 (Fourth)</option>
+          <option value="5">Slide 5 (Fifth)</option>
         </select>
       </div>
     </div>
@@ -2616,7 +2687,7 @@ window.renderCart = function() {
     <div class="cart-item">
       <img class="cart-item-img" src="${item.image||'https://placehold.co/80x80/f3f4f6/9ca3af?text=Img'}" onerror="this.src='https://placehold.co/80x80/f3f4f6/9ca3af?text=Img'">
       <div class="cart-item-info">
-        <div class="cart-item-name">${item.name}${item.variantLabel?` <span style="font-size:11px;color:var(--orange);font-weight:700">(${item.variantLabel})</span>`:''}</div>
+        <div class="cart-item-name">${item.name}${item.variantLabel?' <span style="font-size:11px;color:var(--orange);font-weight:700">('+item.variantLabel+')</span>':''}</div>
         <div class="cart-item-price">₦${(item.price*item.qty).toLocaleString()}</div>
         <div class="cart-item-actions">
           <div class="qty-controls">
@@ -3479,22 +3550,25 @@ window.viewOrderDetails = async function(docId) {
       <!-- ITEMS -->
       <div style="padding:16px;border-bottom:1px solid var(--gray-100)">
         <div style="font-size:12px;font-weight:800;text-transform:uppercase;color:var(--gray-500);letter-spacing:.5px;margin-bottom:10px">🛍️ Items Ordered</div>
-        ${items.length ? items.map(item=>`
-          <div style="display:flex;gap:10px;align-items:flex-start;padding:10px;background:var(--gray-50);border-radius:8px;margin-bottom:8px">
-            ${item.image ? `<img src="${item.image}" style="width:52px;height:52px;object-fit:cover;border-radius:6px;flex-shrink:0" onerror="this.style.display='none'">` : '<div style="width:52px;height:52px;background:var(--gray-200);border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--gray-400);font-size:18px"><i class=\"fas fa-box\"></i></div>'}
-            <div style="flex:1;min-width:0">
-              <div style="font-size:13px;font-weight:800;color:var(--gray-800);margin-bottom:4px;line-height:1.3">${item.name||'Product'}</div>
-              <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:5px">
-                ${item.size ? `<span style="background:#fff;border:1px solid var(--gray-200);border-radius:4px;font-size:11px;font-weight:700;padding:2px 7px;color:var(--gray-700)">Size: ${item.size}</span>` : ''}
-                ${item.color||item.colour ? `<span style="background:#fff;border:1px solid var(--gray-200);border-radius:4px;font-size:11px;font-weight:700;padding:2px 7px;color:var(--gray-700)">Colour: ${item.color||item.colour}</span>` : ''}
-                ${item.variant ? `<span style="background:#fff;border:1px solid var(--gray-200);border-radius:4px;font-size:11px;font-weight:700;padding:2px 7px;color:var(--gray-700)">${item.variant}</span>` : ''}
-              </div>
-              <div style="display:flex;justify-content:space-between;align-items:center">
-                <span style="font-size:12px;color:var(--gray-500)">Qty: <strong style="color:var(--gray-800)">${item.qty||1}</strong></span>
-                <span style="font-size:13px;font-weight:900;color:var(--orange)">₦${((item.price||0)*(item.qty||1)).toLocaleString()}</span>
-              </div>
-            </div>
-          </div>`).join('') : '<p style="font-size:13px;color:var(--gray-400)">No items found</p>'}
+        ${items.length ? items.map(item=>{
+          const imgHtml = item.image
+            ? '<img src="'+item.image+'" style="width:52px;height:52px;object-fit:cover;border-radius:6px;flex-shrink:0" onerror="this.style.display=\'none\'">'
+            : '<div style="width:52px;height:52px;background:var(--gray-200);border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--gray-400);font-size:18px"><i class="fas fa-box"></i></div>';
+          const sizeHtml = item.size ? '<span style="background:#fff;border:1px solid var(--gray-200);border-radius:4px;font-size:11px;font-weight:700;padding:2px 7px;color:var(--gray-700)">Size: '+item.size+'</span>' : '';
+          const colourHtml = (item.color||item.colour) ? '<span style="background:#fff;border:1px solid var(--gray-200);border-radius:4px;font-size:11px;font-weight:700;padding:2px 7px;color:var(--gray-700)">Colour: '+(item.color||item.colour)+'</span>' : '';
+          const variantHtml = item.variant ? '<span style="background:#fff;border:1px solid var(--gray-200);border-radius:4px;font-size:11px;font-weight:700;padding:2px 7px;color:var(--gray-700)">'+item.variant+'</span>' : '';
+          return '<div style="display:flex;gap:10px;align-items:flex-start;padding:10px;background:var(--gray-50);border-radius:8px;margin-bottom:8px">'+
+            imgHtml+
+            '<div style="flex:1;min-width:0">'+
+              '<div style="font-size:13px;font-weight:800;color:var(--gray-800);margin-bottom:4px;line-height:1.3">'+(item.name||'Product')+'</div>'+
+              '<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:5px">'+sizeHtml+colourHtml+variantHtml+'</div>'+
+              '<div style="display:flex;justify-content:space-between;align-items:center">'+
+                '<span style="font-size:12px;color:var(--gray-500)">Qty: <strong style="color:var(--gray-800)">'+(item.qty||1)+'</strong></span>'+
+                '<span style="font-size:13px;font-weight:900;color:var(--orange)">₦'+((item.price||0)*(item.qty||1)).toLocaleString()+'</span>'+
+              '</div>'+
+            '</div>'+
+          '</div>';
+        }).join('') : '<p style="font-size:13px;color:var(--gray-400)">No items found</p>'}
       </div>
 
       <!-- CUSTOMER & DELIVERY -->
@@ -3513,10 +3587,7 @@ window.viewOrderDetails = async function(docId) {
             <div style="font-size:10px;font-weight:700;color:var(--gray-400);text-transform:uppercase;margin-bottom:3px">Delivery Address</div>
             <div style="font-size:13px;font-weight:700">${[addr.street,addr.city,addr.state].filter(Boolean).join(', ')||'—'}</div>
           </div>
-          ${addr.note ? `<div style="background:#fffbeb;border-radius:8px;padding:10px;grid-column:1/-1;border:1px solid #fde68a">
-            <div style="font-size:10px;font-weight:700;color:var(--yellow);text-transform:uppercase;margin-bottom:3px">📝 Note</div>
-            <div style="font-size:13px">${addr.note}</div>
-          </div>` : ''}
+          ${addr.note ? '<div style="background:#fffbeb;border-radius:8px;padding:10px;grid-column:1/-1;border:1px solid #fde68a"><div style="font-size:10px;font-weight:700;color:var(--yellow);text-transform:uppercase;margin-bottom:3px">📝 Note</div><div style="font-size:13px">'+addr.note+'</div></div>' : ''}
         </div>
       </div>
 
@@ -3525,7 +3596,7 @@ window.viewOrderDetails = async function(docId) {
         <div style="font-size:12px;font-weight:800;text-transform:uppercase;color:var(--gray-500);letter-spacing:.5px;margin-bottom:10px">💰 Payment Summary</div>
         <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span style="color:var(--gray-500)">Payment Method</span><span style="font-weight:700">${o.payment==='bank'?'🏦 Bank Transfer (Opay)':'💵 Pay on Delivery'}</span></div>
         <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span style="color:var(--gray-500)">Subtotal</span><span style="font-weight:700">₦${((o.total||0)-(o.deliveryFee||0)).toLocaleString()}</span></div>
-        ${(o.deliveryFee||0)>0 ? `<div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span style="color:var(--gray-500)">Delivery Fee</span><span style="font-weight:700">₦${(o.deliveryFee||0).toLocaleString()}</span></div>` : ''}
+        ${(o.deliveryFee||0)>0 ? '<div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span style="color:var(--gray-500)">Delivery Fee</span><span style="font-weight:700">₦'+(o.deliveryFee||0).toLocaleString()+'</span></div>' : ''}
         <div style="display:flex;justify-content:space-between;font-size:15px;font-weight:900;border-top:2px solid var(--gray-200);padding-top:10px;margin-top:4px"><span>Total</span><span style="color:var(--orange)">₦${(o.total||0).toLocaleString()}</span></div>
       </div>`;
 
@@ -3629,11 +3700,15 @@ window.loadAdminChats = async function() {
           <span style="background:var(--gray-100);color:var(--gray-600);font-size:10px;font-weight:700;padding:3px 8px;border-radius:99px">Session ${d.id.slice(-6)}</span>
         </div>
         <div style="background:var(--gray-50);border-radius:8px;padding:10px;max-height:180px;overflow-y:auto;display:flex;flex-direction:column;gap:6px">
-          ${msgs.length ? msgs.map(m=>`
-            <div style="display:flex;gap:6px;align-items:flex-start;${m.role==='user'?'flex-direction:row-reverse':''}">
-              <div style="width:22px;height:22px;border-radius:50%;background:${m.role==='bot'?'var(--orange)':'var(--gray-300)'};display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:10px;color:#fff">${m.role==='bot'?'<i class="fas fa-robot"></i>':'<i class="fas fa-user"></i>'}</div>
-              <div style="background:${m.role==='bot'?'#fff':'var(--orange)'};color:${m.role==='bot'?'var(--gray-800)':'#fff'};border-radius:8px;padding:6px 10px;font-size:12px;max-width:80%;line-height:1.4;box-shadow:0 1px 2px rgba(0,0,0,.06)">${(m.text||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>')}</div>
-            </div>`).join('') : '<p style="color:var(--gray-400);font-size:12px;text-align:center">No messages</p>'}
+          ${msgs.length ? msgs.map(m=>{
+              const isBot = m.role==='bot';
+              const txt = (m.text||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+              const avatar = isBot ? '<i class="fas fa-robot"></i>' : '<i class="fas fa-user"></i>';
+              return '<div style="display:flex;gap:6px;align-items:flex-start;'+(isBot?'':'flex-direction:row-reverse')+'">'
+                +'<div style="width:22px;height:22px;border-radius:50%;background:'+(isBot?'var(--orange)':'var(--gray-300)')+';display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:10px;color:#fff">'+avatar+'</div>'
+                +'<div style="background:'+(isBot?'#fff':'var(--orange)')+';color:'+(isBot?'var(--gray-800)':'#fff')+';border-radius:8px;padding:6px 10px;font-size:12px;max-width:80%;line-height:1.4;box-shadow:0 1px 2px rgba(0,0,0,.06)">'+txt+'</div>'
+                +'</div>';
+            }).join('') : '<p style="color:var(--gray-400);font-size:12px;text-align:center">No messages</p>'}
         </div>
       </div>`;
     }).join('');
@@ -4073,12 +4148,23 @@ const SLIDE_BG_EXTRA = {
 };
 
 // Load all 5 slots: use Firestore value if saved, otherwise use default
+// Handles both new docs (with slotId) and old docs (matched by order number)
 async function loadBanners() {
   try {
     const snap = await getDocs(collection(db,'banners'));
-    const saved = {};
-    snap.docs.forEach(d => { const s = d.data(); if(s.slotId) saved[s.slotId] = {firestoreId:d.id,...s}; });
-    return DEFAULT_BANNERS.map(def => saved[def.slotId] ? {...def,...saved[def.slotId]} : {...def});
+    const savedBySlot = {};
+    const savedByOrder = {};
+    snap.docs.forEach(d => {
+      const s = d.data();
+      const entry = {firestoreId: d.id, ...s};
+      if(s.slotId) savedBySlot[s.slotId] = entry;
+      else if(s.order) savedByOrder[String(s.order)] = entry; // old format fallback
+    });
+    return DEFAULT_BANNERS.map(def => {
+      if(savedBySlot[def.slotId]) return {...def, ...savedBySlot[def.slotId]};
+      if(savedByOrder[String(def.order)]) return {...def, ...savedByOrder[String(def.order)], slotId: def.slotId};
+      return {...def};
+    });
   } catch(e) { return DEFAULT_BANNERS.map(d=>({...d})); }
 }
 
@@ -4102,10 +4188,11 @@ async function renderSlider() {
 
 window.loadAdminBanners = async function() {
   const list = document.getElementById('admin-banners-list');
-  list.innerHTML = '<p style="color:var(--gray-400);font-size:13px"><i class="fas fa-spinner fa-spin"></i> Loading...</p>';
+  list.innerHTML = '<p style="color:var(--gray-400);font-size:13px;padding:10px"><i class="fas fa-spinner fa-spin"></i> Loading all 5 slides...</p>';
   const banners = await loadBanners();
+  console.log('Loaded banners:', banners.length, banners.map(b=>b.slotId));
   const bgLabels = {'slide-1':'🟠 Orange','slide-2':'🌑 Dark Navy','slide-3':'🔵 Blue/Purple','slide-green':'🟢 Green','slide-dark':'⚫ Dark'};
-  list.innerHTML = banners.map(b=>{
+  list.innerHTML = `<p style="font-size:12px;color:var(--green);font-weight:700;margin-bottom:10px"><i class="fas fa-check-circle"></i> Showing all ${banners.length} slides</p>` + banners.map(b=>{
     const isCustom = !!b.firestoreId;
     return `<div class="banner-card">
       ${b.image ? `<img class="banner-preview" src="${b.image}" onerror="this.src='';this.style.display='none'"><div class="banner-preview-empty" style="display:none">🖼️</div>` : '<div class="banner-preview-empty">🖼️<span style="font-size:11px;margin-top:4px;display:block;color:var(--gray-400)">No image</span></div>'}
@@ -4119,8 +4206,8 @@ window.loadAdminBanners = async function() {
         <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px">${b.subtitle||'—'}</div>
         <div style="font-size:11px;color:var(--gray-400)">Button: "${b.btnText||'Shop Now'}" → ${b.btnAction||'all'}</div>
         <div class="banner-card-actions">
-          <button class="btn-primary" style="font-size:12px;padding:6px 14px" onclick="editBannerSlot('${b.slotId}')"><i class="fas fa-edit"></i> Edit</button>
-          ${isCustom?`<button style="font-size:12px;padding:6px 14px;background:var(--red);color:#fff;border:none;border-radius:6px;font-weight:700;cursor:pointer" onclick="resetBannerSlot('${b.slotId}','${b.firestoreId}')"><i class="fas fa-undo"></i> Reset</button>`:''}
+          <button class="btn-primary" style="font-size:12px;padding:6px 14px" onclick="editBannerSlot('${b.slotId}')"><i class="fas fa-edit"></i> Edit Slide ${b.order}</button>
+          ${isCustom ? '<button style="font-size:12px;padding:6px 14px;background:var(--red);color:#fff;border:none;border-radius:6px;font-weight:700;cursor:pointer" onclick="resetBannerSlot(\''+b.slotId+'\',\''+(b.firestoreId||b.slotId)+'\')"><i class="fas fa-undo"></i> Reset</button>' : ''}
         </div>
       </div>
     </div>`;
@@ -4166,13 +4253,8 @@ window.saveBanner = async function() {
   };
   if(!data.title) return showToast('Title is required','error');
   try {
-    // Check if a Firestore doc already exists for this slot
-    const snap = await getDocs(query(collection(db,'banners'),where('slotId','==',slotId)));
-    if(!snap.empty) {
-      await updateDoc(doc(db,'banners',snap.docs[0].id), data);
-    } else {
-      await addDoc(collection(db,'banners'), data);
-    }
+    // Use slotId as the Firestore document ID — always 1 doc per slot, no duplicates
+    await setDoc(doc(db,'banners',slotId), data);
     closeModal('modal-banner');
     showToast('Slide saved! ✅','success');
     await renderSlider();
@@ -4183,8 +4265,12 @@ window.saveBanner = async function() {
 window.resetBannerSlot = async function(slotId, firestoreId) {
   if(!confirm('Reset this slide back to default?')) return;
   try {
-    await deleteDoc(doc(db,'banners',firestoreId));
-    showToast('Reset to default','success');
+    // Try deleting by slotId (new format) first, then by firestoreId (old format)
+    try { await deleteDoc(doc(db,'banners',slotId)); } catch(e){}
+    if(firestoreId && firestoreId !== slotId) {
+      try { await deleteDoc(doc(db,'banners',firestoreId)); } catch(e){}
+    }
+    showToast('Reset to default ✅','success');
     await renderSlider();
     loadAdminBanners();
   } catch(e) { showToast('Error resetting slide','error'); }
@@ -4396,6 +4482,86 @@ async function init() {
   // Then navigate to hash page if present
   const hash = location.hash.replace('#','');
   if(hash && hash !== 'home' && hash !== '__guard__' && document.getElementById('page-'+hash)) navigate(hash);
+}
+
+// ===== PWA INSTALL =====
+let _pwaInstallEvent = null;
+const _isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+const _isAndroid = /android/i.test(navigator.userAgent);
+const _isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+
+function _showPWABanner() {
+  if(_isStandalone) return; // already installed
+  const dismissed = localStorage.getItem('benim-pwa-dismissed');
+  if(dismissed && Date.now() - Number(dismissed) < 24*60*60*1000) return; // dismissed within 24h
+  setTimeout(() => {
+    document.getElementById('pwa-install-banner').classList.add('show');
+  }, 1500);
+}
+
+// Capture Chrome install event
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  _pwaInstallEvent = e;
+  _showPWABanner();
+});
+
+// For iOS and other browsers — show banner anyway with instructions
+window.addEventListener('load', () => {
+  if(!_pwaInstallEvent && !_isStandalone) {
+    _showPWABanner();
+  }
+});
+
+document.getElementById('pwa-install-btn').addEventListener('click', async () => {
+  if(_pwaInstallEvent) {
+    // Chrome Android — native install prompt
+    _pwaInstallEvent.prompt();
+    const { outcome } = await _pwaInstallEvent.userChoice;
+    if(outcome === 'accepted') {
+      showToast('Benim Shop installed! 🎉','success');
+      document.getElementById('pwa-install-banner').classList.remove('show');
+    }
+    _pwaInstallEvent = null;
+  } else if(_isIOS) {
+    // iOS — show instructions modal
+    showIOSInstallGuide();
+  } else {
+    // Other browsers — show manual instructions
+    showManualInstallGuide();
+  }
+});
+
+window.dismissPWABanner = function() {
+  document.getElementById('pwa-install-banner').classList.remove('show');
+  localStorage.setItem('benim-pwa-dismissed', String(Date.now()));
+};
+
+window.showIOSInstallGuide = function() {
+  openModal('modal-ios-install');
+};
+
+window.showManualInstallGuide = function() {
+  showToast('Open this site in Chrome, tap the 3-dot menu → "Add to Home screen"','info');
+};
+
+// Update banner text based on device
+(function() {
+  const sub = document.getElementById('pwa-banner-sub');
+  if(sub) {
+    if(_isIOS) sub.textContent = 'Tap Install → follow 2 simple steps';
+    else if(_pwaInstallEvent || _isAndroid) sub.textContent = 'Tap Install — works like a real app!';
+    else sub.textContent = 'Add to home screen for faster shopping';
+  }
+})();
+
+// Register service worker
+if('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js')
+      .then(() => console.log('SW registered'))
+      .catch(e => console.log('SW failed:', e));
+  });
 }
 
 init();
