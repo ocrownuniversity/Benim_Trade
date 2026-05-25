@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Benim Shop</title>
 <meta name="description" content="Benim — Your trusted online shopping destination. Quality products, fast delivery, great prices.">
-<meta name="theme-color" content="#e8420a">
+<meta name="theme-color" content="#DC3C0A">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -607,33 +607,6 @@ body{padding-bottom:70px}
 .faq-item.open .faq-q i{transform:rotate(180deg)}
 .faq-item.open .faq-a{display:block}
 
-/* ===== SPLASH SCREEN ===== */
-#splash-screen{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;overflow:hidden;transition:opacity .8s ease,transform .8s ease}
-#splash-screen.fade-out{opacity:0;pointer-events:none;transform:scale(1.06)}
-.splash-bg{position:absolute;inset:0;background:#0d0500}
-.splash-bg::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 40%,#2a0e00 0%,#0d0500 65%)}
-.splash-bg::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 50% at 50% 50%,rgba(232,80,10,.13) 0%,transparent 70%)}
-.splash-particles{position:absolute;inset:0;overflow:hidden;pointer-events:none}
-.splash-particle{position:absolute;border-radius:50%;animation:particleDrift linear infinite}
-@keyframes particleDrift{0%{transform:translateY(100vh) scale(0);opacity:0}10%{opacity:1}90%{opacity:.5}100%{transform:translateY(-20vh) scale(1);opacity:0}}
-.splash-content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;padding:24px;text-align:center}
-.splash-glow-ring{position:absolute;width:260px;height:260px;border-radius:50%;border:1px solid rgba(232,80,10,.15);box-shadow:0 0 60px rgba(232,80,10,.1),inset 0 0 60px rgba(232,80,10,.05);animation:ringPulse 3s ease-in-out infinite}
-.splash-glow-ring2{position:absolute;width:340px;height:340px;border-radius:50%;border:1px solid rgba(232,80,10,.07);animation:ringPulse 3s ease-in-out infinite .8s}
-@keyframes ringPulse{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.05);opacity:1}}
-.splash-icon{font-size:38px;margin-bottom:10px;animation:splashFadeUp .6s cubic-bezier(.34,1.56,.64,1) .2s both;filter:drop-shadow(0 0 20px rgba(232,80,10,.8))}
-.splash-brand{font-family:'Poppins',sans-serif;font-size:64px;font-weight:900;letter-spacing:14px;background:linear-gradient(135deg,#e8500a 0%,#ff8c42 40%,#ffd060 60%,#ff8c42 80%,#e8500a 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-shadow:none;filter:drop-shadow(0 0 30px rgba(232,80,10,.5));margin-bottom:6px;animation:splashFadeUp .8s cubic-bezier(.34,1.56,.64,1) .35s both}
-.splash-divider{width:60px;height:2px;background:linear-gradient(90deg,transparent,#e8500a,#ffd060,#e8500a,transparent);margin:10px auto 14px;border-radius:99px;animation:splashFadeUp .6s ease .55s both}
-.splash-tagline{font-family:'Poppins',sans-serif;font-size:13px;font-weight:500;color:rgba(255,200,120,.7);text-align:center;margin-bottom:8px;animation:splashFadeUp .7s ease .65s both;line-height:1.6;letter-spacing:2px;text-transform:uppercase}
-.splash-tagline strong{color:#ffd060;font-weight:800}
-.splash-sub{font-family:'Poppins',sans-serif;font-size:11px;color:rgba(200,130,60,.5);letter-spacing:1px;text-transform:uppercase;margin-bottom:36px;animation:splashFadeUp .6s ease .75s both}
-.splash-loader{width:200px;display:flex;flex-direction:column;align-items:center;gap:8px;animation:splashFadeUp .7s ease .85s both}
-.splash-bar{width:100%;height:2px;background:rgba(232,80,10,.15);border-radius:99px;overflow:hidden}
-.splash-fill{height:100%;width:0%;background:linear-gradient(90deg,#a03008,#e8500a,#ffd060,#e8500a,#a03008);background-size:200%;border-radius:99px;transition:width .12s ease;box-shadow:0 0 10px rgba(232,80,10,.8);animation:shimmer 1.5s linear infinite}
-@keyframes shimmer{0%{background-position:100%}100%{background-position:-100%}}
-.splash-pct{font-family:'Poppins',sans-serif;font-size:10px;font-weight:700;color:rgba(200,120,60,.5);letter-spacing:2px}
-@keyframes splashFadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-
-
 /* Delivery Type Toggle */
 .delivery-type-row{display:flex;gap:8px;margin-bottom:14px}
 .delivery-type-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:12px 6px;border-radius:10px;border:2px solid var(--gray-200);background:#fff;cursor:pointer;transition:.2s;font-family:'Poppins',sans-serif}
@@ -660,7 +633,7 @@ body{padding-bottom:70px}
 #header{background:#fff!important;box-shadow:0 1px 3px rgba(0,0,0,.08)!important}
 .header-top{padding:12px 14px 10px!important;gap:8px!important}
 .hamburger{color:#222!important;font-size:22px!important;background:none!important;border:none!important;padding:0!important}
-#logo-text{font-family:'Poppins',sans-serif!important;font-weight:900!important;font-size:24px!important;color:#e8420a!important;cursor:pointer!important;letter-spacing:-0.5px!important}
+#logo-text{cursor:pointer!important;display:inline-block!important;vertical-align:middle!important;height:28px!important;width:auto!important}
 .hicon{background:transparent!important;color:#333!important;font-size:22px!important;padding:4px 6px!important;border:none!important}
 .hicon .badge{background:#e8420a!important;color:#fff!important;top:-5px!important;right:-4px!important;width:17px!important;height:17px!important;font-size:9px!important}
 .hicon-label{display:none!important}
@@ -744,8 +717,8 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
 <body>
 <!-- PWA INSTALL BANNER -->
 <div id="pwa-install-banner">
-  <img class="pwa-banner-icon" src="icon-192.png" alt="Benim" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-  <div class="pwa-banner-icon-fallback" style="display:none">🛍️</div>
+  <img class="pwa-banner-icon" src="icon-192.png" alt="Benim" style="border-radius:12px" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+  <div class="pwa-banner-icon-fallback" style="display:none;background:#000">🛍️</div>
   <div class="pwa-banner-text">
     <div class="pwa-banner-title">Install Benim Shop App</div>
     <div class="pwa-banner-sub" id="pwa-banner-sub">Free · No app store needed</div>
@@ -788,24 +761,6 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
     </div>
   </div>
 </div>
-<!-- SPLASH SCREEN -->
-<div id="splash-screen">
-  <div class="splash-bg"></div>
-  <div class="splash-particles" id="splash-particles"></div>
-  <div class="splash-content">
-    <div class="splash-glow-ring"></div>
-    <div class="splash-glow-ring2"></div>
-    <div class="splash-icon">🛍️</div>
-    <div class="splash-brand">BENIM</div>
-    <div class="splash-divider"></div>
-    <div class="splash-tagline">Where Smart <strong>TRADE</strong> Begins</div>
-    <div class="splash-sub">Quality · Speed · Trust</div>
-    <div class="splash-loader">
-      <div class="splash-bar"><div class="splash-fill" id="splash-fill"></div></div>
-      <div class="splash-pct" id="splash-pct">LOADING...</div>
-    </div>
-  </div>
-</div>
 
 
 <!-- ====== HEADER ====== -->
@@ -815,8 +770,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
     <button class="hamburger" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
     <!-- Logo: show image if available, fallback to styled text -->
     <div style="flex:1;display:flex;align-items:center">
-      <span id="logo-text" onclick="navigate('home')" style="font-family:'Poppins',sans-serif;font-weight:900;font-size:26px;color:var(--orange);cursor:pointer;letter-spacing:-0.5px;line-height:1">BENIM</span>
-      <img id="site-logo" src="IMG-20260507-WA0041_1_.jpg" alt="Benim" class="header-logo" onclick="navigate('home')" onerror="this.style.display='none'" style="display:none;margin-left:6px">
+      <img id="header-logo-img" src="header-logo.png" alt="Benim" onclick="navigate('home')" style="height:32px;width:auto;cursor:pointer;display:inline-block;vertical-align:middle;object-fit:contain">
     </div>
     <div class="header-icons" style="display:flex;align-items:center;gap:4px">
       <button id="dark-mode-btn" onclick="toggleDarkMode()" title="Toggle dark/light mode">🌙</button>
@@ -2310,25 +2264,8 @@ let unsubListeners = [];
 const LOGO_URL = '/mnt/user-data/uploads/IMG-20260507-WA0041_1_.jpg';
 // Use inline base64 as fallback for GitHub Pages (logo will be same folder)
 function setLogos() {
-  // Auth pages logo
-  // logos now embedded as base64 — no external file needed
-  /*
-  ['auth-logo','reg-logo'].forEach(id => {
-    const el = document.getElementById(id);
-    if(el) el.src = 'IMG-20260507-WA0041_1_.jpg';
-  });
-  */
-  // Try to load image logo in header; on success hide text, on error keep text
-  const imgLogo = document.getElementById('site-logo');
-  if(imgLogo) {
-    imgLogo.onload = function() {
-      this.style.display = 'block';
-      const textLogo = document.getElementById('logo-text');
-      if(textLogo) textLogo.style.display = 'none';
-    };
-    imgLogo.onerror = function() { this.style.display = 'none'; };
-    imgLogo.src = 'IMG-20260507-WA0041_1_.jpg';
-  }
+  // SVG logo is now inline — no external file needed
+  // site-logo img is hidden by default, SVG shows always
 }
 setLogos();
 
@@ -5197,41 +5134,6 @@ if('serviceWorker' in navigator) {
 
 init();
 
-// ===== SPLASH SCREEN ANIMATION =====
-(function() {
-  const splash = document.getElementById('splash-screen');
-  const fill   = document.getElementById('splash-fill');
-  const pct    = document.getElementById('splash-pct');
-  if (!splash) return;
-  // Generate floating particles
-  const pc = document.getElementById('splash-particles');
-  if (pc) {
-    const colors = ['rgba(232,80,10,.6)','rgba(255,140,66,.5)','rgba(255,208,96,.4)','rgba(180,60,10,.5)'];
-    for(let i=0;i<18;i++){
-      const p = document.createElement('div');
-      p.className = 'splash-particle';
-      const size = Math.random()*4+2;
-      p.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${Math.random()*6+5}s;animation-delay:${Math.random()*4}s;box-shadow:0 0 ${size*2}px ${colors[0]}`;
-      pc.appendChild(p);
-    }
-  }
-  let tick = 0;
-  const steps = 87;
-  const timer = setInterval(() => {
-    tick++;
-    const raw = tick / steps;
-    const progress = Math.min(100, Math.round((1 - Math.pow(1 - raw, 2)) * 100));
-    if (fill) fill.style.width = progress + '%';
-    if (pct)  pct.textContent  = progress < 100 ? 'LOADING...' : 'READY ✓';
-    if (tick >= steps) {
-      clearInterval(timer);
-      setTimeout(() => {
-        splash.classList.add('fade-out');
-        setTimeout(() => { splash.style.display = 'none'; }, 800);
-      }, 300);
-    }
-  }, 30);
-})();
 
 </script>
 </body>
