@@ -770,7 +770,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
     <button class="hamburger" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
     <!-- Logo: show image if available, fallback to styled text -->
     <div style="flex:1;display:flex;align-items:center">
-      <img src="benim-icon.png" alt="Benim" onclick="navigate('home')" style="height:40px;width:auto;max-width:140px;cursor:pointer;display:inline-block;vertical-align:middle;object-fit:contain">
+      <span onclick="navigate('home')" style="font-family:'Poppins',sans-serif;font-weight:900;font-size:26px;color:var(--orange);cursor:pointer;letter-spacing:-0.5px;line-height:1">BENIM</span>
     </div>
     <div class="header-icons" style="display:flex;align-items:center;gap:4px">
       <button id="dark-mode-btn" onclick="toggleDarkMode()" title="Toggle dark/light mode">🌙</button>
@@ -1220,7 +1220,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
 <div id="page-login" class="page">
   <div class="auth-wrap">
     <div class="auth-card">
-      <div class="auth-logo"><div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:8px;cursor:pointer" onclick="navigate('home')"><img src="benim-icon.png" style="height:40px;width:40px;object-fit:contain"><span style="font-family:Poppins,sans-serif;font-weight:900;font-size:28px;color:#e8420a;letter-spacing:-0.5px">BENIM</span></div></div>
+      <div class="auth-logo"><div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:8px;cursor:pointer" onclick="navigate('home')"><div style="text-align:center;margin-bottom:8px;cursor:pointer" onclick="navigate('home')"><span style="font-family:Poppins,sans-serif;font-weight:900;font-size:28px;color:#e8420a;letter-spacing:-0.5px">BENIM</span></div><span style="font-family:Poppins,sans-serif;font-weight:900;font-size:28px;color:#e8420a;letter-spacing:-0.5px">BENIM</span></div></div>
       <h2 class="auth-title">Welcome Back!</h2>
       <p class="auth-subtitle">Sign in to your Benim account</p>
       <button class="btn-google" onclick="loginWithGoogle()"><img src="https://www.google.com/favicon.ico" width="18" height="18"> Continue with Google</button>
