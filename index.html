@@ -770,10 +770,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
     <button class="hamburger" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
     <!-- Logo: show image if available, fallback to styled text -->
     <div style="flex:1;display:flex;align-items:center">
-      <div onclick="navigate('home')" style="display:flex;align-items:center;gap:7px;cursor:pointer;text-decoration:none">
-        <img src="benim-icon.png" alt="Benim" style="height:32px;width:32px;object-fit:contain;display:block;flex-shrink:0">
-        <span style="font-family:'Poppins',sans-serif;font-weight:900;font-size:24px;color:#e8420a;letter-spacing:-0.5px;line-height:1">BENIM</span>
-      </div>
+      <img src="benim-icon.png" alt="Benim" onclick="navigate('home')" style="height:36px;width:auto;cursor:pointer;display:inline-block;vertical-align:middle;object-fit:contain">
     </div>
     <div class="header-icons" style="display:flex;align-items:center;gap:4px">
       <button id="dark-mode-btn" onclick="toggleDarkMode()" title="Toggle dark/light mode">🌙</button>
