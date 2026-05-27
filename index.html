@@ -1,9 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark-mode-default">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Benim Shop</title>
+<script>
+// Apply dark mode BEFORE page renders to prevent white flash
+if(localStorage.getItem('benim-theme') !== 'light') {
+  document.documentElement.style.background = '#0f0f0f';
+}
+</script>
 <meta name="description" content="Benim — Your trusted online shopping destination. Quality products, fast delivery, great prices.">
 <meta name="theme-color" content="#DC3C0A">
 <meta name="mobile-web-app-capable" content="yes">
@@ -91,89 +97,73 @@ body.dark-mode {
 
 /* ===== COMPREHENSIVE DARK MODE ===== */
 body.dark-mode,body.dark-mode .page,body.dark-mode #app{background:#0f0f0f;color:#f0f0f0}
-body.dark-mode header,body.dark-mode .header-search-row{background:#1a1a1a!important;border-bottom:1px solid #2e2e2e}
-body.dark-mode .header-search-wrap{background:#242424!important}
+body.dark-mode header,body.dark-mode .header-search-row{background:#141414!important;border-bottom:1px solid #222}
+body.dark-mode .header-search-wrap{background:#1e1e1e!important;border:1px solid #2a2a2a!important}
 body.dark-mode .header-search{color:#f0f0f0!important}
+body.dark-mode .header-search::placeholder{color:#555!important}
 body.dark-mode .hamburger,body.dark-mode .hicon{color:#e0e0e0!important}
-body.dark-mode .sidebar{background:#1a1a1a!important}
-body.dark-mode .sidebar-section{border-color:#2e2e2e!important}
+body.dark-mode .sidebar{background:#141414!important;border-right:1px solid #222}
+body.dark-mode .sidebar-section{border-color:#222!important}
+body.dark-mode .sidebar-section-title{color:#888!important}
 body.dark-mode .sidebar-item{color:#d0d0d0!important}
-body.dark-mode .sidebar-item:hover{background:#2a2a2a!important}
-body.dark-mode .sidebar-item .cat-count{background:#2e2e2e!important;color:#9ca3af!important}
-body.dark-mode .sidebar-overlay{background:rgba(0,0,0,.75)!important}
-body.dark-mode .bottom-nav{background:#1a1a1a!important;border-top:1px solid #2e2e2e!important}
-body.dark-mode .bottom-nav-item{color:#9ca3af!important}
+body.dark-mode .sidebar-item:hover{background:#1e1e1e!important}
+body.dark-mode .bottom-nav{background:#141414!important;border-top:1px solid #222!important}
+body.dark-mode .bottom-nav-item{color:#666!important}
 body.dark-mode .bottom-nav-item.active,body.dark-mode .bottom-nav-item.active .bnav-icon,body.dark-mode .bottom-nav-item.active .bnav-label{color:var(--orange)!important}
-body.dark-mode .pc{background:#1a1a1a!important;border:1px solid #2e2e2e!important}
+body.dark-mode .pc{background:#1a1a1a!important;border:1px solid #222!important}
 body.dark-mode .pc-name{color:#f0f0f0!important}
 body.dark-mode .pc-body{background:#1a1a1a!important}
-body.dark-mode .pc-wish-btn{background:rgba(26,26,26,.95)!important}
+body.dark-mode .pc-wish-btn{background:rgba(20,20,20,.95)!important;color:#555!important}
+body.dark-mode .pc-wish-btn.active{color:#e53e3e!important}
 body.dark-mode .home-section-title,.dark-mode .section-title{color:#f0f0f0!important}
-body.dark-mode .flash-ends-row{background:#242424!important;border-color:#2e2e2e!important;color:#f0f0f0!important}
-body.dark-mode .flash-time{background:#1a1a1a!important;color:var(--orange)!important}
-body.dark-mode .see-all-link{color:var(--orange)!important}
-body.dark-mode .cart-item,body.dark-mode .cart-summary{background:#1a1a1a!important;border:1px solid #2e2e2e!important}
-body.dark-mode .cart-item-name{color:#f0f0f0!important}
-body.dark-mode .checkout-section{background:#1a1a1a!important;border:1px solid #2e2e2e!important}
+body.dark-mode .flash-ends-row{background:#1a1a1a!important;border-color:#222!important;color:#f0f0f0!important}
+body.dark-mode .flash-time{background:#111!important;color:var(--orange)!important}
+body.dark-mode .cart-item,body.dark-mode .cart-summary{background:#1a1a1a!important;border:1px solid #222!important}
+body.dark-mode .checkout-section{background:#1a1a1a!important;border:1px solid #222!important}
 body.dark-mode .checkout-title{color:#f0f0f0!important}
-body.dark-mode .form-input,body.dark-mode select,body.dark-mode textarea{background:#242424!important;border-color:#3a3a3a!important;color:#f0f0f0!important}
-body.dark-mode .form-label{color:#c0c0c0!important}
-body.dark-mode .address-card{border-color:#3a3a3a!important;background:#1a1a1a!important}
-body.dark-mode .address-card h4{color:#f0f0f0!important}
-body.dark-mode .order-card{background:#1a1a1a!important;border:1px solid #2e2e2e!important}
-body.dark-mode .order-id{color:#9ca3af!important}
-body.dark-mode .order-items{color:#b0b0b0!important}
-body.dark-mode .search-filters{background:#1a1a1a!important;border:1px solid #2e2e2e!important}
-body.dark-mode .filter-select{background:#242424!important;color:#f0f0f0!important;border-color:#3a3a3a!important}
-body.dark-mode .size-btn{background:#242424!important;border-color:#3a3a3a!important;color:#f0f0f0!important}
-body.dark-mode .size-btn.selected{background:var(--orange)!important;border-color:var(--orange)!important;color:#fff!important}
-body.dark-mode .qty-btn{background:#2e2e2e!important;color:#f0f0f0!important;border-color:#3a3a3a!important}
-body.dark-mode .detail-trust-row{background:#1a1a1a!important;border-color:#2e2e2e!important}
-body.dark-mode .detail-tabs-bar{background:#1a1a1a!important;border-color:#2e2e2e!important}
-body.dark-mode .detail-tab-btn{color:#9ca3af!important}
+body.dark-mode .form-input,body.dark-mode select,body.dark-mode textarea,body.dark-mode input[type="text"],body.dark-mode input[type="email"],body.dark-mode input[type="password"],body.dark-mode input[type="tel"],body.dark-mode input[type="number"],body.dark-mode input[type="date"]{background:#1e1e1e!important;border-color:#2a2a2a!important;color:#f0f0f0!important}
+body.dark-mode .form-label{color:#bbb!important}
+body.dark-mode .address-card{border-color:#2a2a2a!important;background:#1a1a1a!important}
+body.dark-mode .order-card{background:#1a1a1a!important;border:1px solid #222!important}
+body.dark-mode .search-filters{background:#1a1a1a!important;border:1px solid #222!important}
+body.dark-mode .filter-select{background:#1e1e1e!important;color:#f0f0f0!important;border-color:#2a2a2a!important}
+body.dark-mode .size-btn{background:#1e1e1e!important;border-color:#2a2a2a!important;color:#f0f0f0!important}
+body.dark-mode .size-btn.selected{background:var(--orange)!important;color:#fff!important}
+body.dark-mode .qty-btn{background:#222!important;color:#f0f0f0!important;border-color:#2a2a2a!important}
+body.dark-mode .detail-trust-row,body.dark-mode .detail-tabs-bar{background:#1a1a1a!important;border-color:#222!important}
+body.dark-mode .detail-tab-btn{color:#666!important}
 body.dark-mode .detail-tab-btn.active{color:var(--orange)!important;border-color:var(--orange)!important}
-body.dark-mode .admin-card{background:#1a1a1a!important;border:1px solid #2e2e2e!important}
-body.dark-mode .admin-card-title{color:#f0f0f0!important;border-color:#2e2e2e!important}
-body.dark-mode .admin-tab{background:#1a1a1a!important;border-color:#2e2e2e!important;color:#c0c0c0!important}
-body.dark-mode .admin-table th{background:#242424!important;color:#b0b0b0!important;border-color:#2e2e2e!important}
-body.dark-mode .admin-table td{border-color:#2e2e2e!important;color:#d0d0d0!important}
-body.dark-mode .admin-table tr:hover td{background:#242424!important}
-body.dark-mode .banner-card{background:#1a1a1a!important;border-color:#2e2e2e!important}
-body.dark-mode .banner-preview-empty{background:linear-gradient(120deg,#1e1e1e,#2a2a2a)!important}
-body.dark-mode .modal{background:#1a1a1a!important;border:1px solid #2e2e2e!important}
-body.dark-mode .modal-overlay{background:rgba(0,0,0,.8)!important}
-body.dark-mode .modal-header,body.dark-mode .modal-footer{border-color:#2e2e2e!important;background:#1a1a1a!important}
+body.dark-mode .admin-card{background:#1a1a1a!important;border:1px solid #222!important}
+body.dark-mode .admin-card-title{color:#f0f0f0!important;border-color:#222!important}
+body.dark-mode .admin-tab{background:#1a1a1a!important;border-color:#222!important;color:#888!important}
+body.dark-mode .admin-tab.active{background:var(--orange)!important;color:#fff!important;border-color:var(--orange)!important}
+body.dark-mode .admin-table th{background:#1e1e1e!important;color:#888!important;border-color:#222!important}
+body.dark-mode .admin-table td{border-color:#222!important;color:#d0d0d0!important}
+body.dark-mode .admin-table tr:hover td{background:#1e1e1e!important}
+body.dark-mode .modal{background:#1a1a1a!important;border:1px solid #2a2a2a!important}
+body.dark-mode .modal-overlay{background:rgba(0,0,0,.85)!important}
+body.dark-mode .modal-header,body.dark-mode .modal-footer{border-color:#222!important;background:#141414!important}
 body.dark-mode .modal-title{color:#f0f0f0!important}
-body.dark-mode .modal-close{color:#9ca3af!important}
-body.dark-mode .modal-body{color:#d0d0d0!important}
-body.dark-mode .chatbot-window{background:#1a1a1a!important;border:1px solid #2e2e2e!important}
-body.dark-mode .chatbot-header{background:#1a1a1a!important;border-color:#2e2e2e!important}
+body.dark-mode .modal-close{color:#666!important}
+body.dark-mode .chatbot-window{background:#1a1a1a!important;border:1px solid #222!important}
 body.dark-mode .chatbot-body{background:#0f0f0f!important}
-body.dark-mode .bot-bubble{background:#242424!important;color:#f0f0f0!important}
-body.dark-mode .chatbot-input-row{background:#1a1a1a!important;border-color:#2e2e2e!important}
-body.dark-mode .chatbot-input{background:#242424!important;color:#f0f0f0!important;border-color:#3a3a3a!important}
-body.dark-mode footer,.dark-mode .site-footer{background:#111!important;border-top:1px solid #2e2e2e!important;color:#9ca3af!important}
-body.dark-mode .review-card{background:#1a1a1a!important;border:1px solid #2e2e2e!important}
-body.dark-mode .track-result,body.dark-mode #track-result{background:#1a1a1a!important;border-color:#2e2e2e!important}
-body.dark-mode .track-step-info h4{color:#f0f0f0!important}
-body.dark-mode .profile-card,body.dark-mode .profile-section,body.dark-mode .account-section{background:#1a1a1a!important;border:1px solid #2e2e2e!important}
-body.dark-mode #page-home,body.dark-mode #page-search,body.dark-mode #page-cart,body.dark-mode #page-checkout,body.dark-mode #page-orders,body.dark-mode #page-track,body.dark-mode #page-wishlist,body.dark-mode #page-profile,body.dark-mode #page-login,body.dark-mode #page-register,body.dark-mode #page-product,body.dark-mode #page-admin{background:#0f0f0f!important}
+body.dark-mode .bot-bubble{background:#1e1e1e!important;color:#f0f0f0!important}
+body.dark-mode .chatbot-input{background:#1e1e1e!important;color:#f0f0f0!important;border-color:#2a2a2a!important}
+body.dark-mode footer,.dark-mode .site-footer{background:#0a0a0a!important;border-top:1px solid #222!important;color:#555!important}
+body.dark-mode .review-card{background:#1a1a1a!important;border:1px solid #222!important}
+body.dark-mode .profile-card,body.dark-mode .profile-section{background:#1a1a1a!important;border:1px solid #222!important}
+body.dark-mode .auth-card,body.dark-mode .login-card,body.dark-mode .register-card{background:#1a1a1a!important;border:1px solid #222!important}
+body.dark-mode .btn-secondary{background:#1e1e1e!important;color:#d0d0d0!important;border-color:#2a2a2a!important}
+body.dark-mode .summary-row{border-color:#222!important;color:#d0d0d0!important}
+body.dark-mode #page-home,body.dark-mode #page-search,body.dark-mode #page-cart,body.dark-mode #page-checkout,body.dark-mode #page-orders,body.dark-mode #page-track,body.dark-mode #page-wishlist,body.dark-mode #page-profile,body.dark-mode #page-login,body.dark-mode #page-register,body.dark-mode #page-product,body.dark-mode #page-admin,body.dark-mode #page-about,body.dark-mode #page-contact,body.dark-mode #page-faq,body.dark-mode #page-terms{background:#0f0f0f!important}
 body.dark-mode [style*="background:#fff"],body.dark-mode [style*="background: #fff"],body.dark-mode [style*="background:white"],body.dark-mode [style*="background:#f9fafb"],body.dark-mode [style*="background:#f5f5f5"]{background:#1a1a1a!important}
-body.dark-mode [style*="background:var(--gray-50)"],body.dark-mode [style*="background:var(--gray-100)"]{background:#242424!important}
+body.dark-mode [style*="background:var(--gray-50)"],body.dark-mode [style*="background:var(--gray-100)"]{background:#1e1e1e!important}
 body.dark-mode [style*="color:#1f2937"],body.dark-mode [style*="color:var(--gray-800)"]{color:#f0f0f0!important}
-body.dark-mode [style*="color:var(--gray-500)"],body.dark-mode [style*="color:var(--gray-600)"]{color:#9ca3af!important}
-body.dark-mode [style*="border:1px solid var(--gray"]{border-color:#2e2e2e!important}
-body.dark-mode .admin-stat-card{background:#1a1a1a!important;border:1px solid #2e2e2e!important}
-body.dark-mode .admin-stat-num{color:var(--orange)!important}
-body.dark-mode .btn-secondary{background:#242424!important;color:#f0f0f0!important;border-color:#3a3a3a!important}
-body.dark-mode input[type="text"],body.dark-mode input[type="email"],body.dark-mode input[type="password"],body.dark-mode input[type="tel"],body.dark-mode input[type="number"],body.dark-mode input[type="range"],body.dark-mode input[type="hidden"]{background:#242424!important;color:#f0f0f0!important;border-color:#3a3a3a!important}
-body.dark-mode .summary-row{border-color:#2e2e2e!important;color:#d0d0d0!important}
-body.dark-mode .order-detail-body{background:#1a1a1a!important}
-body.dark-mode #order-detail-body>div{background:#1a1a1a!important;border-color:#2e2e2e!important}
-body.dark-mode #order-detail-body [style*="background:var(--gray-50)"]{background:#242424!important}
-body.dark-mode #order-detail-body [style*="background:#fff"]{background:#2a2a2a!important}
+body.dark-mode [style*="color:var(--gray-500)"],body.dark-mode [style*="color:var(--gray-600)"]{color:#888!important}
+body.dark-mode .banner-card,body.dark-mode .admin-stat-card{background:#1a1a1a!important;border-color:#222!important}
+body.dark-mode .pc-sold-row .pc-bar-bg{background:#222!important}
 body.dark-mode .home-section{background:#0f0f0f!important}
-body.dark-mode .pc-sold-row .pc-bar-bg{background:#2e2e2e!important}
+body.dark-mode .pwa-install-banner{background:linear-gradient(135deg,#1a0800,#2d1000)!important}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .3s,color .3s}
 a{text-decoration:none;color:inherit}
@@ -769,7 +759,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
     <button class="hamburger" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
     <!-- Logo: show image if available, fallback to styled text -->
     <div style="flex:1;display:flex;align-items:center">
-      <span onclick="navigate('home')" style="font-family:'Poppins',sans-serif;font-weight:900;font-size:26px;color:var(--orange);cursor:pointer;letter-spacing:-0.5px;line-height:1">BENIM</span>
+      <span onclick="navigate('home')" style="font-family:'Poppins',sans-serif;font-weight:900;font-size:26px;color:#e8420a;cursor:pointer;letter-spacing:-0.5px;line-height:1">BENIM</span>
     </div>
     <div class="header-icons" style="display:flex;align-items:center;gap:4px">
       <button id="dark-mode-btn" onclick="toggleDarkMode()" title="Toggle dark/light mode">🌙</button>
@@ -3420,10 +3410,19 @@ window.toggleDarkMode = function() {
   document.getElementById('dark-mode-btn').textContent = isDark ? '☀️' : '🌙';
   localStorage.setItem('benim-theme', isDark ? 'dark' : 'light');
 };
-// Restore saved theme on load
+// Default is DARK — only switch to light if user explicitly chose it
 (function(){
   const saved = localStorage.getItem('benim-theme');
-  if(saved === 'dark') { document.body.classList.add('dark-mode'); const btn = document.getElementById('dark-mode-btn'); if(btn) btn.textContent = '☀️'; }
+  if(saved === 'light') {
+    // User chose light — stay light
+    const btn = document.getElementById('dark-mode-btn');
+    if(btn) btn.textContent = '🌙';
+  } else {
+    // Default dark mode
+    document.body.classList.add('dark-mode');
+    const btn = document.getElementById('dark-mode-btn');
+    if(btn) btn.textContent = '☀️';
+  }
 })();
 window.handleSearchKey = function(e) {
   if(e.key==='Enter') doSearch();
