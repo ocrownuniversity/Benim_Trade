@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Benim Shop</title>
 <script>
-// Apply dark mode BEFORE page renders to prevent white flash
+// Always black background unless user chose light
 if(localStorage.getItem('benim-theme') !== 'light') {
   document.documentElement.style.background = '#0f0f0f';
 }
@@ -27,7 +27,41 @@ if(localStorage.getItem('benim-theme') !== 'light') {
   --orange: #e8420a;
   --orange-light: #ff6b35;
   --orange-dark: #c23608;
-  --white: #ffffff;
+  --white: #1a1a1a;
+  --gray-50: #1a1a1a;
+  --gray-100: #242424;
+  --gray-200: #2e2e2e;
+  --gray-300: #3a3a3a;
+  --gray-400: #6b7280;
+  --gray-500: #9ca3af;
+  --gray-600: #b0b8c4;
+  --gray-700: #d1d5db;
+  --gray-800: #f0f0f0;
+  --gray-900: #f9fafb;
+  --green: #16a34a;
+  --red: #dc2626;
+  --yellow: #f59e0b;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.3);
+  --shadow: 0 2px 8px rgba(0,0,0,.4);
+  --shadow-md: 0 4px 16px rgba(0,0,0,.5);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,.6);
+  --radius: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --bg: #0f0f0f;
+  --surface: #1a1a1a;
+  --surface2: #242424;
+  --border: #2e2e2e;
+  --text: #f0f0f0;
+  --text-muted: #9ca3af;
+}
+body.light-mode {
+  --bg: #f5f5f5;
+  --surface: #ffffff;
+  --surface2: #f9fafb;
+  --border: #e5e7eb;
+  --text: #1f2937;
+  --text-muted: #6b7280;
   --gray-50: #f9fafb;
   --gray-100: #f3f4f6;
   --gray-200: #e5e7eb;
@@ -38,23 +72,13 @@ if(localStorage.getItem('benim-theme') !== 'light') {
   --gray-700: #374151;
   --gray-800: #1f2937;
   --gray-900: #111827;
-  --green: #16a34a;
-  --red: #dc2626;
-  --yellow: #f59e0b;
+  --white: #ffffff;
   --shadow-sm: 0 1px 2px rgba(0,0,0,.05);
   --shadow: 0 2px 8px rgba(0,0,0,.1);
   --shadow-md: 0 4px 16px rgba(0,0,0,.12);
   --shadow-lg: 0 8px 32px rgba(0,0,0,.15);
-  --radius: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
-  --bg: #f5f5f5;
-  --surface: #ffffff;
-  --surface2: #f9fafb;
-  --border: #e5e7eb;
-  --text: #1f2937;
-  --text-muted: #6b7280;
 }
+/* dark-mode class = same as default root (kept for backwards compat) */
 body.dark-mode {
   --bg: #0f0f0f;
   --surface: #1a1a1a;
@@ -73,10 +97,6 @@ body.dark-mode {
   --gray-800: #f0f0f0;
   --gray-900: #f9fafb;
   --white: #1a1a1a;
-  --shadow-sm: 0 1px 2px rgba(0,0,0,.3);
-  --shadow: 0 2px 8px rgba(0,0,0,.4);
-  --shadow-md: 0 4px 16px rgba(0,0,0,.5);
-  --shadow-lg: 0 8px 32px rgba(0,0,0,.6);
 }
 /* Dark mode toggle button */
 #dark-mode-btn{background:none;border:none;font-size:18px;cursor:pointer;padding:6px;border-radius:50%;transition:.2s;display:flex;align-items:center;justify-content:center;color:var(--gray-600)}
@@ -107,10 +127,10 @@ body.dark-mode .sidebar-section{border-color:#222!important}
 body.dark-mode .sidebar-section-title{color:#888!important}
 body.dark-mode .sidebar-item{color:#d0d0d0!important}
 body.dark-mode .sidebar-item:hover{background:#1e1e1e!important}
-body.dark-mode .bottom-nav{background:#141414!important;border-top:1px solid #222!important}
+body.dark-mode .bottom-nav{background:#141414;border-top:1px solid #222;background:#141414!important;border-top:1px solid #222!important}
 body.dark-mode .bottom-nav-item{color:#666!important}
 body.dark-mode .bottom-nav-item.active,body.dark-mode .bottom-nav-item.active .bnav-icon,body.dark-mode .bottom-nav-item.active .bnav-label{color:var(--orange)!important}
-body.dark-mode .pc{background:#1a1a1a!important;border:1px solid #222!important}
+body.dark-mode .pc{background:#1a1a1a;border:1px solid #222;background:#1a1a1a!important;border:1px solid #222!important}
 body.dark-mode .pc-name{color:#f0f0f0!important}
 body.dark-mode .pc-body{background:#1a1a1a!important}
 body.dark-mode .pc-wish-btn{background:rgba(20,20,20,.95)!important;color:#555!important}
@@ -133,14 +153,14 @@ body.dark-mode .qty-btn{background:#222!important;color:#f0f0f0!important;border
 body.dark-mode .detail-trust-row,body.dark-mode .detail-tabs-bar{background:#1a1a1a!important;border-color:#222!important}
 body.dark-mode .detail-tab-btn{color:#666!important}
 body.dark-mode .detail-tab-btn.active{color:var(--orange)!important;border-color:var(--orange)!important}
-body.dark-mode .admin-card{background:#1a1a1a!important;border:1px solid #222!important}
+body.dark-mode .admin-card{background:#1a1a1a;border:1px solid #222;background:#1a1a1a!important;border:1px solid #222!important}
 body.dark-mode .admin-card-title{color:#f0f0f0!important;border-color:#222!important}
 body.dark-mode .admin-tab{background:#1a1a1a!important;border-color:#222!important;color:#888!important}
 body.dark-mode .admin-tab.active{background:var(--orange)!important;color:#fff!important;border-color:var(--orange)!important}
 body.dark-mode .admin-table th{background:#1e1e1e!important;color:#888!important;border-color:#222!important}
 body.dark-mode .admin-table td{border-color:#222!important;color:#d0d0d0!important}
 body.dark-mode .admin-table tr:hover td{background:#1e1e1e!important}
-body.dark-mode .modal{background:#1a1a1a!important;border:1px solid #2a2a2a!important}
+body.dark-mode .modal{background:#1a1a1a;border:1px solid #2a2a2a;background:#1a1a1a!important;border:1px solid #2a2a2a!important}
 body.dark-mode .modal-overlay{background:rgba(0,0,0,.85)!important}
 body.dark-mode .modal-header,body.dark-mode .modal-footer{border-color:#222!important;background:#141414!important}
 body.dark-mode .modal-title{color:#f0f0f0!important}
@@ -166,6 +186,7 @@ body.dark-mode .home-section{background:#0f0f0f!important}
 body.dark-mode .pwa-install-banner{background:linear-gradient(135deg,#1a0800,#2d1000)!important}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .3s,color .3s}
+body.light-mode{background:#0f0f0f;color:#f0f0f0}
 a{text-decoration:none;color:inherit}
 button{cursor:pointer;border:none;outline:none;font-family:inherit}
 input,select,textarea{font-family:inherit;outline:none}
@@ -186,10 +207,12 @@ img{max-width:100%;display:block}
 .absolute{position:absolute}
 
 /* ====== HEADER ====== */
-#header{background:#fff;position:sticky;top:0;z-index:1000;box-shadow:0 1px 4px rgba(0,0,0,.08);border-bottom:1px solid var(--gray-100)}
+#header{background:#141414;position:sticky;top:0;z-index:1000;box-shadow:0 1px 4px rgba(0,0,0,.4);border-bottom:1px solid #222}
+body.light-mode #header{background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.08);border-bottom:1px solid #f3f4f6}
 .header-top{display:flex;align-items:center;gap:10px;padding:8px 16px;max-width:1400px;margin:0 auto}
 .header-logo{height:36px;width:auto;cursor:pointer;object-fit:contain}
-.header-search-row{background:#fff;padding:8px 16px 12px;max-width:1400px;margin:0 auto}.header-search-wrap{display:flex;align-items:center;background:var(--gray-100);border-radius:50px;padding:0 16px;gap:10px;width:100%;border:none}
+.header-search-row{background:#141414;padding:8px 16px 12px;max-width:1400px;margin:0 auto}.header-search-wrap{display:flex;align-items:center;background:#1e1e1e;border-radius:50px;padding:0 16px;gap:10px;width:100%;border:1px solid #2a2a2a}
+body.light-mode .header-search-row{background:#fff}.body.light-mode .header-search-wrap{background:var(--gray-100);border:none}
 .header-search{flex:1;padding:11px 4px;border:none;font-size:14px;color:var(--gray-800);background:transparent;outline:none}.header-search::placeholder{color:var(--gray-400)}
 .header-search-btn{background:transparent;color:var(--gray-400);border:none;padding:0;font-size:17px;cursor:pointer;transition:.2s;display:flex;align-items:center}
 .header-search-btn:hover{color:var(--orange)}
@@ -203,7 +226,8 @@ img{max-width:100%;display:block}
 /* ====== SIDEBAR ====== */
 #sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;opacity:0;pointer-events:none;transition:.3s}
 #sidebar-overlay.open{opacity:1;pointer-events:all}
-#sidebar{position:fixed;left:0;top:0;bottom:0;width:300px;background:#fff;z-index:2001;transform:translateX(-100%);transition:.3s;overflow-y:auto;display:flex;flex-direction:column}
+#sidebar{position:fixed;left:0;top:0;bottom:0;width:300px;background:#141414;z-index:2001;transform:translateX(-100%);transition:.3s;overflow-y:auto;display:flex;flex-direction:column}
+body.light-mode #sidebar{background:#fff}
 #sidebar.open{transform:translateX(0)}
 .sidebar-header{background:var(--orange);padding:20px 16px;display:flex;align-items:center;gap:12px}
 .sidebar-avatar{width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff}
@@ -220,7 +244,8 @@ img{max-width:100%;display:block}
 /* ====== PAGES ====== */
 .page{display:none}
 .page.active{display:block}
-#page-home{background:#f5f5f5}
+#page-home{background:#0f0f0f}
+body.light-mode #page-home{background:#f5f5f5}
 
 /* ====== HERO SLIDER ====== */
 /* hero-slider css moved below */
@@ -236,7 +261,7 @@ img{max-width:100%;display:block}
 /* ====== SKELETON ====== */
 .skeleton{background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.5s infinite}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-.skel-card{background:#fff;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-sm)}
+.skel-card{background:#1a1a1a;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-sm)}
 .skel-img{aspect-ratio:1;width:100%}
 .skel-line{height:12px;margin:10px;border-radius:4px}
 .skel-line.short{width:60%;margin-top:6px}
@@ -254,7 +279,13 @@ img{max-width:100%;display:block}
 .product-detail-wrap{max-width:1200px;margin:0 auto;padding:16px}
 .product-detail-grid{display:grid;gap:20px}
 @media(min-width:768px){.product-detail-grid{grid-template-columns:1fr 1fr}}
-.detail-imgs{position:relative}
+/* Gallery */
+.main-img-wrap{border-radius:10px;overflow:hidden;background:var(--gray-100);aspect-ratio:1/1;position:relative}
+#gallery-slides{height:100%;align-items:stretch}
+#gallery-slides .gslide{min-width:100%;aspect-ratio:1/1;flex-shrink:0}
+#gallery-slides .gslide img{width:100%;height:100%;object-fit:cover;display:block}
+.gdot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.5);cursor:pointer;transition:.2s}
+.gdot.active{background:#fff;width:18px;border-radius:4px}
 .main-img{aspect-ratio:1;background:#fff;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow);margin-bottom:8px}
 .main-img img{width:100%;height:100%;object-fit:cover;transition:.3s;cursor:zoom-in}
 .thumb-row{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
@@ -290,14 +321,14 @@ img{max-width:100%;display:block}
 
 /* ====== CART ====== */
 .cart-wrap{max-width:900px;margin:0 auto;padding:16px}
-.cart-item{background:#fff;border-radius:var(--radius-lg);padding:14px;display:flex;gap:14px;margin-bottom:10px;box-shadow:var(--shadow-sm)}
+.cart-item{background:#1a1a1a;border:1px solid #222;border-radius:var(--radius-lg);padding:14px;display:flex;gap:14px;margin-bottom:10px;box-shadow:var(--shadow-sm)}
 .cart-item-img{width:80px;height:80px;border-radius:8px;object-fit:cover;flex-shrink:0}
 .cart-item-info{flex:1}
 .cart-item-name{font-size:14px;font-weight:700;margin-bottom:4px;color:var(--gray-800)}
 .cart-item-price{font-size:16px;font-weight:900;color:var(--orange)}
 .cart-item-actions{display:flex;align-items:center;gap:10px;margin-top:8px}
 .cart-remove{background:none;border:none;color:var(--red);font-size:13px;cursor:pointer;font-weight:600}
-.cart-summary{background:#fff;border-radius:var(--radius-lg);padding:16px;box-shadow:var(--shadow-sm);margin-top:16px}
+.cart-summary{background:#1a1a1a;border:1px solid #222;border-radius:var(--radius-lg);padding:16px;box-shadow:var(--shadow-sm);margin-top:16px}
 .summary-row{display:flex;justify-content:space-between;margin-bottom:10px;font-size:14px;color:var(--gray-600)}
 .summary-row.total{font-size:18px;font-weight:900;color:var(--gray-800);border-top:2px solid var(--gray-200);padding-top:10px;margin-top:10px}
 .btn-checkout{width:100%;background:var(--orange);color:#fff;padding:14px;border-radius:8px;font-size:16px;font-weight:800;border:none;cursor:pointer;margin-top:12px;transition:.2s}
@@ -305,12 +336,12 @@ img{max-width:100%;display:block}
 
 /* ====== CHECKOUT ====== */
 .checkout-wrap{max-width:800px;margin:0 auto;padding:16px}
-.checkout-section{background:#fff;border-radius:var(--radius-lg);padding:16px;margin-bottom:12px;box-shadow:var(--shadow-sm)}
+.checkout-section{background:#1a1a1a;border:1px solid #222;border-radius:var(--radius-lg);padding:16px;margin-bottom:12px;box-shadow:var(--shadow-sm)}
 .checkout-title{font-size:16px;font-weight:800;color:var(--gray-800);margin-bottom:14px;display:flex;align-items:center;gap:8px}
 .checkout-title i{color:var(--orange)}
 .form-group{margin-bottom:12px}
 .form-label{font-size:13px;font-weight:700;color:var(--gray-600);margin-bottom:5px;display:block}
-.form-input{width:100%;padding:10px 12px;border:2px solid var(--gray-200);border-radius:8px;font-size:14px;transition:.2s;background:#fff}
+.form-input{background:#1e1e1e;border-color:#2a2a2a;color:#f0f0f0;width:100%;padding:10px 12px;border:2px solid var(--gray-200);border-radius:8px;font-size:14px;transition:.2s;background:#fff}
 .form-input:focus{border-color:var(--orange)}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .address-card{border:2px solid var(--gray-200);border-radius:8px;padding:12px;cursor:pointer;transition:.2s;margin-bottom:8px}
@@ -326,7 +357,7 @@ img{max-width:100%;display:block}
 
 /* ====== ORDERS ====== */
 .orders-wrap{max-width:900px;margin:0 auto;padding:16px}
-.order-card{background:#fff;border-radius:var(--radius-lg);padding:16px;margin-bottom:12px;box-shadow:var(--shadow-sm)}
+.order-card{background:#1a1a1a;border:1px solid #222;border-radius:var(--radius-lg);padding:16px;margin-bottom:12px;box-shadow:var(--shadow-sm)}
 .order-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 .order-id{font-size:13px;font-weight:700;color:var(--gray-500)}
 .order-status{font-size:12px;font-weight:800;padding:4px 10px;border-radius:20px}
@@ -354,14 +385,14 @@ img{max-width:100%;display:block}
 
 /* ====== SEARCH RESULTS ====== */
 .search-wrap{max-width:1400px;margin:0 auto;padding:16px}
-.search-filters{background:#fff;border-radius:var(--radius);padding:14px;margin-bottom:14px;box-shadow:var(--shadow-sm);display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.search-filters{background:#1a1a1a;border:1px solid #222;border-radius:var(--radius);padding:14px;margin-bottom:14px;box-shadow:var(--shadow-sm);display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .filter-group{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--gray-600)}
 .filter-select{border:2px solid var(--gray-200);border-radius:6px;padding:5px 10px;font-size:13px;font-weight:600;color:var(--gray-700);cursor:pointer}
 .filter-select:focus{border-color:var(--orange)}
 
 /* ====== AUTH ====== */
 .auth-wrap{max-width:440px;margin:40px auto;padding:16px}
-.auth-card{background:#fff;border-radius:var(--radius-xl);padding:32px;box-shadow:var(--shadow-md)}
+.auth-card{background:#1a1a1a;border:1px solid #222;border-radius:var(--radius-xl);padding:32px;box-shadow:var(--shadow-md)}
 .auth-logo{display:flex;justify-content:center;margin-bottom:24px}
 .auth-logo img{height:60px;object-fit:contain}
 .auth-title{font-size:22px;font-weight:900;color:var(--gray-800);text-align:center;margin-bottom:4px}
@@ -381,7 +412,7 @@ img{max-width:100%;display:block}
 .profile-avatar{width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.2);margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:36px}
 .profile-name{font-size:20px;font-weight:900}
 .profile-email{font-size:14px;opacity:.8;margin-top:4px}
-.profile-section{background:#fff;border-radius:var(--radius-lg);padding:16px;margin-bottom:12px;box-shadow:var(--shadow-sm)}
+.profile-section{background:#1a1a1a;border:1px solid #222;border-radius:var(--radius-lg);padding:16px;margin-bottom:12px;box-shadow:var(--shadow-sm)}
 .profile-section-title{font-size:15px;font-weight:800;color:var(--gray-800);margin-bottom:14px;display:flex;align-items:center;gap:8px}
 .profile-section-title i{color:var(--orange)}
 
@@ -434,11 +465,59 @@ img{max-width:100%;display:block}
 .toast.info i{color:var(--orange)}
 @keyframes toastIn{from{opacity:0;transform:translateX(50px)}to{opacity:1;transform:translateX(0)}}
 
-/* ====== CHATBOT ====== */
+/* ====== SUPPORT CHAT SYSTEM ====== */
 #chatbot-btn{position:fixed;bottom:72px;right:14px;z-index:1500;background:var(--orange);color:#fff;width:46px;height:46px;border-radius:50%;border:none;font-size:18px;cursor:pointer;box-shadow:var(--shadow-md);transition:.2s;display:flex;align-items:center;justify-content:center}
 #chatbot-btn:hover{transform:scale(1.1)}
-#chatbot-window{position:fixed;bottom:84px;left:20px;z-index:1500;background:#fff;border-radius:16px;box-shadow:var(--shadow-lg);width:320px;max-height:440px;display:flex;flex-direction:column;overflow:hidden;transition:.25s;opacity:0;pointer-events:none;transform:translateY(10px)}
-#chatbot-window.open{opacity:1;pointer-events:all;transform:translateY(0)}
+#chatbot-window{position:fixed;bottom:126px;right:14px;z-index:1500;background:#fff;border-radius:16px;box-shadow:0 8px 40px rgba(0,0,0,.18);width:340px;max-height:520px;display:flex;flex-direction:column;overflow:hidden;transition:.3s cubic-bezier(.34,1.56,.64,1);opacity:0;pointer-events:none;transform:translateY(16px) scale(.97)}
+#chatbot-window.open{opacity:1;pointer-events:all;transform:translateY(0) scale(1)}
+.chat-header{background:linear-gradient(135deg,var(--orange),#ff7a3c);color:#fff;padding:12px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.chat-header-avatar{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.chat-header-info{flex:1;min-width:0}
+.chat-header-info h4{font-size:14px;font-weight:800;margin:0;line-height:1.2}
+.chat-header-info span{font-size:11px;opacity:.85}
+.chat-status-dot{width:8px;height:8px;border-radius:50%;background:#4ade80;flex-shrink:0;box-shadow:0 0 6px #4ade80}
+.chat-status-dot.away{background:#fbbf24}
+.chat-status-dot.offline{background:#9ca3af}
+.chat-status-bar{background:rgba(0,0,0,.06);padding:6px 14px;font-size:11px;font-weight:700;text-align:center;flex-shrink:0;letter-spacing:.3px}
+.chat-status-bar.ai{color:rgba(255,255,255,.9);background:rgba(0,0,0,.1)}
+.chat-status-bar.human{color:#fff;background:rgba(0,0,0,.15)}
+.chat-status-bar.waiting{background:#fef3c7;color:#92400e}
+.chat-status-bar.offline-bar{background:#fee2e2;color:#991b1b}
+.chat-quick-actions{padding:10px 12px;display:flex;flex-wrap:wrap;gap:6px;border-bottom:1px solid #f3f4f6;flex-shrink:0;background:#fafafa}
+.chat-quick-btn{font-size:11px;padding:5px 10px;border:1.5px solid var(--orange);color:var(--orange);background:#fff;border-radius:99px;cursor:pointer;font-weight:700;white-space:nowrap;transition:.15s}
+.chat-quick-btn:hover{background:var(--orange);color:#fff}
+.chat-messages{flex:1;overflow-y:auto;padding:14px 12px;display:flex;flex-direction:column;gap:8px;background:#f8f8f8}
+.chat-msg{max-width:82%;padding:9px 13px;border-radius:12px;font-size:13px;line-height:1.5;word-break:break-word;animation:msgPop .2s ease}
+@keyframes msgPop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.chat-msg.bot{background:#fff;color:#1f2937;border-radius:4px 12px 12px 12px;align-self:flex-start;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.chat-msg.user{background:var(--orange);color:#fff;border-radius:12px 12px 4px 12px;align-self:flex-end}
+.chat-msg.human-agent{background:#1e40af;color:#fff;border-radius:4px 12px 12px 12px;align-self:flex-start}
+.chat-msg.system{background:#f0fdf4;color:#15803d;font-size:11px;text-align:center;align-self:center;border-radius:99px;padding:4px 12px;font-weight:700;border:1px solid #bbf7d0}
+.chat-msg-time{font-size:10px;opacity:.55;margin-top:3px}
+.chat-transfer-card{background:#fff;border:2px solid var(--orange);border-radius:10px;padding:12px;margin:6px 0;align-self:flex-start;max-width:90%;box-shadow:0 2px 8px rgba(232,66,10,.1)}
+.chat-transfer-card p{font-size:12px;color:#374151;margin-bottom:10px;line-height:1.5}
+.chat-transfer-card .btn-human{width:100%;background:var(--orange);color:#fff;border:none;border-radius:8px;padding:9px;font-size:13px;font-weight:800;cursor:pointer;margin-bottom:6px}
+.chat-transfer-card .btn-wa{width:100%;background:#25d366;color:#fff;border:none;border-radius:8px;padding:9px;font-size:13px;font-weight:800;cursor:pointer}
+.chat-input-row{display:flex;gap:8px;padding:10px 12px;border-top:1px solid #f0f0f0;background:#fff;flex-shrink:0;align-items:flex-end}
+.chat-input{flex:1;border:1.5px solid #e5e7eb;border-radius:10px;padding:9px 12px;font-size:13px;resize:none;outline:none;font-family:inherit;max-height:80px;background:#fff;color:#1f2937;transition:.2s}
+.chat-input:focus{border-color:var(--orange)}
+.chat-send{background:var(--orange);color:#fff;border:none;border-radius:10px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:.2s}
+.chat-send:hover{background:var(--orange-dark)}
+.chat-typing-indicator{display:flex;gap:4px;align-items:center;padding:8px 12px;background:#fff;border-radius:4px 12px 12px 12px;align-self:flex-start;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.chat-typing-indicator span{width:6px;height:6px;background:#9ca3af;border-radius:50%;animation:typingBounce 1.2s infinite}
+.chat-typing-indicator span:nth-child(2){animation-delay:.2s}
+.chat-typing-indicator span:nth-child(3){animation-delay:.4s}
+@keyframes typingBounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
+/* Admin support panel */
+.support-chat-item{border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px;cursor:pointer;transition:.15s;background:var(--surface)}
+.support-chat-item:hover{border-color:var(--orange)}
+.support-chat-item.unread{border-left:3px solid var(--orange)}
+.support-badge{font-size:10px;font-weight:800;padding:2px 8px;border-radius:99px}
+.badge-active{background:#dcfce7;color:#16a34a}
+.badge-pending{background:#fef3c7;color:#92400e}
+.badge-solved{background:#f3f4f6;color:#6b7280}
+.badge-waiting{background:#fee2e2;color:#dc2626}
+@media(max-width:480px){#chatbot-window{width:calc(100vw - 28px);right:14px;bottom:120px;max-height:480px}}
 .chat-header{background:var(--orange);color:#fff;padding:12px 16px;display:flex;align-items:center;gap:10px}
 .chat-header h4{font-size:14px;font-weight:800;flex:1}
 .chat-close{background:none;border:none;color:#fff;font-size:18px;cursor:pointer}
@@ -703,7 +782,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
 .card-btn-buy:hover{background:#111;color:#fff}
 </style>
 </head>
-<body>
+<body class="dark-mode">
 <!-- PWA INSTALL BANNER -->
 <div id="pwa-install-banner">
   <img class="pwa-banner-icon" src="icon-192.png" alt="Benim" style="border-radius:12px" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
@@ -762,7 +841,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
       <span onclick="navigate('home')" style="font-family:'Poppins',sans-serif;font-weight:900;font-size:26px;color:#e8420a;cursor:pointer;letter-spacing:-0.5px;line-height:1">BENIM</span>
     </div>
     <div class="header-icons" style="display:flex;align-items:center;gap:4px">
-      <button id="dark-mode-btn" onclick="toggleDarkMode()" title="Toggle dark/light mode">🌙</button>
+      <button id="dark-mode-btn" onclick="toggleDarkMode()" title="Toggle dark/light mode">☀️</button>
       <button class="hicon" onclick="navigate('profile')" title="Account"><i class="fas fa-user-circle"></i><span class="badge hidden" id="wish-count">0</span></button>
       <button class="hicon" onclick="navigate('cart')" title="Cart" style="position:relative"><i class="fas fa-shopping-cart"></i><span class="badge hidden" id="cart-count">0</span></button>
     </div>
@@ -954,11 +1033,22 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
   <div class="product-detail-wrap">
     <div class="product-detail-grid">
       <div class="detail-imgs">
-        <div class="main-img"><img id="main-product-img" src="" alt=""></div>
+        <!-- Swipeable image gallery -->
+        <div class="main-img-wrap" style="position:relative;overflow:hidden;touch-action:pan-y">
+          <div id="gallery-slides" style="display:flex;transition:transform .3s ease;will-change:transform">
+            <!-- Images injected by JS -->
+          </div>
+          <button onclick="galleryPrev()" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.45);color:#fff;border:none;border-radius:50%;width:32px;height:32px;font-size:14px;cursor:pointer;z-index:2;display:flex;align-items:center;justify-content:center"><i class="fas fa-chevron-left"></i></button>
+          <button onclick="galleryNext()" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.45);color:#fff;border:none;border-radius:50%;width:32px;height:32px;font-size:14px;cursor:pointer;z-index:2;display:flex;align-items:center;justify-content:center"><i class="fas fa-chevron-right"></i></button>
+          <div id="gallery-dots" style="position:absolute;bottom:8px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:2"></div>
+        </div>
         <div class="thumb-row" id="thumb-row"></div>
       </div>
       <div class="detail-info">
-        <h1 id="detail-name"></h1>
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+          <h1 id="detail-name" style="flex:1"></h1>
+          <button id="share-product-btn" onclick="shareProduct()" style="background:none;border:1px solid var(--gray-200);border-radius:8px;padding:7px 10px;font-size:13px;color:var(--gray-600);cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:5px;flex-shrink:0"><i class="fas fa-share-alt" style="color:var(--orange)"></i> Share</button>
+        </div>
         <div class="detail-rating">
           <div class="stars" id="detail-stars"></div>
           <span id="detail-review-count" style="font-size:13px;color:var(--gray-400)"></span>
@@ -994,7 +1084,9 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
           <button class="btn-cart" id="detail-add-btn" onclick="addToCartFromDetail()"><i class="fas fa-cart-plus"></i> Add to Cart</button>
           <button class="btn-wish" id="detail-wish-btn" onclick="toggleWishlistDetail()"><i class="fas fa-heart"></i></button>
         </div>
-        <div style="background:var(--gray-50);border-radius:8px;padding:12px;font-size:13px;color:var(--gray-600)">
+        <!-- Bulk/Wholesale Request -->
+        <button onclick="showBulkOrderModal()" style="width:100%;margin-top:8px;background:none;border:2px dashed var(--orange);color:var(--orange);border-radius:8px;padding:9px;font-size:13px;font-weight:700;cursor:pointer"><i class="fas fa-boxes"></i> Request Bulk / Wholesale Quote</button>
+        <div style="background:var(--gray-50);border-radius:8px;padding:12px;font-size:13px;color:var(--gray-600);margin-top:10px">
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><i class="fas fa-truck" style="color:var(--orange)"></i> Free delivery on orders above &#8358;150,000</div>
           <div style="display:flex;align-items:center;gap:8px"><i class="fas fa-shield-alt" style="color:var(--green)"></i> Secure payment & buyer protection</div>
         </div>
@@ -1005,6 +1097,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
       <div class="tab-btns">
         <button class="tab-btn active" onclick="switchTab('description',this)">Description</button>
         <button class="tab-btn" onclick="switchTab('reviews',this)">Reviews</button>
+        <button class="tab-btn" onclick="switchTab('qa',this)">Q&amp;A</button>
         <button class="tab-btn" onclick="switchTab('related',this)">Related</button>
       </div>
       <div class="tab-content active" id="tab-description"><p id="detail-description"></p></div>
@@ -1020,13 +1113,35 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
             <label class="form-label">Your Review</label>
             <textarea class="form-input" id="review-text" rows="3" placeholder="Share your experience with this product..."></textarea>
           </div>
+          <div class="form-group">
+            <label class="form-label">Add Photo <span style="color:var(--gray-400);font-weight:400">(optional)</span></label>
+            <input type="file" id="review-photo-input" accept="image/*" class="form-input" style="padding:6px">
+            <div id="review-photo-preview" style="margin-top:8px;display:none"><img id="review-photo-img" style="width:80px;height:80px;object-fit:cover;border-radius:8px;border:2px solid var(--orange)"></div>
+          </div>
           <button class="btn-primary" onclick="submitReview()"><i class="fas fa-paper-plane"></i> Submit Review</button>
         </div>
         <div id="login-to-review" class="hidden" style="text-align:center;padding:20px;color:var(--gray-400)"><p>Please <a href="#" onclick="navigate('login')" style="color:var(--orange);font-weight:700">sign in</a> to write a review.</p></div>
       </div>
+      <!-- Q&A TAB -->
+      <div class="tab-content" id="tab-qa">
+        <div id="qa-list" style="margin-bottom:16px"></div>
+        <div id="qa-form-wrap">
+          <h4 style="font-size:14px;font-weight:800;margin-bottom:10px">Ask a Question</h4>
+          <textarea class="form-input" id="qa-question-input" rows="2" placeholder="e.g. What sizes are available? Does it come in red?"></textarea>
+          <button class="btn-primary" style="margin-top:8px;width:100%" onclick="submitQuestion()"><i class="fas fa-question-circle"></i> Submit Question</button>
+        </div>
+        <div id="qa-login-msg" class="hidden" style="text-align:center;padding:20px;color:var(--gray-400)"><p>Please <a href="#" onclick="navigate('login')" style="color:var(--orange);font-weight:700">sign in</a> to ask a question.</p></div>
+      </div>
       <div class="tab-content" id="tab-related">
         <div class="product-grid" id="related-grid"></div>
       </div>
+    </div>
+    <!-- Also Bought -->
+    <div id="also-bought-section" style="display:none;padding:16px">
+      <div class="home-section-header" style="margin-bottom:12px">
+        <span class="home-section-title" style="font-size:16px">🛒 Customers Also Bought</span>
+      </div>
+      <div class="product-grid" id="also-bought-grid"></div>
     </div>
   </div>
 </div>
@@ -1386,8 +1501,10 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
         <div id="top-products-list"><p style="color:var(--gray-400);font-size:13px">Loading...</p></div>
         <div class="admin-card-title" style="margin-top:16px">📅 Revenue Last 7 Days</div>
         <div id="revenue-chart" style="padding:10px 0"></div>
-        <div style="margin-top:16px;text-align:center">
-          <button class="btn-primary" onclick="sendDailySummaryWhatsApp()"><i class="fab fa-whatsapp"></i> Send Daily Summary to WhatsApp</button>
+        <div id="revenue-goal-section" style="margin-top:16px;background:var(--gray-50);border-radius:10px;padding:14px"></div>
+        <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn-primary" onclick="sendDailySummaryWhatsApp()"><i class="fab fa-whatsapp"></i> Send Daily Summary</button>
+          <button style="background:var(--green);color:#fff;border:none;border-radius:8px;padding:10px 16px;font-size:13px;font-weight:700;cursor:pointer" onclick="exportOrdersCSV()"><i class="fas fa-file-csv"></i> Export Orders CSV</button>
         </div>
       </div>
     </div>
@@ -1407,9 +1524,16 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
           <span>All Products</span>
           <button class="btn-primary" onclick="showAddProductModal()"><i class="fas fa-plus"></i> Add Product</button>
         </div>
+        <!-- Bulk Actions Bar -->
+        <div id="bulk-actions-bar" style="display:none;align-items:center;gap:8px;flex-wrap:wrap;padding:10px;background:var(--gray-50);border-radius:8px;margin-bottom:10px">
+          <span id="bulk-count" style="font-size:13px;font-weight:700;color:var(--orange)">0 selected</span>
+          <button onclick="bulkDiscountProducts()" style="background:var(--orange);color:#fff;border:none;border-radius:6px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer"><i class="fas fa-tag"></i> Bulk Discount</button>
+          <button onclick="bulkDeleteProducts()" style="background:var(--red);color:#fff;border:none;border-radius:6px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer"><i class="fas fa-trash"></i> Delete Selected</button>
+          <button onclick="selectedAdminProducts.clear();document.querySelectorAll('.prod-select-cb').forEach(c=>c.checked=false);document.getElementById('bulk-actions-bar').style.display='none'" style="background:none;border:1px solid var(--gray-300);border-radius:6px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer">Cancel</button>
+        </div>
         <div style="overflow-x:auto">
           <table class="admin-table" id="admin-products-table">
-            <thead><tr><th>Image</th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Actions</th></tr></thead>
+            <thead><tr><th><input type="checkbox" onchange="document.querySelectorAll('.prod-select-cb').forEach(c=>{c.checked=this.checked;toggleProductSelect(c.dataset.id,c)})"></th><th>Image</th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Actions</th></tr></thead>
             <tbody id="admin-products-body"></tbody>
           </table>
         </div>
@@ -1912,13 +2036,28 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
   </div>
 </footer>
 
-<!-- ====== CHATBOT ====== -->
-<button id="chatbot-btn" onclick="toggleChatbot()" title="Chat Support"><i class="fas fa-comment-dots"></i></button>
+<!-- ====== SUPPORT CHAT SYSTEM ====== -->
+<button id="chatbot-btn" onclick="toggleChatbot()" title="Chat Support" style="position:relative">
+  <i class="fas fa-comment-dots"></i>
+  <span id="chat-notif-dot" style="display:none;position:absolute;top:2px;right:2px;width:10px;height:10px;background:#ef4444;border-radius:50%;border:2px solid #fff"></span>
+</button>
 <div id="chatbot-window">
   <div class="chat-header">
-    <i class="fas fa-robot"></i>
-    <h4>Benim Support</h4>
-    <button class="chat-close" onclick="toggleChatbot()"><i class="fas fa-times"></i></button>
+    <div class="chat-header-avatar"><i class="fas fa-robot"></i></div>
+    <div class="chat-header-info">
+      <h4>Benim Support</h4>
+      <span id="chat-agent-name">AI Assistant</span>
+    </div>
+    <div class="chat-status-dot" id="chat-status-dot"></div>
+    <button onclick="toggleChatbot()" style="background:none;border:none;color:#fff;cursor:pointer;padding:4px;margin-left:4px;font-size:16px"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="chat-status-bar ai" id="chat-status-bar">🤖 AI Support Active</div>
+  <div class="chat-quick-actions" id="chat-quick-actions">
+    <button class="chat-quick-btn" onclick="quickSupport('Track my order')">📦 Track Order</button>
+    <button class="chat-quick-btn" onclick="quickSupport('Payment issue')">💳 Payment Issue</button>
+    <button class="chat-quick-btn" onclick="quickSupport('Delivery problem')">🚚 Delivery Problem</button>
+    <button class="chat-quick-btn" onclick="quickSupport('Refund request')">🔄 Refund</button>
+    <button class="chat-quick-btn" onclick="requestHumanSupport()">👤 Human Support</button>
   </div>
   <div class="chat-messages" id="chat-messages"></div>
   <div class="chat-input-row">
@@ -2185,6 +2324,28 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
   </div>
 </div>
 
+<!-- BULK ORDER MODAL -->
+<div class="modal-overlay" id="modal-bulk-order">
+  <div class="modal" style="max-width:440px">
+    <div class="modal-header">
+      <span class="modal-title">📦 Bulk / Wholesale Request</span>
+      <button class="modal-close" onclick="closeModal('modal-bulk-order')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:12px">
+      <p style="font-size:13px;color:var(--gray-500)">Fill this form and we'll contact you with a special wholesale price.</p>
+      <div><label class="form-label">Product</label><input class="form-input" id="bulk-product-name" readonly></div>
+      <div><label class="form-label">Your Name *</label><input class="form-input" id="bulk-name" placeholder="Full name"></div>
+      <div><label class="form-label">Phone / WhatsApp *</label><input class="form-input" id="bulk-phone" type="tel" placeholder="+234..."></div>
+      <div><label class="form-label">Quantity Needed *</label><input class="form-input" id="bulk-qty" type="number" min="1" placeholder="e.g. 50"></div>
+      <div><label class="form-label">Additional Notes</label><textarea class="form-input" id="bulk-notes" rows="2" placeholder="Sizes, colours, delivery location..."></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('modal-bulk-order')">Cancel</button>
+      <button class="btn-primary" onclick="submitBulkOrder()"><i class="fab fa-whatsapp"></i> Send via WhatsApp</button>
+    </div>
+  </div>
+</div>
+
 <!-- ORDER DETAIL MODAL -->
 <div class="modal-overlay" id="modal-order-detail">
   <div class="modal" style="max-width:520px">
@@ -2248,7 +2409,6 @@ let selectedAddress = null;
 let selectedPayment = null;
 let currentSlide = 0;
 let sliderInterval = null;
-let chatSessionId = null;
 let lastOrderId = null;
 let searchQuery = '';
 let searchCategory = 'all';
@@ -2543,11 +2703,11 @@ window.openProduct = function(id) {
   }
   document.getElementById('detail-description').textContent = p.description||'No description available.';
   document.getElementById('qty-input').value = 1;
-  // Images
+  // Images — use new swipeable gallery
   const imgs = (p.images&&p.images.length) ? p.images : ['https://placehold.co/400x400/f3f4f6/9ca3af?text=No+Image'];
-  document.getElementById('main-product-img').src = imgs[0];
+  initGallery(imgs);
   const thumbRow = document.getElementById('thumb-row');
-  thumbRow.innerHTML = imgs.map((img,i) => `<div class="thumb${i===0?' active':''}" onclick="changeMainImg('${img}',this)"><img src="${img}" onerror="this.src='https://placehold.co/80x80/f3f4f6/9ca3af?text=Img'"></div>`).join('');
+  thumbRow.innerHTML = imgs.map((img,i)=>'<div class="thumb thumb-img'+(i===0?' active':'')+'" onclick="goToSlideGallery('+i+');document.querySelectorAll(\'.thumb-img\').forEach((t,j)=>t.classList.toggle(\'active\',j==='+i+'))"><img src="'+img+'" onerror="this.src=\'https://placehold.co/80x80/f3f4f6/9ca3af?text=Img\'"></div>').join('');
   // Size options
   const sizes = p.sizes||[];
   const sizeWrap = document.getElementById('size-selector-wrap');
@@ -2591,15 +2751,13 @@ window.openProduct = function(id) {
   // Review form
   document.getElementById('review-form-wrap').classList.toggle('hidden', !currentUser);
   document.getElementById('login-to-review').classList.toggle('hidden', !!currentUser);
+  // Load Q&A
+  loadQA(p.id);
+  // Load also bought
+  loadAlsoBought(p.id, p.category||'');
 
   navigate('product');
   window.scrollTo(0,0);
-};
-
-window.changeMainImg = function(src, el) {
-  document.getElementById('main-product-img').src = src;
-  document.querySelectorAll('.thumb').forEach(t=>t.classList.remove('active'));
-  el.classList.add('active');
 };
 
 async function loadProductReviews(productId) {
@@ -3410,15 +3568,15 @@ window.toggleDarkMode = function() {
   document.getElementById('dark-mode-btn').textContent = isDark ? '☀️' : '🌙';
   localStorage.setItem('benim-theme', isDark ? 'dark' : 'light');
 };
-// Default is DARK — only switch to light if user explicitly chose it
+// Dark is the default — only go light if user explicitly chose it
 (function(){
   const saved = localStorage.getItem('benim-theme');
   if(saved === 'light') {
-    // User chose light — stay light
+    document.body.classList.remove('dark-mode');
     const btn = document.getElementById('dark-mode-btn');
     if(btn) btn.textContent = '🌙';
   } else {
-    // Default dark mode
+    // Ensure dark mode is on (it's already in the class, this just syncs the button)
     document.body.classList.add('dark-mode');
     const btn = document.getElementById('dark-mode-btn');
     if(btn) btn.textContent = '☀️';
@@ -3594,13 +3752,17 @@ window.deleteProduct = async function(id) {
 
 window.loadAdminProducts = function() {
   const tbody = document.getElementById('admin-products-body');
+  selectedAdminProducts.clear();
+  const bar = document.getElementById('bulk-actions-bar');
+  if(bar) bar.style.display='none';
   tbody.innerHTML = allProducts.map(p=>`
     <tr>
+      <td><input type="checkbox" class="prod-select-cb" data-id="${p.id}" onchange="toggleProductSelect('${p.id}',this)"></td>
       <td><img class="product-thumb-small" src="${(p.images&&p.images[0])||'https://placehold.co/40x40/f3f4f6/9ca3af?text=P'}" onerror="this.src='https://placehold.co/40x40/f3f4f6/9ca3af?text=P'"></td>
       <td>${p.name||''}</td>
       <td>${p.category||''}</td>
       <td>₦${(Number(p.discountPrice)||Number(p.price)||0).toLocaleString()}</td>
-      <td>${p.stock||0}</td>
+      <td style="color:${(p.stock||0)<=5?'var(--red)':(p.stock||0)<=15?'#f59e0b':'inherit'};font-weight:${(p.stock||0)<=10?'800':'400'}">${p.stock||0}</td>
       <td style="display:flex;gap:6px;flex-wrap:wrap">
         <button class="btn-primary" style="padding:5px 10px;font-size:11px" onclick="editProduct('${p.id}')"><i class="fas fa-edit"></i></button>
         <button class="btn-danger" onclick="deleteProduct('${p.id}')"><i class="fas fa-trash"></i></button>
@@ -3963,337 +4125,424 @@ window.loadAdminStats = async function() {
   loadAdminOrders();
 };
 
-// ===== CHATBOT (Smart AI - Free) =====
+// ===== AI + HUMAN SUPPORT CHAT SYSTEM =====
 let chatOpen = false;
-let chatConversation = []; // full conversation history for context
+let chatConversation = [];
+let chatSessionId = null;
+let chatMode = 'ai'; // 'ai' | 'waiting' | 'human' | 'offline'
+let humanJoined = false;
+let supportListener = null;
 
-// Build live product context from store
+// ---- Build product context ----
 function buildProductContext() {
   if (!allProducts.length) return 'No products currently loaded.';
   return allProducts.map(p => {
     const price = Number(p.discountPrice) > 0 ? Number(p.discountPrice) : Number(p.price);
-    const orig = Number(p.price) || 0;
-    const hasDisc = Number(p.discountPrice) > 0 && Number(p.discountPrice) < orig;
-    return `• ${p.name} | Cat: ${p.category} | Price: ₦${price.toLocaleString()}${hasDisc ? ` (orig ₦${orig.toLocaleString()})` : ''} | Stock: ${p.stock > 0 ? p.stock + ' in stock' : 'Out of stock'}${p.sizes && p.sizes.length ? ' | Sizes: ' + p.sizes.join(', ') : ''}${p.colours && p.colours.length ? ' | Colours: ' + p.colours.join(', ') : ''}`;
+    return `• ${p.name} | Cat: ${p.category} | ₦${price.toLocaleString()} | Stock: ${p.stock > 0 ? p.stock : 'Out of stock'}${p.sizes?.length ? ' | Sizes: '+p.sizes.join(', ') : ''}${p.colours?.length ? ' | Colours: '+p.colours.join(', ') : ''}`;
   }).join('\n');
 }
 
 function getSystemContext() {
-  return `You are Benim Support Bot — a helpful, friendly AI customer support assistant for BENIM, a Nigerian online fashion and lifestyle store.
-
-=== STORE INFO ===
-Name: Benim | Country: Nigeria | Nationwide delivery
-WhatsApp: +234 916 803 1213 | Email: shopwitbenim@gmail.com
-Hours: Mon–Sat, 8:00 AM – 8:00 PM (WAT)
-
-=== PAYMENT ===
-1. Bank Transfer (Opay): Adewole Aderonke Aishat | Acc: 9168031213 | Use Order ID as ref
-2. Pay on Delivery (POD)
-
-=== DELIVERY ===
-Free delivery: orders ₦150,000+
-Below ₦150,000: flat ₦3,500 fee
-Lagos: 1–2 days | Abuja/PH: 2–3 days | Other states: 3–5 days | Remote: 5–7 days
-
-=== CHECKOUT STEPS ===
-1. Browse & add items to cart (must be signed in)
-2. Go to Cart → tap "Proceed to Checkout"
-3. Add/select delivery address
-4. Choose Bank Transfer or Pay on Delivery
-5. Tap "Place Order" — WhatsApp confirmation sent
-
-=== ORDER TRACKING ===
-Menu → Track Order → enter Order ID or phone number
-
-=== RETURNS ===
-Contact WhatsApp +234 916 803 1213 within 24hrs of delivery
-
-=== CATEGORIES ===
-Men's Fashion, Women's Fashion, Electronics, Baby Products, Home & Kitchen, Beauty, Sports, Phones, Toys, Groceries
-
-=== CURRENT PRODUCTS ===
-${buildProductContext()}
-
-=== INSTRUCTIONS ===
-- Answer ONLY questions about Benim store, its products, orders, delivery, payments, checkout, account, categories, returns
-- If asked about a specific product by name, search the product list above and give accurate price, stock, sizes, colours
-- If product not found, say it may be out of stock and suggest contacting WhatsApp
-- Be warm, brief (2–4 lines), use simple English. Occasional Nigerian expressions (e.g. "No wahala!") are welcome
-- Never guess prices — always use the product list
-- For unrelated questions, politely redirect to store topics`;
+  return `You are Benim Support Bot — friendly AI assistant for BENIM, a Nigerian online fashion store.
+Store: Nigeria | WhatsApp: +234 916 803 1213 | Email: shopwitbenim@gmail.com | Hours: Mon–Sat 8AM–8PM WAT
+Payment: 1) Bank Transfer Opay - Adewole Aderonke Aishat | 9168031213 2) Pay on Delivery
+Delivery: Free above ₦150,000. ₦3,500 below. Lagos: 1-2 days. Abuja/PH: 2-3 days. Others: 3-5 days.
+Categories: Men's Fashion, Women's Fashion, Electronics, Baby Products, Home & Kitchen, Beauty, Sports, Phones, Toys, Groceries
+Current Products:\n${buildProductContext()}
+Instructions: Answer only about Benim. Be warm, brief (2-4 lines). Use simple English. If you cannot solve the issue, say so clearly and mention a human agent can help.`;
 }
 
-// Smart local fallback that knows the store well
 function smartLocalReply(text) {
   const t = text.toLowerCase();
-
-  // Greeting
-  if (/^(hi|hello|hey|good morning|good afternoon|good evening|sup|howdy|yo)\b/.test(t))
-    return "Hello! 👋 Welcome to Benim! I'm your support assistant. Ask me about products, prices, delivery, checkout, payments, or your orders!";
-
-  // Product search
+  if (/^(hi|hello|hey|good morning|good evening|sup)\b/.test(t)) return "Hello! 👋 Welcome to Benim! I'm your support assistant. Ask me about products, prices, delivery, checkout, or orders!";
   const found = allProducts.filter(p => (p.name||'').toLowerCase().split(' ').some(w => w.length > 3 && t.includes(w)));
   if (found.length) {
-    const p = found[0];
-    const price = Number(p.discountPrice) > 0 ? Number(p.discountPrice) : Number(p.price);
-    const orig = Number(p.price) || 0;
-    const hasDisc = Number(p.discountPrice) > 0 && price < orig;
-    let reply = `I found *${p.name}*!\n💰 Price: ₦${price.toLocaleString()}${hasDisc ? ` (was ₦${orig.toLocaleString()})` : ''}\n📦 Stock: ${p.stock > 0 ? p.stock + ' available' : 'Out of stock'}`;
-    if (p.sizes && p.sizes.length) reply += `\n📏 Sizes: ${p.sizes.join(', ')}`;
-    if (p.colours && p.colours.length) reply += `\n🎨 Colours: ${p.colours.join(', ')}`;
-    reply += `\n\nTo buy: add to cart, go to checkout, choose payment. Need help? 😊`;
-    return reply;
+    const p = found[0]; const price = Number(p.discountPrice) > 0 ? Number(p.discountPrice) : Number(p.price);
+    let r = `I found *${p.name}*!\n💰 ₦${price.toLocaleString()} | 📦 ${p.stock > 0 ? p.stock+' in stock' : 'Out of stock'}`;
+    if (p.sizes?.length) r += `\n📏 Sizes: ${p.sizes.join(', ')}`;
+    if (p.colours?.length) r += `\n🎨 Colours: ${p.colours.join(', ')}`;
+    return r + '\n\nTap "Add to Cart" to buy. Need help? 😊';
   }
-
-  // Price / how much
-  if (/price|cost|how much|fee|charge/.test(t))
-    return "All prices are shown in Nigerian Naira (₦). Discounted prices appear in orange on product cards. Delivery fee is ₦3,500 for orders below ₦150,000 — FREE above ₦150,000! Want to know the price of a specific item? Just ask me by name 😊";
-
-  // Delivery
-  if (/deliver|shipping|ship|how long|when|days/.test(t))
-    return "🚚 Delivery info:\n• Lagos: 1–2 business days\n• Abuja / Port Harcourt: 2–3 days\n• Other states: 3–5 days\n• Remote areas: 5–7 days\n\nDelivery fee: ₦3,500 (FREE on orders ₦150,000+). You'll get WhatsApp updates at every step!";
-
-  // Payment
-  if (/pay|payment|transfer|bank|opay|pod|delivery payment|how to pay/.test(t))
-    return "💳 We accept:\n1. *Bank Transfer (Opay)*: Adewole Aderonke Aishat | 9168031213\n   (Use your Order ID as payment reference)\n2. *Pay on Delivery* — pay cash when your order arrives\n\nChoose your method during checkout!";
-
-  // Checkout / cart / order
-  if (/checkout|cart|order|buy|purchase|place order/.test(t))
-    return "🛒 How to order:\n1. Find a product & tap 'Add to Cart'\n2. Go to Cart → tap 'Proceed to Checkout'\n3. Add your delivery address\n4. Choose Bank Transfer or Pay on Delivery\n5. Tap 'Place Order' ✅\n\nYou must be signed in. Need help signing in?";
-
-  // Tracking
-  if (/track|tracking|where is|status|my order/.test(t))
-    return "📦 To track your order:\n• Tap Menu (☰) → Track Order\n• Enter your Order ID or phone number\n• You'll also get WhatsApp notifications for every status update!\n\nNeed help? Contact us: wa.me/2349168031213";
-
-  // Return / refund / exchange
-  if (/return|refund|exchange|wrong item|damaged|complaint/.test(t))
-    return "We're sorry to hear that! 😟 For returns or complaints:\n• Contact us within 24 hours of delivery\n• WhatsApp: +234 916 803 1213\n• Email: shopwitbenim@gmail.com\n\nWe'll make it right for you! Buyer protection is active on all orders.";
-
-  // Contact
-  if (/contact|reach|call|whatsapp|email|phone/.test(t))
-    return "📞 Contact Benim:\n• WhatsApp: +234 916 803 1213 (fastest!)\n• Email: shopwitbenim@gmail.com\n• Hours: Mon–Sat, 8:00 AM – 8:00 PM (WAT)\n\nTap the WhatsApp link to chat with us directly!";
-
-  // Categories
-  if (/categor|type|kind|what do you sell|what.*sell|collection/.test(t))
-    return "🛍️ We sell:\n• Men's & Women's Fashion\n• Electronics & Phones\n• Baby Products\n• Home & Kitchen\n• Beauty & Sports\n• Groceries & Toys\n\nBrowse by tapping Categories at the bottom or searching any product name!";
-
-  // Account / login / register
-  if (/account|sign in|login|register|sign up|password/.test(t))
-    return "👤 Account help:\n• Tap the person icon at top-right\n• Choose 'Sign In' or 'Create Account'\n• You can also sign in with Google\n• Forgot password? Use 'Forgot password' on the login page\n\nYou need an account to place orders!";
-
-  // Size
-  if (/size|sizing|fit|measurements/.test(t))
-    return "📏 Sizes vary by product. Each product page shows available sizes — just tap the product to see them. Sizes are listed as options you can select before adding to cart.\n\nNot sure about a specific size? Message us on WhatsApp: +234 916 803 1213";
-
-  // Discount / sale / promo
-  if (/discount|sale|promo|deal|offer|flash/.test(t))
-    return "🔥 Check our Flash Sales section on the home page for our best deals! Discounted items show the original price crossed out and the % discount badge.\n\nNew deals are added regularly — keep checking! 👀";
-
-  // About
-  if (/about|who are you|what is benim|benim/.test(t))
-    return "🧡 Benim is a Nigerian online fashion & lifestyle store. We offer quality products at honest prices with nationwide delivery across Nigeria.\n\nShop smart. Dress better. — That's the Benim promise!";
-
-  // Stock / availability
-  if (/stock|available|in stock|out of stock/.test(t))
-    return "Stock status is shown on every product page — it shows how many items are available. 'Out of Stock' means it's temporarily unavailable.\n\nWant to know if a specific item is in stock? Tell me the product name! 😊";
-
-  // Default — helpful and specific
-  return "I'm not sure I understood that, but I'm here to help! 😊 You can ask me about:\n• 🛍️ Products & prices\n• 🚚 Delivery & shipping\n• 💳 Payment methods\n• 🛒 How to checkout\n• 📦 Order tracking\n• 📞 Contact & returns\n\nOr reach us on WhatsApp: +234 916 803 1213";
+  if (/price|cost|how much|fee/.test(t)) return "Prices are in ₦ on each product. Delivery: ₦3,500 (FREE above ₦150,000). Ask me any product name for its price!";
+  if (/deliver|shipping|how long|when|days/.test(t)) return "🚚 Delivery:\n• Lagos: 1–2 days\n• Abuja/PH: 2–3 days\n• Others: 3–5 days\nFree delivery on orders ₦150,000+";
+  if (/pay|payment|transfer|bank|opay/.test(t)) return "💳 Payment options:\n1. Bank Transfer (Opay): Adewole Aderonke Aishat | 9168031213\n2. Pay on Delivery\nChoose at checkout!";
+  if (/track|where is|my order|status/.test(t)) return "📦 Track order: Menu → Track Order → enter Order ID or phone. You also get WhatsApp updates automatically!";
+  if (/return|refund|exchange|wrong|damaged/.test(t)) return "😟 For returns/refunds, contact us within 24hrs of delivery via WhatsApp: +234 916 803 1213";
+  if (/contact|whatsapp|call|reach/.test(t)) return "📞 Contact: WhatsApp +234 916 803 1213 | Email: shopwitbenim@gmail.com\nMon–Sat 8AM–8PM";
+  if (/size|sizing|fit/.test(t)) return "📏 Sizes are shown on each product page. Not sure? Message us on WhatsApp: +234 916 803 1213";
+  if (/discount|sale|promo|flash/.test(t)) return "🔥 Check Flash Sales on the home page for deals! New offers added regularly 👀";
+  if (/categor|what.*sell|collection/.test(t)) return "🛍️ We sell: Men's & Women's Fashion, Electronics, Phones, Baby Products, Home & Kitchen, Beauty, Sports, Groceries & Toys!";
+  if (/account|login|sign in|register|password/.test(t)) return "👤 Tap the person icon → Sign In or Create Account. You can also sign in with Google. Need account help?";
+  return null; // null = show human transfer option
 }
 
-window.toggleChatbot = function() {
-  chatOpen = !chatOpen;
-  document.getElementById('chatbot-window').classList.toggle('open', chatOpen);
-  if (chatOpen && !document.getElementById('chat-messages').innerHTML) {
-    addChatMsg("Hi! 👋 I'm Benim's smart support assistant. Ask me anything — products, prices, delivery, checkout, orders, and more!", 'bot');
+// ---- Chat Status UI ----
+function setChatStatus(mode) {
+  chatMode = mode;
+  const bar = document.getElementById('chat-status-bar');
+  const dot = document.getElementById('chat-status-dot');
+  const agentName = document.getElementById('chat-agent-name');
+  const avatar = document.querySelector('.chat-header-avatar i');
+  if (!bar) return;
+  if (mode === 'ai') {
+    bar.className = 'chat-status-bar ai'; bar.textContent = '🤖 AI Support Active';
+    if(dot){dot.className='chat-status-dot';} if(agentName)agentName.textContent='AI Assistant';
+    if(avatar){avatar.className='fas fa-robot';}
+  } else if (mode === 'waiting') {
+    bar.className = 'chat-status-bar waiting'; bar.textContent = '⏳ Waiting for Customer Care...';
+    if(dot){dot.className='chat-status-dot away';} if(agentName)agentName.textContent='Connecting...';
+  } else if (mode === 'human') {
+    bar.className = 'chat-status-bar human'; bar.style.background='#1e40af'; bar.style.color='#fff';
+    bar.textContent = '✅ Connected to Customer Care';
+    if(dot){dot.className='chat-status-dot';} if(agentName)agentName.textContent='Customer Care';
+    if(avatar){avatar.className='fas fa-user-tie';}
+  } else if (mode === 'offline') {
+    bar.className = 'chat-status-bar offline-bar'; bar.textContent = '💤 Support Offline — Message saved';
+    if(dot){dot.className='chat-status-dot offline';}
   }
-};
-window.openChatbot = function() { chatOpen = false; toggleChatbot(); };
+}
 
-window.chatKeyPress = function(e) {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChatMessage(); }
-};
-
-window.sendChatMessage = async function() {
-  const input = document.getElementById('chat-input');
-  const text = input.value.trim();
-  if (!text) return;
-  addChatMsg(text, 'user');
-  saveChatSession(text, 'user');
-  input.value = '';
-
-  // Show typing
+// ---- Add message to UI ----
+function addChatMsg(text, role, time) {
   const msgs = document.getElementById('chat-messages');
-  const typingDiv = document.createElement('div');
-  typingDiv.className = 'chat-msg bot';
-  typingDiv.id = 'chat-typing';
-  typingDiv.innerHTML = '<span style="opacity:.5;font-style:italic">Typing…</span>';
-  msgs.appendChild(typingDiv);
-  msgs.scrollTop = msgs.scrollHeight;
-
-  // Add to conversation
-  chatConversation.push({ role: 'user', parts: [{ text }] });
-
-  // Try Gemini free API first
-  let reply = null;
-  try {
-    const GEMINI_KEY = 'AIzaSyDaGmWKa4JsXZ-g7dM7fLQy5X3Mg3Nf8Y0'; // free public demo key
-    const contextMsg = getSystemContext();
-    // Build messages: system as first user turn, then history
-    const history = chatConversation.slice(-8); // last 4 exchanges
-    const contents = [
-      { role: 'user', parts: [{ text: contextMsg + '\n\nCustomer says: ' + text }] }
-    ];
-    const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ contents, generationConfig: { maxOutputTokens: 300, temperature: 0.7 } })
-      }
-    );
-    const data = await res.json();
-    reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || null;
-  } catch(e) { reply = null; }
-
-  // If Gemini fails, use smart local reply
-  if (!reply) reply = smartLocalReply(text);
-
-  const typingEl = document.getElementById('chat-typing');
-  if (typingEl) typingEl.remove();
-
-  chatConversation.push({ role: 'model', parts: [{ text: reply }] });
-  addChatMsg(reply, 'bot');
-  saveChatSession(reply, 'bot');
-};
-
-function addChatMsg(text, role) {
-  const msgs = document.getElementById('chat-messages');
+  if (!msgs) return;
   const div = document.createElement('div');
   div.className = 'chat-msg ' + role;
-  // Render newlines and *bold*
-  div.innerHTML = text
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/\*(.*?)\*/g,'<strong>$1</strong>')
-    .replace(/\n/g,'<br>');
+  const formatted = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\*(.*?)\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
+  const ts = time ? '<div class="chat-msg-time">'+new Date(time).toLocaleTimeString('en-NG',{hour:'2-digit',minute:'2-digit'})+'</div>' : '';
+  div.innerHTML = formatted + ts;
   msgs.appendChild(div);
   msgs.scrollTop = msgs.scrollHeight;
 }
 
-async function saveChatSession(text, role) {
-  try {
-    if(!chatSessionId) chatSessionId = 'session-'+Date.now();
-    const ref = doc(db,'chatbot_sessions',chatSessionId);
-    const snap = await getDoc(ref);
-    const existing = snap.exists() ? (snap.data().messages||[]) : [];
-    existing.push({ text, role, ts: Date.now() });
-    await setDoc(ref, { messages: existing, userEmail: currentUser?.email||'Guest', updatedAt: serverTimestamp() });
-  } catch(e){}
+function addSystemMsg(text) {
+  const msgs = document.getElementById('chat-messages');
+  if(!msgs) return;
+  const div = document.createElement('div');
+  div.className = 'chat-msg system';
+  div.textContent = text;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
 }
 
-// ===== WHATSAPP =====
-const ADMIN_WHATSAPP = '2349168031213';
+function showTransferCard() {
+  const msgs = document.getElementById('chat-messages');
+  if (!msgs) return;
+  const div = document.createElement('div');
+  div.className = 'chat-transfer-card';
+  div.innerHTML = '<p>I may not be able to fully resolve this. Would you like to speak with a human customer care agent?</p>'
+    +'<button class="btn-human" onclick="requestHumanSupport()"><i class="fas fa-user-headset"></i> Speak With Customer Care</button>'
+    +'<button class="btn-wa" onclick="window.open(\'https://wa.me/2349168031213\',\'_blank\')"><i class="fab fa-whatsapp"></i> Continue on WhatsApp</button>';
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
 
-function notifyBuyerWhatsApp(phone, orderId, status, items, customerName, total, deliveryFee) {
-  if (!phone) return;
-  let cleanPhone = String(phone).replace(/[^0-9]/g, '');
-  if (!cleanPhone) return;
-  // Convert 0xxxxxxxx to 234xxxxxxxx
-  if (cleanPhone.startsWith('0')) cleanPhone = '234' + cleanPhone.slice(1);
-
-  const STATUS_MESSAGES = {
-    pending: {
-      emoji: '⏳',
-      label: 'Order Received',
-      body: `We've received your order and it's currently being reviewed. You'll get another update once we confirm it.`
-    },
-    confirmed: {
-      emoji: '✅',
-      label: 'Order Confirmed',
-      body: `Great news! Your order has been *confirmed* by our team. We are now preparing your items for dispatch.`
-    },
-    processing: {
-      emoji: '⚙️',
-      label: 'Order Processing',
-      body: `Your order is currently being *processed and packaged* with care. It will be handed over to our delivery team soon.`
-    },
-    out_for_delivery: {
-      emoji: '🚚',
-      label: 'Out for Delivery',
-      body: `Your order is *on its way* to you right now! Our delivery agent will contact you before arrival. Please keep your phone reachable.`
-    },
-    delivered: {
-      emoji: '🎉',
-      label: 'Order Delivered',
-      body: `Your order has been *successfully delivered*! We hope you love your purchase. 😊
-
-Please drop a review — it means a lot to us!
-
-If you have any issues, reply to this message within 24 hours.`
-    },
-    cancelled: {
-      emoji: '❌',
-      label: 'Order Cancelled',
-      body: `We're sorry, your order has been *cancelled*. If this was a mistake or you have questions, please reply to this message or contact us directly.`
-    }
+// ---- Save / load session in Firestore ----
+async function ensureChatSession() {
+  if (chatSessionId) return;
+  chatSessionId = 'support-' + Date.now() + '-' + Math.random().toString(36).slice(2,7);
+  const data = {
+    sessionId: chatSessionId,
+    userId: currentUser?.uid || 'guest',
+    userEmail: currentUser?.email || 'Guest',
+    userName: currentUser?.displayName || currentUser?.email?.split('@')[0] || 'Guest',
+    messages: [],
+    status: 'active',
+    mode: 'ai',
+    humanJoined: false,
+    adminRead: false,
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp()
   };
-
-  const s = STATUS_MESSAGES[status] || { emoji: '📦', label: status.replace(/_/g,' ').replace(/\w/g,l=>l.toUpperCase()), body: 'Your order status has been updated.' };
-
-  const msg = encodeURIComponent(
-    `Hello *${customerName}*! 👋
-
-` +
-    `${s.emoji} *${s.label}* — Benim Order Update
-
-` +
-    `${s.body}
-
-` +
-    `━━━━━━━━━━━━━━━
-` +
-    `🧾 *Order ID:* ${orderId}
-` +
-    `🛍️ *Items:* ${items}
-` +
-    `💰 *Total Paid:* ₦${Number(total||0).toLocaleString()}
-` +
-    (Number(deliveryFee) > 0 ? `🚚 *Delivery Fee:* ₦${Number(deliveryFee).toLocaleString()}
-` : '') +
-    `━━━━━━━━━━━━━━━
-
-` +
-    `Thank you for shopping with *Benim*! 🧡
-` +
-    `Need help? Call/WhatsApp: +234 916 803 1213`
-  );
-  window.open(`https://wa.me/${cleanPhone}?text=${msg}`, '_blank');
+  await setDoc(doc(db, 'support_chats', chatSessionId), data);
 }
 
-function notifyAdminWhatsApp(orderId, customerName, customerEmail, items, subtotal, deliveryFee, payment, address, buyerPhone, couponDiscount, couponCode, loyaltyDiscount) {
-  const cd = Number(couponDiscount||0);
-  const ld = Number(loyaltyDiscount||0);
-  const cleanBuyerPhone = String(buyerPhone||'').replace(/[^0-9]/g,'');
-  const grandTotal = Math.max(0, Number(subtotal||0) - cd - ld + Number(deliveryFee||0));
-  const msg = encodeURIComponent(
-    '🛒 *NEW ORDER — Benim!*\n\n' +
-    '🧾 *Order ID:* '+orderId+'\n' +
-    '👤 *Customer:* '+customerName+'\n' +
-    '📧 *Email:* '+customerEmail+'\n' +
-    (cleanBuyerPhone ? '📱 *Phone:* '+buyerPhone+'\n' : '') +
-    '\n📦 *Items Ordered:*\n'+items+'\n\n' +
-    '💰 *Subtotal:* ₦'+Number(subtotal||0).toLocaleString()+'\n' +
-    (Number(deliveryFee)>0 ? '🚚 *Delivery Fee:* ₦'+Number(deliveryFee).toLocaleString()+'\n' : '🚚 *Delivery:* FREE ✅\n') +
-    (cd>0 ? '🏷️ *Coupon ('+(couponCode||'DISCOUNT')+'):* -₦'+cd.toLocaleString()+'\n' : '') +
-    (ld>0 ? '⭐ *Loyalty Points:* -₦'+ld.toLocaleString()+'\n' : '') +
-    (cd>0||ld>0 ? '🎉 *Total Savings:* ₦'+(cd+ld).toLocaleString()+'\n' : '') +
-    '💵 *Grand Total:* ₦'+grandTotal.toLocaleString()+'\n' +
-    '💳 *Payment:* '+(payment==='bank'?'Bank Transfer (Opay)':'Pay on Delivery')+'\n' +
-    '📍 *Address:* '+address+'\n\n' +
-    '👉 Go to Admin Panel → Orders to confirm.'
-  );
-  window.open('https://wa.me/'+ADMIN_WHATSAPP+'?text='+msg, '_blank');
+async function saveMsg(text, role) {
+  try {
+    await ensureChatSession();
+    const ref = doc(db, 'support_chats', chatSessionId);
+    const snap = await getDoc(ref);
+    const msgs = snap.exists() ? (snap.data().messages || []) : [];
+    msgs.push({ text, role, ts: Date.now() });
+    await updateDoc(ref, {
+      messages: msgs,
+      updatedAt: serverTimestamp(),
+      status: role === 'user' ? 'active' : undefined,
+      adminRead: role === 'user' ? false : undefined
+    });
+  } catch(e) { console.warn('saveMsg error:', e); }
 }
+
+// ---- Real-time listener for admin replies ----
+function startSupportListener() {
+  if (!chatSessionId || supportListener) return;
+  supportListener = onSnapshot(doc(db, 'support_chats', chatSessionId), snap => {
+    if (!snap.exists()) return;
+    const data = snap.data();
+    // Check if human agent joined
+    if (data.humanJoined && !humanJoined) {
+      humanJoined = true;
+      setChatStatus('human');
+      addSystemMsg('✅ A customer care agent has joined the chat');
+    }
+    // Show new admin messages in real-time
+    const msgs = data.messages || [];
+    const lastAdminMsg = msgs.filter(m => m.role === 'admin').pop();
+    if (lastAdminMsg) {
+      const existing = document.querySelectorAll('.chat-msg.human-agent');
+      const lastShown = existing.length ? existing[existing.length-1].dataset.ts : 0;
+      if (lastAdminMsg.ts > Number(lastShown)) {
+        addChatMsg(lastAdminMsg.text, 'human-agent', lastAdminMsg.ts);
+        const el = document.querySelector('.chat-msg.human-agent:last-child');
+        if (el) el.dataset.ts = lastAdminMsg.ts;
+        // Show notification dot if window is closed
+        if (!chatOpen) {
+          const dot = document.getElementById('chat-notif-dot');
+          if (dot) dot.style.display = 'block';
+        }
+      }
+    }
+  });
+}
+
+// ---- Request human support ----
+window.requestHumanSupport = async function() {
+  try {
+    await ensureChatSession();
+    // Check if admin is online (simple check via settings doc)
+    let adminOnline = false;
+    try {
+      const onlineSnap = await getDoc(doc(db, 'settings', 'admin_status'));
+      adminOnline = onlineSnap.exists() && onlineSnap.data().online === true;
+    } catch(e) {}
+
+    await updateDoc(doc(db, 'support_chats', chatSessionId), {
+      status: 'waiting',
+      mode: 'waiting',
+      requestedHuman: true,
+      requestedAt: serverTimestamp()
+    });
+
+    if (adminOnline) {
+      setChatStatus('waiting');
+      addSystemMsg('⏳ Connecting you to a customer care agent...');
+      startSupportListener();
+      // Notify admin
+      const msg = encodeURIComponent('🆘 *Customer Support Request*\nFrom: '+(currentUser?.email||'Guest')+'\nSession: '+chatSessionId+'\n\nGo to Admin Panel → Chat Sessions to reply.');
+      setTimeout(() => window.open('https://wa.me/2349168031213?text='+msg,'_blank'), 800);
+    } else {
+      setChatStatus('offline');
+      addChatMsg("Our customer care team is currently offline. Your message has been saved and we'll get back to you as soon as we're available. You can also reach us on WhatsApp: +234 916 803 1213 😊", 'bot');
+      showToast('Message saved! We\'ll respond soon.','info');
+    }
+  } catch(e) { addChatMsg("Sorry, there was an error. Please try WhatsApp: +234 916 803 1213", 'bot'); }
+};
+
+// ---- Quick support shortcuts ----
+window.quickSupport = function(text) {
+  const input = document.getElementById('chat-input');
+  if (input) { input.value = text; sendChatMessage(); }
+};
+
+// ---- Main send function ----
+window.sendChatMessage = async function() {
+  const input = document.getElementById('chat-input');
+  const text = (input?.value || '').trim();
+  if (!text) return;
+  addChatMsg(text, 'user', Date.now());
+  saveMsg(text, 'user');
+  input.value = '';
+  startSupportListener();
+
+  // If human agent is active, don't auto-reply with AI
+  if (humanJoined || chatMode === 'human') return;
+  if (chatMode === 'waiting') {
+    addChatMsg("You're in the queue for a human agent. We'll connect you shortly! You can also reach us on WhatsApp: +234 916 803 1213", 'bot');
+    return;
+  }
+
+  // Show typing indicator
+  const msgs = document.getElementById('chat-messages');
+  const typing = document.createElement('div');
+  typing.className = 'chat-typing-indicator'; typing.id = 'chat-typing';
+  typing.innerHTML = '<span></span><span></span><span></span>';
+  msgs.appendChild(typing); msgs.scrollTop = msgs.scrollHeight;
+
+  chatConversation.push({ role: 'user', parts: [{ text }] });
+
+  let reply = null;
+  try {
+    const GEMINI_KEY = 'AIzaSyDaGmWKa4JsXZ-g7dM7fLQy5X3Mg3Nf8Y0';
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: getSystemContext() + '\n\nCustomer: ' + text }] }], generationConfig: { maxOutputTokens: 300, temperature: 0.7 } })
+    });
+    const data = await res.json();
+    reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || null;
+  } catch(e) { reply = null; }
+
+  if (!reply) reply = smartLocalReply(text);
+
+  document.getElementById('chat-typing')?.remove();
+
+  if (!reply) {
+    // AI doesn't know — offer human transfer
+    addChatMsg("I'm not fully sure how to help with that. Let me connect you with our customer care team!", 'bot');
+    saveMsg("AI could not resolve: " + text, 'bot');
+    showTransferCard();
+    return;
+  }
+
+  chatConversation.push({ role: 'model', parts: [{ text: reply }] });
+  addChatMsg(reply, 'bot', Date.now());
+  saveMsg(reply, 'bot');
+
+  // After 3 AI replies, suggest human support
+  const userMsgs = chatConversation.filter(m => m.role === 'user').length;
+  if (userMsgs === 4 && !humanJoined) {
+    setTimeout(() => {
+      addChatMsg("Still need help? Our customer care team is available to assist you directly.", 'bot');
+      showTransferCard();
+    }, 800);
+  }
+};
+
+window.toggleChatbot = function() {
+  chatOpen = !chatOpen;
+  const win = document.getElementById('chatbot-window');
+  if (win) win.classList.toggle('open', chatOpen);
+  if (chatOpen) {
+    const dot = document.getElementById('chat-notif-dot');
+    if (dot) dot.style.display = 'none';
+    if (!document.getElementById('chat-messages').innerHTML) {
+      setChatStatus('ai');
+      addChatMsg("Hello! 👋 Welcome to *Benim Support*! I'm your AI assistant.\n\nAsk me about products, prices, delivery, orders — or tap a quick option below!", 'bot');
+    }
+  }
+};
+window.openChatbot = function() { chatOpen = false; toggleChatbot(); };
+window.chatKeyPress = function(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChatMessage(); } };
+
+// ===== ADMIN SUPPORT DASHBOARD (enhanced loadAdminChats) =====
+window.loadAdminChats = async function() {
+  const wrap = document.getElementById('admin-chats-list');
+  wrap.innerHTML = '<p style="color:var(--gray-400);font-size:13px"><i class="fas fa-spinner fa-spin"></i> Loading support chats...</p>';
+  try {
+    // Toggle admin online status
+    await setDoc(doc(db,'settings','admin_status'), { online: true, lastSeen: serverTimestamp() }, { merge: true });
+
+    const snap = await getDocs(collection(db, 'support_chats'));
+    if (snap.empty) {
+      wrap.innerHTML = '<div style="text-align:center;padding:30px;color:var(--gray-400)"><i class="fas fa-comments" style="font-size:36px;display:block;margin-bottom:10px"></i><p>No support chats yet</p></div>';
+      return;
+    }
+    const chats = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+      .sort((a, b) => (b.updatedAt?.seconds||0) - (a.updatedAt?.seconds||0));
+
+    const waiting = chats.filter(c => c.status === 'waiting' || c.requestedHuman).length;
+    wrap.innerHTML = (waiting > 0 ? '<div style="background:#fee2e2;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:13px;font-weight:700;color:#dc2626"><i class="fas fa-bell"></i> '+waiting+' customer(s) waiting for human support</div>' : '')
+      + chats.map(c => {
+      const lastMsg = (c.messages||[]).slice(-1)[0];
+      const unread = !c.adminRead && lastMsg?.role === 'user';
+      const statusClass = c.status === 'waiting' ? 'badge-waiting' : c.status === 'solved' ? 'badge-solved' : c.status === 'human' ? 'badge-active' : 'badge-pending';
+      const statusLabel = c.status === 'waiting' ? '🔴 Waiting' : c.status === 'solved' ? '✅ Solved' : c.status === 'human' ? '🟢 Active' : '🟡 Pending';
+      return '<div class="support-chat-item'+(unread?' unread':'')+'" onclick="openSupportChat(\''+c.id+'\')">'+
+        '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">'+
+          '<div style="font-size:13px;font-weight:800">'+(c.userName||c.userEmail||'Guest')+'</div>'+
+          '<span class="support-badge '+statusClass+'">'+statusLabel+'</span>'+
+        '</div>'+
+        '<div style="font-size:11px;color:var(--gray-400);margin-bottom:6px">'+(c.userEmail||'')+'</div>'+
+        (lastMsg ? '<div style="font-size:12px;color:var(--gray-600);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:240px">'+(lastMsg.role==='user'?'👤 ':'🤖 ')+(lastMsg.text||'').substring(0,60)+'</div>' : '')+
+      '</div>';
+    }).join('');
+  } catch(e) {
+    wrap.innerHTML = '<p style="color:var(--red);font-size:13px">Error: '+e.message+'</p>';
+  }
+};
+
+// Open a specific support chat for admin reply
+window.openSupportChat = async function(sessionId) {
+  try {
+    const snap = await getDoc(doc(db, 'support_chats', sessionId));
+    if (!snap.exists()) return;
+    const chat = snap.data();
+    const msgs = chat.messages || [];
+
+    // Mark as admin read
+    await updateDoc(doc(db, 'support_chats', sessionId), { adminRead: true });
+
+    // Show in modal
+    const body = document.getElementById('order-detail-body');
+    const modal = document.getElementById('modal-order-detail');
+    if (!body || !modal) return;
+
+    body.innerHTML = '<div style="padding:14px">'
+      + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">'
+        + '<div><div style="font-size:14px;font-weight:800">'+(chat.userName||'Guest')+'</div><div style="font-size:12px;color:var(--gray-500)">'+(chat.userEmail||'')+'</div></div>'
+        + '<div style="display:flex;gap:6px;flex-wrap:wrap">'
+          + '<button onclick="updateChatStatus(\''+sessionId+'\',\'active\')" style="font-size:11px;padding:5px 10px;background:#dcfce7;color:#16a34a;border:none;border-radius:6px;cursor:pointer;font-weight:700">🟢 Active</button>'
+          + '<button onclick="updateChatStatus(\''+sessionId+'\',\'solved\')" style="font-size:11px;padding:5px 10px;background:#f3f4f6;color:#6b7280;border:none;border-radius:6px;cursor:pointer;font-weight:700">✅ Solved</button>'
+          + '<button onclick="joinAsHuman(\''+sessionId+'\')" style="font-size:11px;padding:5px 10px;background:var(--orange);color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:700">👤 Join Chat</button>'
+        + '</div>'
+      + '</div>'
+      + '<div style="background:var(--gray-50);border-radius:10px;padding:10px;max-height:280px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;margin-bottom:12px">'
+        + (msgs.length ? msgs.map(m => {
+            const isUser = m.role==='user'; const isAdmin = m.role==='admin';
+            const bg = isUser ? 'var(--orange)' : isAdmin ? '#1e40af' : 'var(--gray-100)';
+            const color = (isUser||isAdmin) ? '#fff' : 'var(--gray-800)';
+            const align = isUser ? 'flex-end' : 'flex-start';
+            const label = isUser ? '👤' : isAdmin ? '🎧' : '🤖';
+            return '<div style="display:flex;flex-direction:column;align-items:'+align+'"><div style="background:'+bg+';color:'+color+';padding:7px 11px;border-radius:10px;font-size:12px;max-width:85%;line-height:1.5">'+label+' '+(m.text||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</div><div style="font-size:10px;color:var(--gray-400);margin-top:2px">'+(m.ts?new Date(m.ts).toLocaleTimeString('en-NG',{hour:'2-digit',minute:'2-digit'}):'')+'</div></div>';
+          }).join('') : '<p style="color:var(--gray-400);font-size:12px;text-align:center">No messages</p>')
+      + '</div>'
+      + '<div style="display:flex;gap:8px">'
+        + '<textarea id="admin-reply-input" class="form-input" rows="2" placeholder="Type your reply to the customer..." style="flex:1;resize:none;font-size:13px"></textarea>'
+        + '<button onclick="sendAdminReply(\''+sessionId+'\')" style="background:var(--orange);color:#fff;border:none;border-radius:8px;padding:10px 14px;font-size:13px;font-weight:700;cursor:pointer;flex-shrink:0"><i class="fas fa-paper-plane"></i></button>'
+      + '</div>'
+      + '</div>';
+
+    document.getElementById('order-detail-update-btn').style.display = 'none';
+    document.querySelector('#modal-order-detail .modal-title').textContent = '💬 Support Chat';
+    openModal('modal-order-detail');
+  } catch(e) { showToast('Error: '+e.message,'error'); }
+};
+
+window.sendAdminReply = async function(sessionId) {
+  const input = document.getElementById('admin-reply-input');
+  const text = (input?.value||'').trim();
+  if (!text) return showToast('Enter a reply','error');
+  try {
+    const snap = await getDoc(doc(db,'support_chats',sessionId));
+    const msgs = snap.exists() ? (snap.data().messages||[]) : [];
+    msgs.push({ text, role: 'admin', ts: Date.now() });
+    await updateDoc(doc(db,'support_chats',sessionId), {
+      messages: msgs, updatedAt: serverTimestamp(),
+      humanJoined: true, mode: 'human', status: 'active'
+    });
+    if(input) input.value = '';
+    showToast('Reply sent ✅','success');
+    openSupportChat(sessionId);
+  } catch(e) { showToast('Error: '+e.message,'error'); }
+};
+
+window.joinAsHuman = async function(sessionId) {
+  try {
+    await updateDoc(doc(db,'support_chats',sessionId), { humanJoined: true, mode: 'human', status: 'active', updatedAt: serverTimestamp() });
+    showToast('You joined the chat as a human agent','success');
+    openSupportChat(sessionId);
+  } catch(e) {}
+};
+
+window.updateChatStatus = async function(sessionId, status) {
+  await updateDoc(doc(db,'support_chats',sessionId), { status, updatedAt: serverTimestamp() });
+  showToast('Chat marked as '+status,'success');
+  openSupportChat(sessionId);
+};
+
+// Legacy saveChatSession alias (used in old code)
+async function saveChatSession(text, role) { await saveMsg(text, role); }
 
 // ===== SLIDER =====
 // ===== BANNER / SLIDER MANAGEMENT =====
@@ -4944,6 +5193,300 @@ window.acknowledgeCancel = async function(docId) {
   } catch(e) { showToast('Error','error'); }
 };
 
+// ===== FEATURE 2: SWIPEABLE IMAGE GALLERY =====
+let galleryIndex = 0;
+let galleryImages = [];
+let touchStartX = 0;
+
+function initGallery(images) {
+  galleryImages = images.length ? images : ['https://placehold.co/400x400/f3f4f6/9ca3af?text=No+Image'];
+  galleryIndex = 0;
+  const slides = document.getElementById('gallery-slides');
+  const dots = document.getElementById('gallery-dots');
+  if(!slides) return;
+  slides.innerHTML = galleryImages.map(src=>'<div class="gslide"><img src="'+src+'" alt="" loading="lazy" onerror="this.src=\'https://placehold.co/400x400/f3f4f6/9ca3af?text=No+Image\'"></div>').join('');
+  dots.innerHTML = galleryImages.map((_,i)=>'<div class="gdot'+(i===0?' active':'')+'" onclick="goToSlideGallery('+i+')"></div>').join('');
+  updateGallery();
+  // Touch swipe support
+  const wrap = document.querySelector('.main-img-wrap');
+  if(wrap) {
+    wrap.addEventListener('touchstart', e=>{ touchStartX = e.touches[0].clientX; }, {passive:true});
+    wrap.addEventListener('touchend', e=>{
+      const diff = touchStartX - e.changedTouches[0].clientX;
+      if(Math.abs(diff) > 40) diff > 0 ? galleryNext() : galleryPrev();
+    }, {passive:true});
+  }
+}
+function updateGallery() {
+  const slides = document.getElementById('gallery-slides');
+  if(slides) slides.style.transform = 'translateX(-'+galleryIndex+'00%)';
+  document.querySelectorAll('.gdot').forEach((d,i)=>d.classList.toggle('active', i===galleryIndex));
+  // Sync thumb
+  document.querySelectorAll('.thumb-img').forEach((t,i)=>t.classList.toggle('active', i===galleryIndex));
+}
+window.galleryNext = function() { galleryIndex = (galleryIndex+1) % galleryImages.length; updateGallery(); };
+window.galleryPrev = function() { galleryIndex = (galleryIndex-1+galleryImages.length) % galleryImages.length; updateGallery(); };
+window.goToSlideGallery = function(i) { galleryIndex=i; updateGallery(); };
+
+// ===== FEATURE 3: "CUSTOMERS ALSO BOUGHT" =====
+async function loadAlsoBought(productId, category) {
+  // Get products ordered together (from orders), fallback to same category
+  try {
+    const snap = await getDocs(query(collection(db,'orders'), where('status','==','delivered'), limit(50)));
+    const coProducts = {};
+    snap.docs.forEach(d=>{
+      const items = d.data().items||[];
+      const ids = items.map(x=>x.productId||x.id).filter(Boolean);
+      if(ids.includes(productId)) {
+        ids.forEach(id=>{ if(id!==productId) coProducts[id]=(coProducts[id]||0)+1; });
+      }
+    });
+    const sorted = Object.entries(coProducts).sort((a,b)=>b[1]-a[1]).slice(0,4).map(x=>x[0]);
+    const prods = sorted.map(id=>allProducts.find(p=>p.id===id)).filter(Boolean);
+    // Fallback to same category
+    const fallback = allProducts.filter(p=>p.category===category && p.id!==productId && !prods.find(x=>x.id===p.id)).slice(0, 4-prods.length);
+    const final = [...prods, ...fallback].slice(0,4);
+    if(final.length) {
+      const sec = document.getElementById('also-bought-section');
+      if(sec) { sec.style.display='block'; renderProductGrid('also-bought-grid', final); }
+    }
+  } catch(e) {}
+}
+
+// ===== FEATURE 4: PRODUCT SHARE =====
+window.shareProduct = function() {
+  if(!currentProduct) return;
+  const url = window.location.href.split('#')[0]+'#product-'+currentProduct.id;
+  const text = 'Check out '+currentProduct.name+' on Benim Shop!\n₦'+(currentProduct.discountPrice||currentProduct.price||0).toLocaleString()+'\n'+url;
+  if(navigator.share) {
+    navigator.share({ title: currentProduct.name, text, url }).catch(()=>{});
+  } else {
+    // WhatsApp share fallback
+    window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');
+  }
+};
+
+// ===== FEATURE 6: REAL-TIME ORDER TRACKING =====
+// (Enhanced tracking steps are already in showTrackingModal — this adds live Firestore listener)
+window.startLiveTracking = function(orderId) {
+  const q2 = query(collection(db,'orders'), where('orderId','==',orderId));
+  const unsub = onSnapshot(q2, snap=>{
+    if(!snap.empty) {
+      const o = snap.docs[0].data();
+      const steps=['pending','confirmed','processing','out_for_delivery','delivered'];
+      const currentIdx = steps.indexOf(o.status);
+      document.querySelectorAll('.track-step').forEach((el,i)=>{
+        el.classList.toggle('done', i<currentIdx);
+        el.classList.toggle('current', i===currentIdx);
+      });
+    }
+  });
+  unsubListeners.push(unsub);
+};
+
+// ===== FEATURE 8: BULK / WHOLESALE =====
+window.showBulkOrderModal = function() {
+  if(!currentProduct) return;
+  document.getElementById('bulk-product-name').value = currentProduct.name||'';
+  document.getElementById('bulk-name').value = '';
+  document.getElementById('bulk-phone').value = '';
+  document.getElementById('bulk-qty').value = '';
+  document.getElementById('bulk-notes').value = '';
+  openModal('modal-bulk-order');
+};
+window.submitBulkOrder = function() {
+  const name = document.getElementById('bulk-name').value.trim();
+  const phone = document.getElementById('bulk-phone').value.trim();
+  const qty = document.getElementById('bulk-qty').value.trim();
+  const notes = document.getElementById('bulk-notes').value.trim();
+  const product = document.getElementById('bulk-product-name').value;
+  if(!name||!phone||!qty) return showToast('Please fill name, phone and quantity','error');
+  const msg = encodeURIComponent(
+    '📦 *Bulk/Wholesale Request — Benim!*\n\n'+
+    '🛍️ *Product:* '+product+'\n'+
+    '👤 *Name:* '+name+'\n'+
+    '📱 *Phone:* '+phone+'\n'+
+    '🔢 *Quantity:* '+qty+'\n'+
+    (notes?'📝 *Notes:* '+notes+'\n':'')+
+    '\nPlease send wholesale pricing.'
+  );
+  window.open('https://wa.me/'+ADMIN_WHATSAPP+'?text='+msg,'_blank');
+  closeModal('modal-bulk-order');
+  showToast('Request sent via WhatsApp!','success');
+};
+
+// ===== FEATURE 11: PRODUCT Q&A =====
+window.loadQA = async function(productId) {
+  const list = document.getElementById('qa-list');
+  if(!list) return;
+  try {
+    const snap = await getDocs(query(collection(db,'qa'), where('productId','==',productId), orderBy('createdAt','desc')));
+    if(snap.empty) { list.innerHTML='<p style="color:var(--gray-400);font-size:13px;text-align:center;padding:16px">No questions yet. Be the first to ask!</p>'; return; }
+    list.innerHTML = snap.docs.map(d=>{
+      const q = d.data();
+      return '<div style="border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:10px">'+
+        '<div style="display:flex;gap:8px;margin-bottom:8px">'+
+          '<span style="background:#fef3c7;color:#92400e;font-size:10px;font-weight:800;padding:2px 8px;border-radius:99px;flex-shrink:0">Q</span>'+
+          '<div style="font-size:13px;font-weight:700">'+q.question+'</div>'+
+        '</div>'+
+        (q.answer ? '<div style="display:flex;gap:8px;padding-left:4px">'+
+          '<span style="background:#dcfce7;color:#15803d;font-size:10px;font-weight:800;padding:2px 8px;border-radius:99px;flex-shrink:0">A</span>'+
+          '<div style="font-size:13px;color:var(--gray-600)">'+q.answer+'</div>'+
+        '</div>' : '<div style="font-size:11px;color:var(--gray-400);padding-left:4px">Awaiting answer from seller...</div>')+
+      '</div>';
+    }).join('');
+  } catch(e) {}
+  // Show form or login msg
+  const formWrap = document.getElementById('qa-form-wrap');
+  const loginMsg = document.getElementById('qa-login-msg');
+  if(currentUser) { if(formWrap) formWrap.style.display='block'; if(loginMsg) loginMsg.classList.add('hidden'); }
+  else { if(formWrap) formWrap.style.display='none'; if(loginMsg) loginMsg.classList.remove('hidden'); }
+};
+window.submitQuestion = async function() {
+  if(!currentUser) return showToast('Please sign in first','info');
+  if(!currentProduct) return;
+  const q = (document.getElementById('qa-question-input').value||'').trim();
+  if(!q) return showToast('Please enter your question','error');
+  try {
+    await addDoc(collection(db,'qa'), {
+      productId: currentProduct.id, productName: currentProduct.name,
+      question: q, answer: '', userId: currentUser.uid,
+      userEmail: currentUser.email, createdAt: serverTimestamp()
+    });
+    document.getElementById('qa-question-input').value = '';
+    showToast('Question submitted! Seller will answer soon.','success');
+    loadQA(currentProduct.id);
+    // Notify admin
+    const msg = encodeURIComponent('❓ *New Question on '+currentProduct.name+'*\n\n'+q+'\n\nFrom: '+currentUser.email+'\n\nGo to Admin Panel to answer.');
+    setTimeout(()=>window.open('https://wa.me/'+ADMIN_WHATSAPP+'?text='+msg,'_blank'), 500);
+  } catch(e) { showToast('Error submitting: '+e.message,'error'); }
+};
+
+// ===== FEATURE 12: REVIEWS WITH PHOTOS =====
+// Photo preview for review
+document.addEventListener('change', e=>{
+  if(e.target.id==='review-photo-input') {
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = ev=>{
+      const img = document.getElementById('review-photo-img');
+      const prev = document.getElementById('review-photo-preview');
+      if(img) img.src = ev.target.result;
+      if(prev) prev.style.display='block';
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
+// ===== FEATURE 14: INVENTORY ALERTS =====
+window.saveStockAlert = async function(productId, threshold) {
+  try {
+    await setDoc(doc(db,'stock_alerts',productId), { threshold: Number(threshold), updatedAt: serverTimestamp() }, {merge:true});
+    showToast('Stock alert saved','success');
+  } catch(e) {}
+};
+
+// ===== FEATURE 15: BULK PRODUCT ACTIONS =====
+let selectedAdminProducts = new Set();
+window.toggleProductSelect = function(id, cb) {
+  if(cb.checked) selectedAdminProducts.add(id); else selectedAdminProducts.delete(id);
+  document.getElementById('bulk-actions-bar').style.display = selectedAdminProducts.size > 0 ? 'flex' : 'none';
+  document.getElementById('bulk-count').textContent = selectedAdminProducts.size+' selected';
+};
+window.bulkDeleteProducts = async function() {
+  if(!selectedAdminProducts.size) return;
+  if(!confirm('Delete '+selectedAdminProducts.size+' products? This cannot be undone.')) return;
+  try {
+    await Promise.all([...selectedAdminProducts].map(id=>deleteDoc(doc(db,'products',id))));
+    showToast('Deleted '+selectedAdminProducts.size+' products','success');
+    selectedAdminProducts.clear();
+    allProducts = allProducts.filter(p=>!selectedAdminProducts.has(p.id));
+    document.getElementById('bulk-actions-bar').style.display='none';
+    loadAdminProducts();
+  } catch(e) { showToast('Error: '+e.message,'error'); }
+};
+window.bulkDiscountProducts = async function() {
+  const pct = prompt('Enter discount percentage to apply to all selected products (e.g. 10 for 10%):');
+  if(!pct || isNaN(pct)) return;
+  try {
+    await Promise.all([...selectedAdminProducts].map(async id=>{
+      const snap = await getDoc(doc(db,'products',id));
+      if(snap.exists()) {
+        const price = snap.data().price||0;
+        const discountPrice = Math.round(price * (1 - Number(pct)/100));
+        await updateDoc(doc(db,'products',id), { discountPrice });
+      }
+    }));
+    showToast(pct+'% discount applied to '+selectedAdminProducts.size+' products','success');
+    selectedAdminProducts.clear();
+    document.getElementById('bulk-actions-bar').style.display='none';
+    loadAdminProducts();
+  } catch(e) { showToast('Error: '+e.message,'error'); }
+};
+
+// ===== FEATURE 16: EXPORT ORDERS TO CSV =====
+window.exportOrdersCSV = async function() {
+  try {
+    const snap = await getDocs(collection(db,'orders'));
+    const rows = [['Order ID','Customer','Email','Phone','Items','Subtotal','Delivery Fee','Discount','Total','Payment','Status','Date','Address']];
+    snap.docs.forEach(d=>{
+      const o = d.data();
+      const date = o.createdAt ? new Date(o.createdAt.toDate()).toLocaleDateString() : '';
+      const addr = o.address ? [o.address.street,o.address.city,o.address.state].filter(Boolean).join(', ') : '';
+      const items = (o.items||[]).map(x=>x.name+(x.qty>1?' x'+x.qty:'')).join('; ');
+      rows.push([o.orderId||d.id, (o.address&&o.address.name)||'', o.userEmail||'', o.phone||'', items, o.subtotal||0, o.deliveryFee||0, (o.couponDiscount||0)+(o.loyaltyDiscount||0), o.total||0, o.payment||'', o.status||'', date, addr]);
+    });
+    const csv = rows.map(r=>r.map(v=>'"'+(String(v).replace(/"/g,'""'))+'"').join(',')).join('\n');
+    const blob = new Blob([csv], {type:'text/csv'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href=url; a.download='benim-orders-'+new Date().toISOString().slice(0,10)+'.csv';
+    a.click(); URL.revokeObjectURL(url);
+    showToast('Orders exported to CSV ✅','success');
+  } catch(e) { showToast('Export failed: '+e.message,'error'); }
+};
+
+// ===== FEATURE 17: CUSTOMER MANAGEMENT =====
+window.viewCustomerHistory = async function(email) {
+  try {
+    const snap = await getDocs(query(collection(db,'orders'), where('userEmail','==',email)));
+    const orders = snap.docs.map(d=>d.data());
+    const total = orders.reduce((s,o)=>s+(o.total||0),0);
+    showToast(email+' — '+orders.length+' orders, ₦'+total.toLocaleString()+' total spent','info');
+  } catch(e) {}
+};
+
+// ===== FEATURE 18: REVENUE GOALS =====
+window.loadRevenueGoal = async function() {
+  try {
+    const goalSnap = await getDoc(doc(db,'settings','revenue_goal'));
+    const goal = goalSnap.exists() ? goalSnap.data().monthly : 0;
+    const snap = await getDocs(collection(db,'orders'));
+    const now = new Date();
+    const monthRevenue = snap.docs.reduce((s,d)=>{
+      const o = d.data();
+      if(o.createdAt) { const d2=new Date(o.createdAt.toDate()); if(d2.getMonth()===now.getMonth()&&d2.getFullYear()===now.getFullYear()) return s+(o.total||0); }
+      return s;
+    },0);
+    const pct = goal > 0 ? Math.min(100, Math.round(monthRevenue/goal*100)) : 0;
+    const el = document.getElementById('revenue-goal-section');
+    if(el) {
+      el.innerHTML = '<div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px;font-weight:700">Monthly Revenue Goal</span><button style="font-size:11px;color:var(--orange);background:none;border:none;cursor:pointer;font-weight:700" onclick="setRevenueGoal()">Set Goal</button></div>'+
+        '<div style="display:flex;justify-content:space-between;font-size:12px;color:var(--gray-500);margin-bottom:6px"><span>₦'+monthRevenue.toLocaleString()+' earned</span><span>Goal: ₦'+(goal||0).toLocaleString()+'</span></div>'+
+        '<div style="background:var(--gray-100);border-radius:99px;height:10px;overflow:hidden"><div style="width:'+pct+'%;height:100%;background:linear-gradient(90deg,var(--orange),#ff9640);border-radius:99px;transition:.5s"></div></div>'+
+        '<div style="font-size:11px;color:var(--gray-400);margin-top:4px;text-align:right">'+pct+'% of monthly goal</div>';
+    }
+  } catch(e) {}
+};
+window.setRevenueGoal = async function() {
+  const goal = prompt('Enter monthly revenue goal in ₦ (e.g. 500000):');
+  if(!goal||isNaN(goal)) return;
+  await setDoc(doc(db,'settings','revenue_goal'), { monthly: Number(goal), updatedAt: serverTimestamp() });
+  showToast('Goal set: ₦'+Number(goal).toLocaleString(),'success');
+  loadRevenueGoal();
+};
+
 window.cancelOrder = async function(docId, orderId) {
   if(!confirm('Cancel order '+orderId+'? This cannot be undone.')) return;
   try {
@@ -5035,6 +5578,7 @@ window.loadAnalytics = async function() {
           '<div style="font-size:9px;color:var(--gray-500);font-weight:700">'+label+'</div></div>';
       }).join('')+'</div>';
   } catch(e) { console.error('Analytics error:',e); }
+  loadRevenueGoal();
 };
 
 // ===== DAILY SALES SUMMARY =====
