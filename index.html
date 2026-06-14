@@ -920,6 +920,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
     <div id="sb-user-items" class="hidden">
       <div class="sidebar-item" onclick="navigate('orders');toggleSidebar()"><i class="fas fa-box"></i> My Orders</div>
       <div class="sidebar-item" onclick="navigate('wishlist');toggleSidebar()"><i class="fas fa-heart"></i> Wishlist</div>
+      <div class="sidebar-item" onclick="navigate('wallet');toggleSidebar()" style="color:var(--green);font-weight:800"><i class="fas fa-wallet"></i> My Wallet <span id="sb-wallet-bal" style="margin-left:auto;font-size:11px;background:rgba(22,163,74,.15);color:var(--green);padding:2px 8px;border-radius:99px">₦0</span></div>
       <div class="sidebar-item" onclick="navigate('profile');toggleSidebar()"><i class="fas fa-user-circle"></i> Profile & Settings</div>
       <div class="sidebar-item" onclick="navigate('addresses');toggleSidebar()"><i class="fas fa-map-marker-alt"></i> Address Book</div>
       <div class="sidebar-item" onclick="navigate('track');toggleSidebar()"><i class="fas fa-truck"></i> Track Order</div>
@@ -1405,15 +1406,17 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
     <div class="auth-card">
       <div class="auth-logo"><span style="font-family:'Poppins',sans-serif;font-weight:900;font-size:28px;color:#e8420a;letter-spacing:-0.5px;cursor:pointer" onclick="navigate('home')">BENIM</span></div>
       <h2 class="auth-title">Forgot Password?</h2>
-      <p class="auth-subtitle">Submit your email and our admin team will send you a secure reset link.</p>
+      <p class="auth-subtitle">Enter your email and WhatsApp number. Our admin will send your reset link via WhatsApp.</p>
       <div id="forgot-form-wrap">
         <div class="form-group"><label class="form-label">Email Address</label><input class="form-input" id="forgot-email" type="email" placeholder="you@example.com"></div>
-        <button class="btn-auth" onclick="doForgotPassword()" id="forgot-submit-btn"><i class="fas fa-paper-plane"></i> Submit Reset Request</button>
+        <div class="form-group"><label class="form-label">Your WhatsApp Number <span style="font-size:11px;color:var(--gray-400)">(receives the reset link)</span></label><input class="form-input" id="forgot-phone" type="tel" placeholder="+2348012345678"></div>
+        <button class="btn-auth" onclick="doForgotPassword()" id="forgot-submit-btn"><i class="fab fa-whatsapp"></i> Request Reset via WhatsApp</button>
       </div>
       <div id="forgot-success-msg" style="display:none;text-align:center;padding:18px 0">
         <div style="font-size:48px;margin-bottom:12px">✅</div>
         <div style="font-size:15px;font-weight:800;color:var(--green);margin-bottom:8px">Request Submitted!</div>
-        <div style="font-size:13px;color:var(--text-muted);line-height:1.6">Your password reset request has been sent to our admin team. You'll receive a secure reset link by email once it's approved. This usually takes a few minutes.</div>
+        <div style="font-size:13px;color:var(--gray-500);line-height:1.6">Our admin team will send your password reset link via WhatsApp shortly. Please keep an eye on your WhatsApp messages.</div>
+        <div style="margin-top:14px;background:rgba(37,211,102,.1);border:1px solid rgba(37,211,102,.3);border-radius:10px;padding:12px;font-size:12px;color:#128C7E;font-weight:700"><i class="fab fa-whatsapp"></i> Check your WhatsApp for the secure reset link</div>
       </div>
       <div class="auth-switch" style="margin-top:16px"><a onclick="navigate('login')"><i class="fas fa-arrow-left"></i> Back to Sign In</a></div>
     </div>
@@ -1494,7 +1497,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
         Bank Transfer
         <span style="font-size:10px;opacity:.7;font-weight:600">Upload Proof</span>
       </button>
-      <button id="wallet-paystack-btn" onclick="showFundWalletModal('paystack')" style="background:var(--surface);border:2px solid #00b5d8;color:#00b5d8;border-radius:12px;padding:14px;font-size:13px;font-weight:800;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;display:none">
+      <button id="wallet-paystack-btn" onclick="showFundWalletModal('paystack')" style="background:var(--surface);border:2px solid #00b5d8;color:#00b5d8;border-radius:12px;padding:14px;font-size:13px;font-weight:800;cursor:pointer;flex-direction:column;align-items:center;gap:6px;display:none">
         <i class="fas fa-bolt" style="font-size:22px"></i>
         Paystack
         <span style="font-size:10px;opacity:.7;font-weight:600">Instant Funding</span>
@@ -2693,7 +2696,8 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
   </div>
 </div>
 
-<div id="toast-container"></div>
+<!-- PASSWORD RESET SEND MODAL -->
+<div class="modal-overlay" id="modal-send-reset">
   <div class="modal" style="max-width:460px">
     <div class="modal-header">
       <span class="modal-title">🔑 Send Password Reset Link</span>
@@ -2704,23 +2708,24 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
       <div style="background:rgba(232,66,10,.06);border:1px solid rgba(232,66,10,.2);border-radius:10px;padding:14px">
         <div style="font-size:12px;font-weight:700;color:var(--gray-400);margin-bottom:4px">Sending reset link to:</div>
         <div id="pwr-modal-email" style="font-size:14px;font-weight:900;color:var(--orange)"></div>
-        <div id="pwr-modal-name" style="font-size:13px;color:var(--text-muted)"></div>
+        <div id="pwr-modal-name" style="font-size:13px;color:var(--gray-500)"></div>
+        <div id="pwr-modal-phone-row" style="font-size:12px;color:var(--green);margin-top:4px;font-weight:700;display:none"><i class="fab fa-whatsapp"></i> WhatsApp: <span id="pwr-modal-phone"></span></div>
       </div>
-      <div style="font-size:13px;color:var(--text-muted);line-height:1.6">
-        <i class="fas fa-info-circle" style="color:var(--orange)"></i> A secure, one-time reset link will be generated and shown below for you to send manually. The link expires in <strong>30 minutes</strong>.
+      <div style="font-size:13px;color:var(--gray-500);line-height:1.6">
+        <i class="fas fa-info-circle" style="color:var(--orange)"></i> A secure one-time reset link will be generated and sent to the user via WhatsApp. The link expires in <strong>30 minutes</strong>.
       </div>
       <div id="pwr-modal-link-wrap" style="display:none">
-        <label class="form-label">Generated Reset Link (copy & send to user)</label>
+        <label class="form-label">Generated Reset Link (also sent via WhatsApp)</label>
         <div style="display:flex;gap:8px;align-items:center">
           <input class="form-input" id="pwr-modal-link-input" readonly style="font-size:11px;flex:1;background:var(--surface2)">
           <button onclick="copyResetLink()" style="background:var(--orange);color:#fff;border:none;border-radius:8px;padding:10px 14px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap"><i class="fas fa-copy"></i> Copy</button>
         </div>
-        <div style="margin-top:10px;padding:12px;background:rgba(22,163,74,.08);border:1px solid rgba(22,163,74,.2);border-radius:8px;font-size:12px;color:#15803d;font-weight:700"><i class="fas fa-check-circle"></i> Link generated! Status marked as "Sent". Copy the link and paste it into your email to the user.</div>
+        <div style="margin-top:10px;padding:12px;background:rgba(37,211,102,.08);border:1px solid rgba(37,211,102,.3);border-radius:8px;font-size:12px;color:#128C7E;font-weight:700"><i class="fab fa-whatsapp"></i> WhatsApp opened with the reset link! Status marked as "Sent".</div>
       </div>
     </div>
     <div class="modal-footer">
       <button class="btn-secondary" onclick="closeModal('modal-send-reset')">Close</button>
-      <button class="btn-primary" id="pwr-generate-btn" onclick="generateAndSendResetLink()"><i class="fas fa-key"></i> Generate Reset Link</button>
+      <button class="btn-primary" id="pwr-generate-btn" onclick="generateAndSendResetLink()" style="background:linear-gradient(135deg,#25D366,#128C7E)"><i class="fab fa-whatsapp"></i> Send Reset Link via WhatsApp</button>
     </div>
   </div>
 </div>
@@ -2730,7 +2735,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
 <!-- ====== FIREBASE + APP SCRIPT ====== -->
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup, updatePassword } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail, confirmPasswordReset, GoogleAuthProvider, signInWithPopup, updatePassword } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
 import { getFirestore, collection, doc, addDoc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, query, where, orderBy, limit, onSnapshot, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
 
 const firebaseConfig = {
@@ -2939,10 +2944,11 @@ function generateSecureToken() {
 
 window.doForgotPassword = async function() {
   const email = document.getElementById('forgot-email').value.trim().toLowerCase();
+  const phone = (document.getElementById('forgot-phone')?.value || '').trim();
   if (!email) return showToast('Please enter your email address','error');
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showToast('Please enter a valid email address','error');
+  if (!phone) return showToast('Please enter your WhatsApp number','error');
 
-  // Rate limit check
   if (!checkPWResetRateLimit(email)) {
     return showToast('Too many requests. Please wait 5 minutes before trying again.','error');
   }
@@ -2951,7 +2957,6 @@ window.doForgotPassword = async function() {
   btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
 
   try {
-    // Look up user profile in Firestore by email
     let fullName = '', username = '';
     try {
       const usersSnap = await getDocs(query(collection(db,'users'), where('email','==',email)));
@@ -2962,47 +2967,33 @@ window.doForgotPassword = async function() {
       }
     } catch(e) {}
 
-    // Gather device/IP info (IP is client-side approximation)
     const device = navigator.userAgent.slice(0, 120);
     const now = new Date();
 
-    // Save request to Firestore
     await addDoc(collection(db, 'password_reset_requests'), {
-      email,
-      fullName,
+      email, phone, fullName,
       username: username || email.split('@')[0],
       status: 'pending',
       requestedAt: serverTimestamp(),
       requestedAtISO: now.toISOString(),
       device,
-      ipAddress: 'Client-side (see server logs)',
-      tokenUsed: false,
-      token: null,
-      tokenExpiry: null,
-      sentAt: null,
-      completedAt: null,
-      auditLog: [{
-        action: 'request_submitted',
-        timestamp: now.toISOString(),
-        detail: `Reset request submitted for ${email}`
-      }]
+      tokenUsed: false, token: null, tokenExpiry: null,
+      sentAt: null, completedAt: null,
+      auditLog: [{ action: 'request_submitted', timestamp: now.toISOString(), detail: `Reset request submitted for ${email} (WhatsApp: ${phone})` }]
     });
 
-    // Show success state
     document.getElementById('forgot-form-wrap').style.display = 'none';
     document.getElementById('forgot-success-msg').style.display = 'block';
-    showToast('Reset request submitted! Admin will send you a link shortly.','success');
-
-    // Update admin badge
+    showToast('Request submitted! Admin will WhatsApp you the reset link.','success');
     updatePWResetBadge();
-
   } catch(e) {
     console.error('Forgot password error:', e);
     showToast('Something went wrong. Please try again.','error');
     btn.disabled = false;
-    btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Reset Request';
+    btn.innerHTML = '<i class="fab fa-whatsapp"></i> Request Reset via WhatsApp';
   }
 };
+
 
 // ===== ADMIN: LOAD PASSWORD RESET REQUESTS =====
 let allPWResets = [];
@@ -3153,15 +3144,19 @@ function renderPWAuditLog(list) {
 
 // ===== ADMIN: OPEN SEND RESET MODAL =====
 window.openSendResetModal = function(docId, email, fullName, username) {
+  const r = window._pwrResetMap ? (window._pwrResetMap[docId] || {}) : {};
   document.getElementById('pwr-doc-id').value = docId;
-  // Use textContent to safely set values — no injection risk
   document.getElementById('pwr-modal-email').textContent = email;
   document.getElementById('pwr-modal-name').textContent = (fullName ? fullName + ' · ' : '') + '@' + (username || email.split('@')[0]);
+  const phoneEl = document.getElementById('pwr-modal-phone');
+  const phoneRow = document.getElementById('pwr-modal-phone-row');
+  if (phoneEl) phoneEl.textContent = r.phone || 'Not provided';
+  if (phoneRow) phoneRow.style.display = r.phone ? 'block' : 'none';
   document.getElementById('pwr-modal-link-wrap').style.display = 'none';
   document.getElementById('pwr-modal-link-input').value = '';
   const btn = document.getElementById('pwr-generate-btn');
   btn.disabled = false;
-  btn.innerHTML = '<i class="fas fa-key"></i> Generate Reset Link';
+  btn.innerHTML = '<i class="fab fa-whatsapp"></i> Send Reset Link via WhatsApp';
   openModal('modal-send-reset');
 };
 
@@ -3169,6 +3164,7 @@ window.openSendResetModal = function(docId, email, fullName, username) {
 window.generateAndSendResetLink = async function() {
   const docId = document.getElementById('pwr-doc-id').value;
   const email = document.getElementById('pwr-modal-email').textContent;
+  const userPhone = document.getElementById('pwr-modal-phone') ? document.getElementById('pwr-modal-phone').textContent : '';
   const btn = document.getElementById('pwr-generate-btn');
   btn.disabled = true;
   btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
@@ -3177,47 +3173,56 @@ window.generateAndSendResetLink = async function() {
     const token = generateSecureToken();
     const tokenExpiry = Date.now() + 30 * 60 * 1000; // 30 min
 
-    // Build reset link using current page URL as base
+    // Build reset link
     const base = window.location.href.split('#')[0].split('?')[0];
     const resetLink = `${base}?pwreset=${token}`;
 
-    // Save token to Firestore
     const nowISO = new Date().toISOString();
     const docRef = doc(db, 'password_reset_requests', docId);
     const existing = await getDoc(docRef);
-    const existingLogs = existing.exists() ? (existing.data().auditLog || []) : [];
+    const existingData = existing.exists() ? existing.data() : {};
+    const existingLogs = existingData.auditLog || [];
+    const recipientPhone = userPhone || existingData.phone || '';
 
     await updateDoc(docRef, {
       status: 'sent',
-      token: token,
-      tokenExpiry: tokenExpiry,
-      tokenUsed: false,
-      sentAt: serverTimestamp(),
-      sentAtISO: nowISO,
+      token, tokenExpiry, tokenUsed: false,
+      sentAt: serverTimestamp(), sentAtISO: nowISO,
       auditLog: [...existingLogs, {
         action: 'link_generated',
         timestamp: nowISO,
-        detail: `Secure reset link generated and ready to send to ${email}. Expires at ${new Date(tokenExpiry).toLocaleTimeString()}`
+        detail: `Reset link generated for ${email}. Sent via WhatsApp to ${recipientPhone}. Expires at ${new Date(tokenExpiry).toLocaleTimeString()}`
       }]
     });
 
-    // Show the link for admin to copy
+    // Open WhatsApp with the reset link
+    const waMsg = encodeURIComponent(
+      `🔐 *Benim Password Reset*\n\n` +
+      `Hello${existingData.fullName ? ' ' + existingData.fullName : ''},\n\n` +
+      `Your password reset link is ready. Click the link below to create a new password:\n\n` +
+      `${resetLink}\n\n` +
+      `⏰ *This link expires in 30 minutes and can only be used once.*\n\n` +
+      `If you did not request this reset, please ignore this message.\n\n` +
+      `— Benim Administration Team`
+    );
+    const waNum = recipientPhone.replace(/[^0-9]/g,'');
+    window.open(`https://wa.me/${waNum}?text=${waMsg}`, '_blank');
+
+    // Show the link in the modal too
     document.getElementById('pwr-modal-link-input').value = resetLink;
     document.getElementById('pwr-modal-link-wrap').style.display = 'block';
-    btn.innerHTML = '<i class="fas fa-check"></i> Link Generated!';
+    btn.innerHTML = '<i class="fab fa-whatsapp"></i> WhatsApp Opened!';
 
-    // Refresh the table
     loadPWResetRequests();
-    showToast('Reset link generated! Copy it and send to user.', 'success');
+    showToast('WhatsApp opened with reset link!', 'success');
 
   } catch(e) {
     console.error('Generate reset link error:', e);
     showToast('Failed to generate link. Try again.', 'error');
     btn.disabled = false;
-    btn.innerHTML = '<i class="fas fa-key"></i> Generate Reset Link';
+    btn.innerHTML = '<i class="fab fa-whatsapp"></i> Send via WhatsApp';
   }
-};
-
+}
 window.copyResetLink = function() {
   const input = document.getElementById('pwr-modal-link-input');
   navigator.clipboard.writeText(input.value).then(() => {
@@ -3256,28 +3261,39 @@ window.exportPWResetCSV = function() {
 async function checkPasswordResetToken() {
   const params = new URLSearchParams(window.location.search);
   const token = params.get('pwreset');
+  const oobCode = params.get('oobCode'); // Firebase built-in reset
+  const mode = params.get('mode');
+
+  // Handle Firebase built-in reset link (mode=resetPassword)
+  if (mode === 'resetPassword' && oobCode) {
+    navigate('reset-password');
+    document.getElementById('reset-pw-form').dataset.oobCode = oobCode;
+    document.getElementById('reset-pw-form').dataset.token = '';
+    document.getElementById('reset-pw-form').dataset.docId = '';
+    document.getElementById('reset-pw-subtitle').textContent = 'Enter your new password below.';
+    document.getElementById('reset-pw-form').style.display = 'block';
+    document.getElementById('reset-pw-invalid').style.display = 'none';
+    window.history.replaceState({}, '', window.location.pathname);
+    return;
+  }
+
   if (!token) return;
 
-  // Navigate to reset password page
   navigate('reset-password');
 
   try {
-    // Find the request document with this token
     const snap = await getDocs(query(collection(db,'password_reset_requests'), where('token','==',token)));
     if (snap.empty) {
       document.getElementById('reset-pw-form').style.display = 'none';
       document.getElementById('reset-pw-invalid').style.display = 'block';
       return;
     }
-
     const docData = snap.docs[0];
     const r = docData.data();
 
-    // Check expiry
     if (r.tokenUsed || Date.now() > (r.tokenExpiry || 0)) {
       document.getElementById('reset-pw-form').style.display = 'none';
       document.getElementById('reset-pw-invalid').style.display = 'block';
-      // Log expired attempt
       try {
         const logs = r.auditLog || [];
         await updateDoc(doc(db,'password_reset_requests', docData.id), {
@@ -3287,13 +3303,13 @@ async function checkPasswordResetToken() {
       return;
     }
 
-    // Valid token — store for use on form submit
     document.getElementById('reset-pw-form').dataset.docId = docData.id;
     document.getElementById('reset-pw-form').dataset.email = r.email;
     document.getElementById('reset-pw-form').dataset.token = token;
+    document.getElementById('reset-pw-form').dataset.oobCode = '';
     document.getElementById('reset-pw-subtitle').textContent = `Creating new password for: ${r.email}`;
-
-    // Clean URL
+    document.getElementById('reset-pw-form').style.display = 'block';
+    document.getElementById('reset-pw-invalid').style.display = 'none';
     window.history.replaceState({}, '', window.location.pathname);
 
   } catch(e) {
@@ -3307,53 +3323,91 @@ window.doResetPassword = async function() {
   const form = document.getElementById('reset-pw-form');
   const docId = form.dataset.docId;
   const email = form.dataset.email;
-  const token = form.dataset.token;
+  const oobCode = form.dataset.oobCode; // Firebase oobCode from URL
+  const token = form.dataset.token;    // Our custom token from URL
   const newPw = document.getElementById('reset-new-pw').value;
   const confirmPw = document.getElementById('reset-confirm-pw').value;
 
-  if (!docId || !email || !token) return showToast('Invalid session. Please request a new link.','error');
   if (!newPw || newPw.length < 6) return showToast('Password must be at least 6 characters','error');
   if (newPw !== confirmPw) return showToast('Passwords do not match','error');
 
+  const btn = form.querySelector('button[onclick="doResetPassword()"]');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...'; }
+
   try {
-    // Sign in the user with the stored email so we can update their password via Firebase
-    // Since this is a reset flow, we use the Firebase sendPasswordResetEmail approach
-    // For client-side only: we use Firebase's built-in system for the actual password change
-    // and mark the admin request as completed
+    // Path A: Firebase oobCode (from Firebase email link — fallback)
+    if (oobCode) {
+      await confirmPasswordReset(auth, oobCode, newPw);
+    }
+    // Path B: Custom token — user must be signed in, or we use sendPasswordResetEmail
+    // Since we are a pure client-side app, we use Firebase's built-in reset:
+    // The reset link from the admin already contains our custom token.
+    // We use Firebase sendPasswordResetEmail as a trigger, then the user
+    // sets password via Firebase's own link OR we sign them in if possible.
+    // Best approach for client-only: use updatePassword after signing in via currentUser.
+    // But user isn't signed in here, so we send Firebase's own reset email as the actual mechanism.
+    else if (token && email) {
+      // Send Firebase's own password reset email — this is the real password change mechanism
+      await sendPasswordResetEmail(auth, email);
+      // Mark our custom token as used
+      const nowISO = new Date().toISOString();
+      if (docId) {
+        const reqSnap = await getDoc(doc(db,'password_reset_requests', docId));
+        const logs = reqSnap.exists() ? (reqSnap.data().auditLog || []) : [];
+        await updateDoc(doc(db,'password_reset_requests', docId), {
+          status: 'completed', tokenUsed: true,
+          completedAt: serverTimestamp(), completedAtISO: nowISO,
+          auditLog: [...logs, { action: 'password_changed', timestamp: nowISO, detail: `Firebase reset email sent to ${email} — user will set password via Firebase link` }]
+        });
+      }
+      form.innerHTML = `
+        <div style="text-align:center;padding:20px 0">
+          <div style="font-size:48px;margin-bottom:12px">📧</div>
+          <div style="font-size:15px;font-weight:800;color:var(--green);margin-bottom:8px">Check Your Email!</div>
+          <div style="font-size:13px;color:var(--gray-500);line-height:1.6;margin-bottom:16px">
+            We've sent a password reset link to <strong>${email}</strong>.<br>
+            Click the link in that email to set your new password, then come back and sign in.
+          </div>
+          <button class="btn-auth" onclick="navigate('login')"><i class="fas fa-sign-in-alt"></i> Go to Sign In</button>
+        </div>`;
+      showToast('Reset email sent! Check your inbox.','success');
+      updatePWResetBadge();
+      return;
+    } else {
+      return showToast('Invalid reset session. Please request a new link.','error');
+    }
 
-    await sendPasswordResetEmail(auth, email);
-
-    // Mark request as completed and token as used
+    // If confirmPasswordReset succeeded (oobCode path):
     const nowISO = new Date().toISOString();
-    const reqSnap = await getDoc(doc(db,'password_reset_requests', docId));
-    const logs = reqSnap.exists() ? (reqSnap.data().auditLog || []) : [];
-    await updateDoc(doc(db,'password_reset_requests', docId), {
-      status: 'completed',
-      tokenUsed: true,
-      completedAt: serverTimestamp(),
-      completedAtISO: nowISO,
-      auditLog: [...logs, {
-        action: 'password_changed',
-        timestamp: nowISO,
-        detail: `Password reset completed for ${email}. Firebase reset email also sent as confirmation.`
-      }]
-    });
-
-    // Show success and notify
+    if (docId) {
+      try {
+        const reqSnap = await getDoc(doc(db,'password_reset_requests', docId));
+        const logs = reqSnap.exists() ? (reqSnap.data().auditLog || []) : [];
+        await updateDoc(doc(db,'password_reset_requests', docId), {
+          status: 'completed', tokenUsed: true,
+          completedAt: serverTimestamp(), completedAtISO: nowISO,
+          auditLog: [...logs, { action: 'password_changed', timestamp: nowISO, detail: `Password successfully changed for ${email}` }]
+        });
+      } catch(e) {}
+    }
     form.innerHTML = `
       <div style="text-align:center;padding:20px 0">
         <div style="font-size:48px;margin-bottom:12px">🎉</div>
-        <div style="font-size:16px;font-weight:800;color:var(--green);margin-bottom:8px">Password Reset Complete!</div>
-        <div style="font-size:13px;color:var(--text-muted);margin-bottom:16px">A confirmation email has been sent to <strong>${email}</strong> with a link to finalize your new password.</div>
-        <button class="btn-auth" onclick="navigate('login')"><i class="fas fa-sign-in-alt"></i> Sign In</button>
+        <div style="font-size:16px;font-weight:800;color:var(--green);margin-bottom:8px">Password Changed!</div>
+        <div style="font-size:13px;color:var(--gray-500);margin-bottom:16px">Your password has been updated successfully. You can now sign in with your new password.</div>
+        <button class="btn-auth" onclick="navigate('login')"><i class="fas fa-sign-in-alt"></i> Sign In Now</button>
       </div>`;
-
-    showToast('Password reset completed! Check your email.', 'success');
+    showToast('Password changed successfully! 🎉','success');
     updatePWResetBadge();
 
   } catch(e) {
     console.error('Reset password error:', e);
-    showToast('Failed to reset password: ' + (e.message || 'Unknown error'), 'error');
+    let msg = 'Failed to reset password.';
+    if (e.code === 'auth/expired-action-code') msg = 'Reset link has expired. Please request a new one.';
+    else if (e.code === 'auth/invalid-action-code') msg = 'Invalid reset link. Please request a new one.';
+    else if (e.code === 'auth/weak-password') msg = 'Password is too weak. Use at least 6 characters.';
+    showToast(msg,'error');
+    if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-lock"></i> Set New Password'; }
   }
 };
 
@@ -3408,6 +3462,8 @@ async function loadWalletBalance() {
     _walletBalance = w ? (w.balance || 0) : 0;
     // Update all balance displays
     const displays = ['profile-wallet-balance','wallet-balance-display','checkout-wallet-balance-label'];
+    const sbBal = document.getElementById('sb-wallet-bal');
+    if (sbBal) sbBal.textContent = '₦' + _walletBalance.toLocaleString('en-NG',{minimumFractionDigits:0});
     displays.forEach(id => {
       const el = document.getElementById(id);
       if (el) el.textContent = '₦' + _walletBalance.toLocaleString('en-NG', {minimumFractionDigits:2});
@@ -3458,8 +3514,13 @@ async function loadWalletTransactions() {
   if (!list) return;
   list.innerHTML = '<p style="color:var(--gray-400);font-size:13px;text-align:center;padding:20px"><i class="fas fa-spinner fa-spin"></i> Loading...</p>';
   try {
-    const snap = await getDocs(query(collection(db,'wallet_transactions'),
-      where('uid','==',currentUser.uid), orderBy('createdAt','desc'), limit(50)));
+    let snap;
+    try {
+      snap = await getDocs(query(collection(db,'wallet_transactions'),
+        where('uid','==',currentUser.uid), orderBy('createdAt','desc'), limit(50)));
+    } catch(e2) {
+      snap = await getDocs(query(collection(db,'wallet_transactions'), where('uid','==',currentUser.uid)));
+    }
     if (snap.empty) {
       list.innerHTML = '<p style="color:var(--gray-400);font-size:13px;text-align:center;padding:20px">No transactions yet.</p>';
       return;
@@ -3643,11 +3704,18 @@ window.loadAdminWallets = async function() {
   if (reqDiv) reqDiv.innerHTML = '<p style="color:var(--gray-400);font-size:13px;text-align:center;padding:20px"><i class="fas fa-spinner fa-spin"></i> Loading...</p>';
 
   try {
-    const snap = await getDocs(query(collection(db,'wallet_funding_requests'), orderBy('createdAt','desc'), limit(100)));
-    const requests = snap.docs.map(d => ({id:d.id,...d.data()}));
+    let snap;
+    try {
+      snap = await getDocs(query(collection(db,'wallet_funding_requests'), orderBy('createdAt','desc'), limit(100)));
+    } catch(e2) {
+      // Fallback without orderBy if index not ready
+      snap = await getDocs(collection(db,'wallet_funding_requests'));
+    }
+    const requests = snap.docs.map(d => ({id:d.id,...d.data()}))
+      .sort((a,b) => (b.createdAtISO||'') > (a.createdAtISO||'') ? 1 : -1);
     renderFundingRequests(requests, reqDiv);
   } catch(e) {
-    if (reqDiv) reqDiv.innerHTML = '<p style="color:var(--red);font-size:13px;text-align:center;padding:20px">Error loading requests.</p>';
+    if (reqDiv) reqDiv.innerHTML = '<p style="color:var(--red);font-size:13px;text-align:center;padding:20px">Error: ' + e.message + '</p>';
   }
 
   // Load all wallets
