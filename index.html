@@ -457,12 +457,13 @@ body.light-mode #page-home{background:#f5f5f5}
 
 /* ====== TOAST ====== */
 #toast-container{position:fixed;bottom:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px}
-.toast{background:#fff;border-radius:10px;padding:12px 16px;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;min-width:240px;animation:toastIn .3s ease;border-left:4px solid var(--green)}
-.toast.error{border-left-color:var(--red)}
-.toast.info{border-left-color:var(--orange)}
-.toast i{font-size:16px;color:var(--green)}
-.toast.error i{color:var(--red)}
-.toast.info i{color:var(--orange)}
+.toast{background:#1a2e1a;color:#d1fae5;border-radius:12px;padding:14px 18px;box-shadow:0 8px 32px rgba(0,0,0,.55);display:flex;align-items:center;gap:12px;font-size:14px;font-weight:700;min-width:260px;max-width:340px;animation:toastIn .3s ease;border-left:5px solid #22c55e;border:1px solid #22c55e}
+.toast.error{background:#2e1a1a;color:#fecaca;border-color:#ef4444;border-left:5px solid #ef4444}
+.toast.info{background:#1a1f2e;color:#bfdbfe;border-color:#3b82f6;border-left:5px solid #3b82f6}
+.toast i{font-size:18px;color:#22c55e;flex-shrink:0}
+.toast.error i{color:#ef4444}
+.toast.info i{color:#3b82f6}
+.toast span{line-height:1.4}
 @keyframes toastIn{from{opacity:0;transform:translateX(50px)}to{opacity:1;transform:translateX(0)}}
 
 /* ====== SUPPORT CHAT SYSTEM ====== */
@@ -695,6 +696,12 @@ body{padding-bottom:70px}
 </style>
 
 <style>
+/* ===== PASSWORD SHOW/HIDE TOGGLE ===== */
+.pw-wrap{position:relative;display:flex;align-items:center}
+.pw-wrap .form-input{flex:1;padding-right:44px}
+.pw-toggle{position:absolute;right:12px;background:none;border:none;cursor:pointer;color:var(--gray-400);font-size:16px;padding:4px;line-height:1;transition:color .2s}
+.pw-toggle:hover{color:var(--orange)}
+
 /* ===== WALLET SYSTEM STYLES ===== */
 #page-wallet .admin-card { margin-bottom: 0; }
 #wallet-tx-list > div:last-child { border-bottom: none; }
@@ -1375,7 +1382,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
       <button class="btn-google" onclick="loginWithGoogle()"><img src="https://www.google.com/favicon.ico" width="18" height="18"> Continue with Google</button>
       <div class="auth-divider">or</div>
       <div class="form-group"><label class="form-label">Email Address</label><input class="form-input" id="login-email" type="email" placeholder="you@example.com"></div>
-      <div class="form-group"><label class="form-label">Password</label><input class="form-input" id="login-password" type="password" placeholder="Your password"></div>
+      <div class="form-group"><label class="form-label">Password</label><div class="pw-wrap"><input class="form-input" id="login-password" type="password" placeholder="Your password"><button type="button" class="pw-toggle" onclick="togglePw('login-password',this)" title="Show/hide password"><i class="fas fa-eye"></i></button></div></div>
       <div style="text-align:right;margin-bottom:14px"><a onclick="navigate('forgot')" style="color:var(--orange);font-size:13px;font-weight:700;cursor:pointer">Forgot password?</a></div>
       <button class="btn-auth" onclick="doLogin()"><i class="fas fa-sign-in-alt"></i> Sign In</button>
       <div class="auth-switch">Don't have an account? <a onclick="navigate('register')">Create Account</a></div>
@@ -1393,7 +1400,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
       <div class="form-group"><label class="form-label">Full Name</label><input class="form-input" id="reg-name" type="text" placeholder="Your full name"></div>
       <div class="form-group"><label class="form-label">Email Address</label><input class="form-input" id="reg-email" type="email" placeholder="you@example.com"></div>
       <div class="form-group"><label class="form-label">Phone Number</label><input class="form-input" id="reg-phone" type="tel" placeholder="+234..."></div>
-      <div class="form-group"><label class="form-label">Password</label><input class="form-input" id="reg-password" type="password" placeholder="At least 6 characters"></div>
+      <div class="form-group"><label class="form-label">Password</label><div class="pw-wrap"><input class="form-input" id="reg-password" type="password" placeholder="At least 6 characters"><button type="button" class="pw-toggle" onclick="togglePw('reg-password',this)" title="Show/hide password"><i class="fas fa-eye"></i></button></div></div>
       <button class="btn-auth" onclick="doRegister()"><i class="fas fa-user-plus"></i> Create Account</button>
       <div class="auth-switch">Already have an account? <a onclick="navigate('login')">Sign In</a></div>
     </div>
@@ -1431,8 +1438,8 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
       <h2 class="auth-title">Create New Password</h2>
       <p class="auth-subtitle" id="reset-pw-subtitle">Enter your new password below.</p>
       <div id="reset-pw-form">
-        <div class="form-group"><label class="form-label">New Password</label><input class="form-input" id="reset-new-pw" type="password" placeholder="At least 6 characters"></div>
-        <div class="form-group"><label class="form-label">Confirm Password</label><input class="form-input" id="reset-confirm-pw" type="password" placeholder="Repeat new password"></div>
+        <div class="form-group"><label class="form-label">New Password</label><div class="pw-wrap"><input class="form-input" id="reset-new-pw" type="password" placeholder="At least 6 characters"><button type="button" class="pw-toggle" onclick="togglePw('reset-new-pw',this)" title="Show/hide password"><i class="fas fa-eye"></i></button></div></div>
+        <div class="form-group"><label class="form-label">Confirm Password</label><div class="pw-wrap"><input class="form-input" id="reset-confirm-pw" type="password" placeholder="Repeat new password"><button type="button" class="pw-toggle" onclick="togglePw('reset-confirm-pw',this)" title="Show/hide password"><i class="fas fa-eye"></i></button></div></div>
         <button class="btn-auth" onclick="doResetPassword()"><i class="fas fa-lock"></i> Set New Password</button>
       </div>
       <div id="reset-pw-invalid" style="display:none;text-align:center;padding:14px 0">
@@ -1471,7 +1478,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
     </div>
     <div class="profile-section">
       <div class="profile-section-title"><i class="fas fa-lock"></i> Change Password</div>
-      <div class="form-group"><label class="form-label">New Password</label><input class="form-input" id="new-password" type="password" placeholder="New password"></div>
+      <div class="form-group"><label class="form-label">New Password</label><div class="pw-wrap"><input class="form-input" id="new-password" type="password" placeholder="New password"><button type="button" class="pw-toggle" onclick="togglePw('new-password',this)" title="Show/hide password"><i class="fas fa-eye"></i></button></div></div>
       <button class="btn-primary" onclick="changePassword()"><i class="fas fa-key"></i> Update Password</button>
     </div>
   </div>
@@ -6412,6 +6419,18 @@ window.switchTab = function(tab, btn) {
 };
 
 // ===== TOAST =====
+window.togglePw = function(inputId, btn) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  const isHidden = input.type === 'password';
+  input.type = isHidden ? 'text' : 'password';
+  const icon = btn.querySelector('i');
+  if (icon) {
+    icon.className = isHidden ? 'fas fa-eye-slash' : 'fas fa-eye';
+  }
+  btn.title = isHidden ? 'Hide password' : 'Show password';
+};
+
 window.showToast = function(message, type='success') {
   const icons = { success:'fa-check-circle', error:'fa-exclamation-circle', info:'fa-info-circle' };
   const toast = document.createElement('div');
