@@ -259,7 +259,11 @@ body.dark-mode .skeleton{background:linear-gradient(90deg,#1c1c1c 25%,#2a2a2a 37
 
 /* Product card skeleton */
 .skel-card{background:var(--surface);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-sm);border:1px solid var(--border)}
-.skel-img{aspect-ratio:1;width:100%}
+.skel-img{aspect-ratio:1;width:100%;position:relative;display:flex;align-items:center;justify-content:center}
+.skel-img::after{content:'';position:absolute;width:34px;height:34px;border-radius:50%;background:var(--surface);display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.skel-img::before{content:'\f290';font-family:'Font Awesome 6 Free';font-weight:900;position:absolute;z-index:1;font-size:14px;color:var(--gray-300);animation:none;background:none}
+body.dark-mode .skel-img::after{background:var(--surface)}
+body.dark-mode .skel-img::before{color:var(--gray-400)}
 .skel-line{height:12px;margin:10px 10px 0;border-radius:4px}
 .skel-line.short{width:55%;margin-top:8px;margin-bottom:10px}
 .skel-line.price{width:45%;height:16px;margin-top:8px}
@@ -627,6 +631,11 @@ body{padding-bottom:70px}
 
 /* ====== HERO SLIDER ref style ====== */
 .hero-slider{position:relative;overflow:hidden;border-radius:12px;margin:10px 14px;height:190px}
+.hero-slider-skel{width:100%;height:100%;position:relative;display:flex;align-items:center;justify-content:center}
+.hero-slider-skel::after{content:'';position:absolute;width:46px;height:46px;border-radius:50%;background:var(--surface);display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.hero-slider-skel::before{content:'\f290';font-family:'Font Awesome 6 Free';font-weight:900;position:absolute;z-index:1;font-size:18px;color:var(--gray-300)}
+body.dark-mode .hero-slider-skel::after{background:var(--surface)}
+body.dark-mode .hero-slider-skel::before{color:var(--gray-400)}
 @media(min-width:480px){.hero-slider{height:220px}}
 @media(min-width:768px){.hero-slider{height:320px;margin:16px 20px}}
 .slides-container{display:flex;transition:transform .5s cubic-bezier(.4,0,.2,1);height:100%;will-change:transform}
@@ -989,7 +998,9 @@ body{padding-bottom:65px!important;background:var(--bg)!important}
   <!-- Hero Slider -->
   <div class="hero-slider">
     <div class="slides-container" id="slides">
-      <!-- Slides rendered by JS from Firestore / defaults -->
+      <!-- Static skeleton shown instantly on page load, before Firestore/JS finishes.
+           JS replaces this content once real slides are ready. -->
+      <div class="skeleton hero-slider-skel"></div>
     </div>
     <button class="slider-prev" onclick="changeSlide(-1)"><i class="fas fa-chevron-left"></i></button>
     <button class="slider-next" onclick="changeSlide(1)"><i class="fas fa-chevron-right"></i></button>
@@ -1013,7 +1024,7 @@ body{padding-bottom:65px!important;background:var(--bg)!important}
       </div>
       <a class="home-see-all" onclick="navigate('search')">See All <i class="fas fa-chevron-right"></i></a>
     </div>
-    <div class="product-grid" id="flash-grid"></div>
+    <div class="product-grid skel-wrap" id="flash-grid"><div class="skel-card"><div class="skel-img skeleton"></div><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div><div class="skel-line price skeleton"></div><div class="skel-line btn skeleton"></div></div><div class="skel-card"><div class="skel-img skeleton"></div><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div><div class="skel-line price skeleton"></div><div class="skel-line btn skeleton"></div></div><div class="skel-card"><div class="skel-img skeleton"></div><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div><div class="skel-line price skeleton"></div><div class="skel-line btn skeleton"></div></div><div class="skel-card"><div class="skel-img skeleton"></div><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div><div class="skel-line price skeleton"></div><div class="skel-line btn skeleton"></div></div></div>
   </div>
 
   <!-- Featured Products -->
@@ -1022,7 +1033,7 @@ body{padding-bottom:65px!important;background:var(--bg)!important}
       <div class="home-section-title">Featured Products</div>
       <a class="home-see-all" onclick="navigate('search')">See All <i class="fas fa-chevron-right"></i></a>
     </div>
-    <div class="product-grid" id="featured-grid"></div>
+    <div class="product-grid skel-wrap" id="featured-grid"><div class="skel-card"><div class="skel-img skeleton"></div><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div><div class="skel-line price skeleton"></div><div class="skel-line btn skeleton"></div></div><div class="skel-card"><div class="skel-img skeleton"></div><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div><div class="skel-line price skeleton"></div><div class="skel-line btn skeleton"></div></div><div class="skel-card"><div class="skel-img skeleton"></div><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div><div class="skel-line price skeleton"></div><div class="skel-line btn skeleton"></div></div><div class="skel-card"><div class="skel-img skeleton"></div><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div><div class="skel-line price skeleton"></div><div class="skel-line btn skeleton"></div></div></div>
   </div>
 
   <!-- Trending -->
@@ -1031,7 +1042,7 @@ body{padding-bottom:65px!important;background:var(--bg)!important}
       <div class="home-section-title">Trending Now</div>
       <a class="home-see-all" onclick="navigate('search')">See All <i class="fas fa-chevron-right"></i></a>
     </div>
-    <div class="product-grid" id="trending-grid"></div>
+    <div class="product-grid skel-wrap" id="trending-grid"><div class="skel-card"><div class="skel-img skeleton"></div><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div><div class="skel-line price skeleton"></div><div class="skel-line btn skeleton"></div></div><div class="skel-card"><div class="skel-img skeleton"></div><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div><div class="skel-line price skeleton"></div><div class="skel-line btn skeleton"></div></div><div class="skel-card"><div class="skel-img skeleton"></div><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div><div class="skel-line price skeleton"></div><div class="skel-line btn skeleton"></div></div><div class="skel-card"><div class="skel-img skeleton"></div><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div><div class="skel-line price skeleton"></div><div class="skel-line btn skeleton"></div></div></div>
   </div>
   <!-- RECENTLY VIEWED -->
   <div class="home-section" id="recently-viewed-section" style="display:none">
@@ -4311,6 +4322,7 @@ function swapSkeletonContent(el, htmlOrFn) {
 function renderProductGrid(gridId, products, isFlash=false) {
   const grid = document.getElementById(gridId);
   if(!grid) return;
+  grid.classList.remove('skel-wrap');
   if(!products||!products.length) {
     grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--gray-400)">No products found</div>`;
     return;
@@ -5107,7 +5119,21 @@ window.placeOrder = async function() {
     const orderRef = await addDoc(collection(db,'orders'), orderData);
     lastOrderId = orderRef.id;
 
-    // ---- Debit wallet if paying with wallet ----
+    // Build items summary + address string early so we can notify admin immediately
+    const itemNames = itemsCopy.map(x=>{
+      let detail = x.name;
+      if(x.size) detail += ` (Size: ${x.size})`;
+      if(x.colour||x.color) detail += ` (Colour: ${x.colour||x.color})`;
+      if(x.qty>1) detail += ` ×${x.qty}`;
+      return detail;
+    }).join('\n');
+    const addrStr = [addr.street,addr.city,addr.state].filter(Boolean).join(', ');
+
+    // Notify ADMIN immediately — must happen right after the click/await chain
+    // with minimal delay, or mobile browsers will block the WhatsApp popup.
+    notifyAdminWhatsApp(orderId, addr.name||currentUser.email.split('@')[0], currentUser.email, itemNames, subtotal, deliveryFee, selectedPayment, addrStr, addr.phone||'', couponDiscount, appliedCoupon?.code||'', loyaltyDiscount);
+
+    // ---- Debit wallet if paying with wallet (after notifying admin) ----
     if (selectedPayment === 'wallet') {
       await debitWallet(currentUser.uid, grandTotal, 'purchase', `Order payment: ${orderId}`, orderId);
       await loadWalletBalance();
@@ -5119,15 +5145,7 @@ window.placeOrder = async function() {
     if(appliedCoupon && appliedCoupon.firestoreId) {
       try { await updateDoc(doc(db,'coupons',appliedCoupon.firestoreId), { usageCount: (appliedCoupon.usageCount||0)+1 }); } catch(e) {}
     }
-    // Clear cart BEFORE notifications
-    const itemNames = itemsCopy.map(x=>{
-      let detail = x.name;
-      if(x.size) detail += ` (Size: ${x.size})`;
-      if(x.colour||x.color) detail += ` (Colour: ${x.colour||x.color})`;
-      if(x.qty>1) detail += ` ×${x.qty}`;
-      return detail;
-    }).join('\n');
-    const addrStr = [addr.street,addr.city,addr.state].filter(Boolean).join(', ');
+    // Clear cart
     cart = [];
     await saveCart();
     updateCartBadge();
@@ -5146,8 +5164,6 @@ window.placeOrder = async function() {
         }
       } catch(e) { console.warn('Stock update failed for', pid, e); }
     }
-    // Notify ADMIN first
-    notifyAdminWhatsApp(orderId, addr.name||currentUser.email.split('@')[0], currentUser.email, itemNames, subtotal, deliveryFee, selectedPayment, addrStr, addr.phone||'', couponDiscount, appliedCoupon?.code||'', loyaltyDiscount);
     setTimeout(()=>{
       notifyBuyerWhatsApp(addr.phone||'', orderId, 'pending', itemNames, addr.name||currentUser.email.split('@')[0], grandTotal, deliveryFee);
     }, 2000);
@@ -5155,7 +5171,8 @@ window.placeOrder = async function() {
     navigate('success');
     showToast('Order placed successfully! 🎉');
   } catch(e) {
-    showToast('Failed to place order: '+e.message,'error');
+    console.error('placeOrder error:', e);
+    showToast('Failed to place order: '+(e.message||e.code||'Unknown error'),'error');
   }
 };
 
@@ -5656,16 +5673,20 @@ window.loadAdminProducts = function() {
   `).join('');
 };
 
-window.loadAdminOrders = async function() {
+let _adminOrdersUnsub = null;
+window.loadAdminOrders = function() {
   const tbody = document.getElementById('admin-orders-body');
   tbody.innerHTML = skelTableRows(7, 6);
-  try {
-    const q = collection(db,'orders');
-    const snap = await getDocs(q);
+
+  // Stop any previous listener so we don't stack duplicates
+  if (_adminOrdersUnsub) { try { _adminOrdersUnsub(); } catch(e) {} _adminOrdersUnsub = null; }
+
+  const q = collection(db,'orders');
+  _adminOrdersUnsub = onSnapshot(q, (snap) => {
     let totalRevenue = 0;
 
     // Show cancellation notifications
-    const cancelled = snap.docs.filter(d=>d.data().status==='cancelled' && !d.data().adminAcknowledged);
+    const cancelled = snap.docs.filter(d=>{ try { return d.data().status==='cancelled' && !d.data().adminAcknowledged; } catch(e){ return false; } });
     const cancelCard = document.getElementById('admin-cancel-notif-card');
     const cancelList = document.getElementById('admin-cancel-notif-list');
     const cancelCount = document.getElementById('cancel-notif-count');
@@ -5688,32 +5709,60 @@ window.loadAdminOrders = async function() {
       cancelCard.style.display = 'none';
     }
 
-    const rows = snap.docs.map(d=>{
-      const o = d.data();
-      totalRevenue += o.total||0;
-      const itemCount = (o.items||[]).reduce((s,x)=>s+(x.qty||1),0);
-      const statusKey = o.status==='out_for_delivery'?'out':o.status||'pending';
-      return `<tr>
-        <td style="font-size:11px;font-weight:800">${o.orderId||d.id.slice(0,8)}</td>
-        <td style="font-size:12px">
-          <div style="font-weight:700">${(o.address&&o.address.name)||o.buyerName||'—'}</div>
-          <div style="color:var(--gray-400);font-size:11px">${o.userEmail||''}</div>
-          ${(o.phone||(o.address&&o.address.phone)) ? `<div style="font-size:11px;color:var(--green)"><i class="fab fa-whatsapp"></i> ${o.phone||(o.address&&o.address.phone)}</div>` : ''}
-        </td>
-        <td style="font-weight:800">₦${(o.total||0).toLocaleString()}</td>
-        <td style="font-size:12px"><span style="background:var(--gray-100);padding:2px 8px;border-radius:99px;font-weight:700;font-size:11px">${itemCount} item${itemCount!==1?'s':''}</span></td>
-        <td style="font-size:12px">${o.payment==='bank'?'🏦 Bank':'💵 POD'}</td>
-        <td><span class="order-status status-${statusKey}">${(o.status||'pending').replace(/_/g,' ').replace(/\b\w/g,l=>l.toUpperCase())}</span></td>
-        <td style="display:flex;flex-direction:column;gap:5px;padding:8px 6px">
-          <button style="background:var(--orange);color:#fff;border:none;border-radius:6px;font-size:11px;font-weight:700;padding:5px 8px;cursor:pointer;white-space:nowrap" onclick="viewOrderDetails('${d.id}')"><i class="fas fa-eye"></i> Details</button>
-          <button class="btn-success" style="font-size:11px;padding:5px 8px;white-space:nowrap" onclick="openStatusModal('${d.id}','${o.status||'pending'}','${o.userEmail||''}')"><i class="fas fa-edit"></i> Update</button>
-        </td>
-      </tr>`;
+    // Sort newest first (client-side, since createdAt may be a pending server timestamp briefly)
+    const sortedDocs = [...snap.docs].sort((a,b) => {
+      const at = a.data().createdAt?.toMillis?.() || 0;
+      const bt = b.data().createdAt?.toMillis?.() || 0;
+      return bt - at;
     });
-    tbody.innerHTML = rows.join('') || '<tr><td colspan="7" style="text-align:center;color:var(--gray-400)">No orders</td></tr>';
+
+    const paymentLabels = {
+      bank: '🏦 Bank',
+      wallet: '💰 Wallet',
+      paystack: '⚡ Paystack',
+      cod: '💵 POD'
+    };
+
+    // Render each row independently — one malformed order document
+    // must never blank out the rest of the table.
+    const rows = sortedDocs.map(d => {
+      try {
+        const o = d.data();
+        totalRevenue += o.total||0;
+        const itemCount = (o.items||[]).reduce((s,x)=>s+(x.qty||1),0);
+        const statusKey = o.status==='out_for_delivery'?'out':o.status||'pending';
+        const paymentLabel = paymentLabels[o.payment] || (o.payment ? escHtml(o.payment) : '—');
+        return `<tr>
+          <td style="font-size:11px;font-weight:800">${escHtml(o.orderId||d.id.slice(0,8))}</td>
+          <td style="font-size:12px">
+            <div style="font-weight:700">${escHtml((o.address&&o.address.name)||o.buyerName||'—')}</div>
+            <div style="color:var(--gray-400);font-size:11px">${escHtml(o.userEmail||'')}</div>
+            ${(o.phone||(o.address&&o.address.phone)) ? `<div style="font-size:11px;color:var(--green)"><i class="fab fa-whatsapp"></i> ${escHtml(o.phone||(o.address&&o.address.phone))}</div>` : ''}
+          </td>
+          <td style="font-weight:800">₦${(o.total||0).toLocaleString()}</td>
+          <td style="font-size:12px"><span style="background:var(--gray-100);padding:2px 8px;border-radius:99px;font-weight:700;font-size:11px">${itemCount} item${itemCount!==1?'s':''}</span></td>
+          <td style="font-size:12px">${paymentLabel}</td>
+          <td><span class="order-status status-${statusKey}">${(o.status||'pending').replace(/_/g,' ').replace(/\b\w/g,l=>l.toUpperCase())}</span></td>
+          <td style="display:flex;flex-direction:column;gap:5px;padding:8px 6px">
+            <button style="background:var(--orange);color:#fff;border:none;border-radius:6px;font-size:11px;font-weight:700;padding:5px 8px;cursor:pointer;white-space:nowrap" onclick="viewOrderDetails('${d.id}')"><i class="fas fa-eye"></i> Details</button>
+            <button class="btn-success" style="font-size:11px;padding:5px 8px;white-space:nowrap" onclick="openStatusModal('${d.id}','${o.status||'pending'}','${o.userEmail||''}')"><i class="fas fa-edit"></i> Update</button>
+          </td>
+        </tr>`;
+      } catch(rowErr) {
+        console.error('Order row render error for doc', d.id, rowErr);
+        return `<tr><td colspan="7" style="font-size:11px;color:var(--red)">⚠️ Could not render order ${d.id.slice(0,8)} (${rowErr.message})</td></tr>`;
+      }
+    });
+    tbody.innerHTML = rows.join('') || '<tr><td colspan="7" style="text-align:center;color:var(--gray-400)">No orders yet</td></tr>';
     document.getElementById('stat-orders').textContent = snap.docs.length;
     document.getElementById('stat-revenue').textContent = '₦'+totalRevenue.toLocaleString();
-  } catch(e) { tbody.innerHTML = '<tr><td colspan="7" style="color:var(--red);text-align:center">Error loading</td></tr>'; }
+  }, (err) => {
+    console.error('loadAdminOrders listener error:', err);
+    tbody.innerHTML = `<tr><td colspan="7" style="color:var(--red);text-align:center;padding:16px">
+      Error loading orders: ${escHtml(err.message||err.code||'Unknown error')}<br>
+      <span style="font-size:11px;color:var(--gray-400)">This is usually a Firestore permissions issue — check your security rules allow admin to read the 'orders' collection.</span>
+    </td></tr>`;
+  });
 };
 
 window.openStatusModal = function(orderId, status, email) {
@@ -6659,7 +6708,7 @@ function _showPage(page) {
   if(page==='wishlist') renderWishlist();
   if(page==='addresses') loadAddresses();
   if(page==='search') { if(!allProducts.length) loadProducts(); applyFilters(); }
-  if(page==='admin') { loadAdminProducts(); loadAdminStats(); updatePWResetBadge(); }
+  if(page==='admin') { loadAdminProducts(); loadAdminStats(); loadAdminOrders(); updatePWResetBadge(); }
   if(page==='profile') loadUserProfile();
   if(page==='wallet') { loadWalletBalance(); loadWalletTransactions(); loadPaystackSettings(); }
   if(page==='forgot') {
