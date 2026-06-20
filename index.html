@@ -261,7 +261,7 @@ body.dark-mode .skeleton{background:linear-gradient(90deg,#1c1c1c 25%,#2a2a2a 37
 /* Product card skeleton */
 .skel-card{background:var(--surface);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-sm);border:1px solid var(--border)}
 .skel-img{aspect-ratio:1;width:100%;position:relative;display:flex;align-items:center;justify-content:center}
-.skel-img::after{content:'';position:absolute;width:44px;height:44px;border-radius:50%;background:var(--surface) var(--benim-logo) center/28px 28px no-repeat;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.15);opacity:.92}
+.skel-img::after{content:'';position:absolute;width:80px;height:80px;border-radius:50%;background:var(--surface) var(--benim-logo) center/56px 56px no-repeat;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.15);opacity:.92}
 body.dark-mode .skel-img::after{background-color:var(--surface)}
 .skel-line{height:12px;margin:10px 10px 0;border-radius:4px}
 .skel-line.short{width:55%;margin-top:8px;margin-bottom:10px}
@@ -631,7 +631,7 @@ body{padding-bottom:70px}
 /* ====== HERO SLIDER ref style ====== */
 .hero-slider{position:relative;overflow:hidden;border-radius:12px;margin:10px 14px;height:190px}
 .hero-slider-skel{width:100%;height:100%;position:relative;display:flex;align-items:center;justify-content:center}
-.hero-slider-skel::after{content:'';position:absolute;width:64px;height:64px;border-radius:50%;background:var(--surface) var(--benim-logo) center/40px 40px no-repeat;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.15);opacity:.92}
+.hero-slider-skel::after{content:'';position:absolute;width:118px;height:118px;border-radius:50%;background:var(--surface) var(--benim-logo) center/80px 80px no-repeat;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.15);opacity:.92}
 body.dark-mode .hero-slider-skel::after{background-color:var(--surface)}
 @media(min-width:480px){.hero-slider{height:220px}}
 @media(min-width:768px){.hero-slider{height:320px;margin:16px 20px}}
@@ -1861,6 +1861,13 @@ body{padding-bottom:65px!important;background:var(--bg)!important}
           </table>
         </div>
       </div>
+
+      <!-- DANGER ZONE: Reset Orders & Revenue -->
+      <div class="admin-card" style="border:2px solid #fee2e2;background:#fef2f2;margin-top:14px">
+        <div class="admin-card-title" style="color:var(--red)"><i class="fas fa-exclamation-triangle"></i> Danger Zone</div>
+        <p style="font-size:13px;color:var(--gray-600);margin-bottom:14px">Permanently delete <strong>all orders</strong> and reset revenue back to ₦0. This is useful when you want to start fresh after testing. <strong style="color:var(--red)">This action cannot be undone.</strong></p>
+        <button onclick="openResetOrdersModal()" style="background:var(--red);color:#fff;border:none;border-radius:8px;padding:11px 18px;font-size:13px;font-weight:800;cursor:pointer"><i class="fas fa-trash-alt"></i> Delete All Orders &amp; Reset Revenue</button>
+      </div>
     </div>
     <!-- Reviews Tab -->
     <div id="admin-reviews" class="admin-tab-content hidden">
@@ -2668,6 +2675,33 @@ body{padding-bottom:65px!important;background:var(--bg)!important}
     </div>
   </div>
 </div>
+<!-- RESET ORDERS / REVENUE MODAL -->
+<div class="modal-overlay" id="modal-reset-orders">
+  <div class="modal" style="max-width:440px">
+    <div class="modal-header">
+      <span class="modal-title" style="color:var(--red)"><i class="fas fa-exclamation-triangle"></i> Delete All Orders</span>
+      <button class="modal-close" onclick="closeModal('modal-reset-orders')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:14px">
+      <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:14px;font-size:13px;color:#991b1b;line-height:1.6">
+        <strong>This will permanently delete:</strong>
+        <ul style="margin:8px 0 0 18px;padding:0">
+          <li>All <span id="reset-orders-count">0</span> orders in your database</li>
+          <li>All revenue history (back to ₦0)</li>
+        </ul>
+        <p style="margin-top:10px;font-weight:800">This cannot be undone. Product listings, users, and wallets are NOT affected.</p>
+      </div>
+      <div>
+        <label class="form-label">Type <strong>DELETE</strong> to confirm</label>
+        <input class="form-input" id="reset-orders-confirm-input" placeholder="Type DELETE here" autocomplete="off">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('modal-reset-orders')">Cancel</button>
+      <button id="reset-orders-confirm-btn" onclick="confirmResetOrders()" disabled style="background:var(--gray-300);color:#fff;border:none;border-radius:8px;padding:10px 18px;font-size:13px;font-weight:800;cursor:not-allowed"><i class="fas fa-trash-alt"></i> Permanently Delete</button>
+    </div>
+  </div>
+</div>
 <!-- FUND WALLET MODAL -->
 <div class="modal-overlay" id="modal-fund-wallet">
   <div class="modal" style="max-width:460px">
@@ -2819,7 +2853,7 @@ body{padding-bottom:65px!important;background:var(--bg)!important}
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail, confirmPasswordReset, GoogleAuthProvider, signInWithPopup, updatePassword } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
-import { getFirestore, collection, doc, addDoc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, query, where, orderBy, limit, onSnapshot, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+import { getFirestore, collection, doc, addDoc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, query, where, orderBy, limit, onSnapshot, serverTimestamp, writeBatch } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyA-jgBpKJMPd0Jz1Ro_U9RrAd45jGl_gJw",
@@ -5856,6 +5890,95 @@ window.viewOrderDetails = async function(docId) {
     };
   } catch(e) {
     body.innerHTML = `<p style="padding:20px;color:var(--red)">Error loading order: ${e.message}</p>`;
+  }
+};
+
+// ===== DANGER ZONE: RESET ALL ORDERS & REVENUE =====
+window.openResetOrdersModal = async function() {
+  if (!isAdmin) return;
+  const countEl = document.getElementById('reset-orders-count');
+  const input = document.getElementById('reset-orders-confirm-input');
+  const btn = document.getElementById('reset-orders-confirm-btn');
+  input.value = '';
+  setResetOrdersBtnState(false);
+  countEl.textContent = '…';
+  openModal('modal-reset-orders');
+  try {
+    const snap = await getDocs(collection(db,'orders'));
+    countEl.textContent = snap.size;
+  } catch(e) {
+    countEl.textContent = '?';
+  }
+};
+
+function setResetOrdersBtnState(enabled) {
+  const btn = document.getElementById('reset-orders-confirm-btn');
+  if (!btn) return;
+  btn.disabled = !enabled;
+  btn.style.cursor = enabled ? 'pointer' : 'not-allowed';
+  btn.style.background = enabled ? 'var(--red)' : 'var(--gray-300)';
+}
+
+// Wire up the confirm-text input once the DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  const input = document.getElementById('reset-orders-confirm-input');
+  if (input) {
+    input.addEventListener('input', () => {
+      setResetOrdersBtnState(input.value.trim() === 'DELETE');
+    });
+  }
+});
+// Also wire immediately in case DOMContentLoaded already fired (module scripts run after parse)
+(function wireResetOrdersInput(){
+  const input = document.getElementById('reset-orders-confirm-input');
+  if (input && !input.dataset.wired) {
+    input.dataset.wired = '1';
+    input.addEventListener('input', () => {
+      setResetOrdersBtnState(input.value.trim() === 'DELETE');
+    });
+  }
+})();
+
+window.confirmResetOrders = async function() {
+  if (!isAdmin) return;
+  const input = document.getElementById('reset-orders-confirm-input');
+  if (input.value.trim() !== 'DELETE') {
+    showToast('Please type DELETE to confirm', 'error');
+    return;
+  }
+  const btn = document.getElementById('reset-orders-confirm-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting...';
+
+  try {
+    const snap = await getDocs(collection(db,'orders'));
+    const docs = snap.docs;
+    const CHUNK_SIZE = 450; // stay under Firestore's 500-op batch limit
+
+    for (let i = 0; i < docs.length; i += CHUNK_SIZE) {
+      const batch = writeBatch(db);
+      const chunk = docs.slice(i, i + CHUNK_SIZE);
+      chunk.forEach(d => batch.delete(d.ref));
+      await batch.commit();
+    }
+
+    // Reset visible stats immediately
+    const statOrders = document.getElementById('stat-orders');
+    const statRevenue = document.getElementById('stat-revenue');
+    if (statOrders) statOrders.textContent = '0';
+    if (statRevenue) statRevenue.textContent = '₦0';
+
+    closeModal('modal-reset-orders');
+    showToast(`Deleted ${docs.length} order(s). Revenue reset to ₦0.`, 'success');
+
+    // The live onSnapshot listener on Orders tab will auto-refresh the table.
+    // Also refresh dashboard stats explicitly.
+    if (typeof loadAdminStats === 'function') loadAdminStats();
+  } catch(e) {
+    console.error('confirmResetOrders error:', e);
+    showToast('Failed to delete orders: ' + (e.message||e.code||'Unknown error'), 'error');
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-trash-alt"></i> Permanently Delete';
   }
 };
 
