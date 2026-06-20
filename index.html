@@ -1598,6 +1598,14 @@ body{padding-bottom:65px!important;background:var(--bg)!important}
         <p>🔑 Pending Resets</p>
       </div>
     </div>
+
+    <!-- Always-visible shortcut to Danger Zone, regardless of which tab is active -->
+    <div onclick="switchAdminTab('orders',document.querySelector('.admin-tab[onclick*=&quot;orders&quot;]'));setTimeout(()=>document.getElementById('admin-danger-zone').scrollIntoView({behavior:'smooth',block:'center'}),150)" style="cursor:pointer;display:flex;align-items:center;gap:10px;background:#fef2f2;border:1.5px solid #fecaca;border-radius:10px;padding:10px 14px;margin-bottom:14px">
+      <i class="fas fa-exclamation-triangle" style="color:var(--red);font-size:16px"></i>
+      <span style="font-size:13px;font-weight:700;color:#991b1b;flex:1">Need to start fresh? Delete all orders & reset revenue</span>
+      <i class="fas fa-chevron-right" style="color:var(--red);font-size:12px"></i>
+    </div>
+
     <div class="admin-tabs">
       <button class="admin-tab active" onclick="switchAdminTab('products',this)">Products</button>
       <button class="admin-tab" onclick="switchAdminTab('orders',this)">Orders</button>
@@ -1863,7 +1871,7 @@ body{padding-bottom:65px!important;background:var(--bg)!important}
       </div>
 
       <!-- DANGER ZONE: Reset Orders & Revenue -->
-      <div class="admin-card" style="border:2px solid #fee2e2;background:#fef2f2;margin-top:14px">
+      <div class="admin-card" id="admin-danger-zone" style="border:2px solid #fee2e2;background:#fef2f2;margin-top:14px">
         <div class="admin-card-title" style="color:var(--red)"><i class="fas fa-exclamation-triangle"></i> Danger Zone</div>
         <p style="font-size:13px;color:var(--gray-600);margin-bottom:14px">Permanently delete <strong>all orders</strong> and reset revenue back to ₦0. This is useful when you want to start fresh after testing. <strong style="color:var(--red)">This action cannot be undone.</strong></p>
         <button onclick="openResetOrdersModal()" style="background:var(--red);color:#fff;border:none;border-radius:8px;padding:11px 18px;font-size:13px;font-weight:800;cursor:pointer"><i class="fas fa-trash-alt"></i> Delete All Orders &amp; Reset Revenue</button>
