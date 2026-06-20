@@ -1,15 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" class="dark-mode-default">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Benim Shop</title>
-<script>
-// Always black background unless user chose light
-if(localStorage.getItem('benim-theme') !== 'light') {
-  document.documentElement.style.background = '#0f0f0f';
-}
-</script>
 <meta name="description" content="Benim — Your trusted online shopping destination. Quality products, fast delivery, great prices.">
 <meta name="theme-color" content="#DC3C0A">
 <meta name="mobile-web-app-capable" content="yes">
@@ -27,41 +21,7 @@ if(localStorage.getItem('benim-theme') !== 'light') {
   --orange: #e8420a;
   --orange-light: #ff6b35;
   --orange-dark: #c23608;
-  --white: #1a1a1a;
-  --gray-50: #1a1a1a;
-  --gray-100: #242424;
-  --gray-200: #2e2e2e;
-  --gray-300: #3a3a3a;
-  --gray-400: #6b7280;
-  --gray-500: #9ca3af;
-  --gray-600: #b0b8c4;
-  --gray-700: #d1d5db;
-  --gray-800: #f0f0f0;
-  --gray-900: #f9fafb;
-  --green: #16a34a;
-  --red: #dc2626;
-  --yellow: #f59e0b;
-  --shadow-sm: 0 1px 2px rgba(0,0,0,.3);
-  --shadow: 0 2px 8px rgba(0,0,0,.4);
-  --shadow-md: 0 4px 16px rgba(0,0,0,.5);
-  --shadow-lg: 0 8px 32px rgba(0,0,0,.6);
-  --radius: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
-  --bg: #0f0f0f;
-  --surface: #1a1a1a;
-  --surface2: #242424;
-  --border: #2e2e2e;
-  --text: #f0f0f0;
-  --text-muted: #9ca3af;
-}
-body.light-mode {
-  --bg: #f5f5f5;
-  --surface: #ffffff;
-  --surface2: #f9fafb;
-  --border: #e5e7eb;
-  --text: #1f2937;
-  --text-muted: #6b7280;
+  --white: #ffffff;
   --gray-50: #f9fafb;
   --gray-100: #f3f4f6;
   --gray-200: #e5e7eb;
@@ -72,11 +32,45 @@ body.light-mode {
   --gray-700: #374151;
   --gray-800: #1f2937;
   --gray-900: #111827;
-  --white: #ffffff;
+  --green: #16a34a;
+  --red: #dc2626;
+  --yellow: #f59e0b;
   --shadow-sm: 0 1px 2px rgba(0,0,0,.05);
   --shadow: 0 2px 8px rgba(0,0,0,.1);
   --shadow-md: 0 4px 16px rgba(0,0,0,.12);
   --shadow-lg: 0 8px 32px rgba(0,0,0,.15);
+  --radius: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --bg: #f5f5f5;
+  --surface: #ffffff;
+  --surface2: #f9fafb;
+  --border: #e5e7eb;
+  --text: #1f2937;
+  --text-muted: #6b7280;
+}
+body.dark-mode {
+  --bg: #0f0f0f;
+  --surface: #1a1a1a;
+  --surface2: #242424;
+  --border: #2e2e2e;
+  --text: #f0f0f0;
+  --text-muted: #9ca3af;
+  --gray-50: #1a1a1a;
+  --gray-100: #242424;
+  --gray-200: #2e2e2e;
+  --gray-300: #3a3a3a;
+  --gray-400: #6b7280;
+  --gray-500: #9ca3af;
+  --gray-600: #b0b8c4;
+  --gray-700: #d1d5db;
+  --gray-800: #f0f0f0;
+  --gray-900: #f9fafb;
+  --white: #1a1a1a;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.3);
+  --shadow: 0 2px 8px rgba(0,0,0,.4);
+  --shadow-md: 0 4px 16px rgba(0,0,0,.5);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,.6);
 }
 /* dark-mode class = same as default root (kept for backwards compat) */
 body.dark-mode {
@@ -186,7 +180,6 @@ body.dark-mode .home-section{background:#0f0f0f!important}
 body.dark-mode .pwa-install-banner{background:linear-gradient(135deg,#1a0800,#2d1000)!important}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .3s,color .3s}
-body.light-mode{background:#0f0f0f;color:#f0f0f0}
 a{text-decoration:none;color:inherit}
 button{cursor:pointer;border:none;outline:none;font-family:inherit}
 input,select,textarea{font-family:inherit;outline:none}
@@ -207,12 +200,10 @@ img{max-width:100%;display:block}
 .absolute{position:absolute}
 
 /* ====== HEADER ====== */
-#header{background:#141414;position:sticky;top:0;z-index:1000;box-shadow:0 1px 4px rgba(0,0,0,.4);border-bottom:1px solid #222}
-body.light-mode #header{background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.08);border-bottom:1px solid #f3f4f6}
+#header{background:var(--surface);position:sticky;top:0;z-index:1000;box-shadow:var(--shadow-sm);border-bottom:1px solid var(--border)}
 .header-top{display:flex;align-items:center;gap:10px;padding:8px 16px;max-width:1400px;margin:0 auto}
 .header-logo{height:36px;width:auto;cursor:pointer;object-fit:contain}
-.header-search-row{background:#141414;padding:8px 16px 12px;max-width:1400px;margin:0 auto}.header-search-wrap{display:flex;align-items:center;background:#1e1e1e;border-radius:50px;padding:0 16px;gap:10px;width:100%;border:1px solid #2a2a2a}
-body.light-mode .header-search-row{background:#fff}.body.light-mode .header-search-wrap{background:var(--gray-100);border:none}
+.header-search-row{background:var(--surface);padding:8px 16px 12px;max-width:1400px;margin:0 auto}.header-search-wrap{display:flex;align-items:center;background:var(--gray-100);border-radius:50px;padding:0 16px;gap:10px;width:100%;border:1px solid var(--border)}
 .header-search{flex:1;padding:11px 4px;border:none;font-size:14px;color:var(--gray-800);background:transparent;outline:none}.header-search::placeholder{color:var(--gray-400)}
 .header-search-btn{background:transparent;color:var(--gray-400);border:none;padding:0;font-size:17px;cursor:pointer;transition:.2s;display:flex;align-items:center}
 .header-search-btn:hover{color:var(--orange)}
@@ -226,8 +217,7 @@ body.light-mode .header-search-row{background:#fff}.body.light-mode .header-sear
 /* ====== SIDEBAR ====== */
 #sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;opacity:0;pointer-events:none;transition:.3s}
 #sidebar-overlay.open{opacity:1;pointer-events:all}
-#sidebar{position:fixed;left:0;top:0;bottom:0;width:300px;background:#141414;z-index:2001;transform:translateX(-100%);transition:.3s;overflow-y:auto;display:flex;flex-direction:column}
-body.light-mode #sidebar{background:#fff}
+#sidebar{position:fixed;left:0;top:0;bottom:0;width:300px;background:var(--surface);z-index:2001;transform:translateX(-100%);transition:.3s;overflow-y:auto;display:flex;flex-direction:column}
 #sidebar.open{transform:translateX(0)}
 .sidebar-header{background:var(--orange);padding:20px 16px;display:flex;align-items:center;gap:12px}
 .sidebar-avatar{width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff}
@@ -244,8 +234,7 @@ body.light-mode #sidebar{background:#fff}
 /* ====== PAGES ====== */
 .page{display:none}
 .page.active{display:block}
-#page-home{background:#0f0f0f}
-body.light-mode #page-home{background:#f5f5f5}
+#page-home{background:var(--bg)}
 
 /* ====== HERO SLIDER ====== */
 /* hero-slider css moved below */
@@ -360,14 +349,14 @@ body.dark-mode .skeleton{background:linear-gradient(90deg,#1c1c1c 25%,#2a2a2a 37
 
 /* ====== CART ====== */
 .cart-wrap{max-width:900px;margin:0 auto;padding:16px}
-.cart-item{background:#1a1a1a;border:1px solid #222;border-radius:var(--radius-lg);padding:14px;display:flex;gap:14px;margin-bottom:10px;box-shadow:var(--shadow-sm)}
+.cart-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px;display:flex;gap:14px;margin-bottom:10px;box-shadow:var(--shadow-sm)}
 .cart-item-img{width:80px;height:80px;border-radius:8px;object-fit:cover;flex-shrink:0}
 .cart-item-info{flex:1}
 .cart-item-name{font-size:14px;font-weight:700;margin-bottom:4px;color:var(--gray-800)}
 .cart-item-price{font-size:16px;font-weight:900;color:var(--orange)}
 .cart-item-actions{display:flex;align-items:center;gap:10px;margin-top:8px}
 .cart-remove{background:none;border:none;color:var(--red);font-size:13px;cursor:pointer;font-weight:600}
-.cart-summary{background:#1a1a1a;border:1px solid #222;border-radius:var(--radius-lg);padding:16px;box-shadow:var(--shadow-sm);margin-top:16px}
+.cart-summary{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;box-shadow:var(--shadow-sm);margin-top:16px}
 .summary-row{display:flex;justify-content:space-between;margin-bottom:10px;font-size:14px;color:var(--gray-600)}
 .summary-row.total{font-size:18px;font-weight:900;color:var(--gray-800);border-top:2px solid var(--gray-200);padding-top:10px;margin-top:10px}
 .btn-checkout{width:100%;background:var(--orange);color:#fff;padding:14px;border-radius:8px;font-size:16px;font-weight:800;border:none;cursor:pointer;margin-top:12px;transition:.2s}
@@ -375,12 +364,12 @@ body.dark-mode .skeleton{background:linear-gradient(90deg,#1c1c1c 25%,#2a2a2a 37
 
 /* ====== CHECKOUT ====== */
 .checkout-wrap{max-width:800px;margin:0 auto;padding:16px}
-.checkout-section{background:#1a1a1a;border:1px solid #222;border-radius:var(--radius-lg);padding:16px;margin-bottom:12px;box-shadow:var(--shadow-sm)}
+.checkout-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:12px;box-shadow:var(--shadow-sm)}
 .checkout-title{font-size:16px;font-weight:800;color:var(--gray-800);margin-bottom:14px;display:flex;align-items:center;gap:8px}
 .checkout-title i{color:var(--orange)}
 .form-group{margin-bottom:12px}
 .form-label{font-size:13px;font-weight:700;color:var(--gray-600);margin-bottom:5px;display:block}
-.form-input{background:#1e1e1e;border-color:#2a2a2a;color:#f0f0f0;width:100%;padding:10px 12px;border:2px solid var(--gray-200);border-radius:8px;font-size:14px;transition:.2s;background:#fff}
+.form-input{width:100%;padding:10px 12px;border:2px solid var(--gray-200);border-radius:8px;font-size:14px;transition:.2s;background:var(--surface);color:var(--text)}
 .form-input:focus{border-color:var(--orange)}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .address-card{border:2px solid var(--gray-200);border-radius:8px;padding:12px;cursor:pointer;transition:.2s;margin-bottom:8px}
@@ -396,7 +385,7 @@ body.dark-mode .skeleton{background:linear-gradient(90deg,#1c1c1c 25%,#2a2a2a 37
 
 /* ====== ORDERS ====== */
 .orders-wrap{max-width:900px;margin:0 auto;padding:16px}
-.order-card{background:#1a1a1a;border:1px solid #222;border-radius:var(--radius-lg);padding:16px;margin-bottom:12px;box-shadow:var(--shadow-sm)}
+.order-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:12px;box-shadow:var(--shadow-sm)}
 .order-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 .order-id{font-size:13px;font-weight:700;color:var(--gray-500)}
 .order-status{font-size:12px;font-weight:800;padding:4px 10px;border-radius:20px}
@@ -424,14 +413,14 @@ body.dark-mode .skeleton{background:linear-gradient(90deg,#1c1c1c 25%,#2a2a2a 37
 
 /* ====== SEARCH RESULTS ====== */
 .search-wrap{max-width:1400px;margin:0 auto;padding:16px}
-.search-filters{background:#1a1a1a;border:1px solid #222;border-radius:var(--radius);padding:14px;margin-bottom:14px;box-shadow:var(--shadow-sm);display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.search-filters{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:14px;box-shadow:var(--shadow-sm);display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .filter-group{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--gray-600)}
 .filter-select{border:2px solid var(--gray-200);border-radius:6px;padding:5px 10px;font-size:13px;font-weight:600;color:var(--gray-700);cursor:pointer}
 .filter-select:focus{border-color:var(--orange)}
 
 /* ====== AUTH ====== */
 .auth-wrap{max-width:440px;margin:40px auto;padding:16px}
-.auth-card{background:#1a1a1a;border:1px solid #222;border-radius:var(--radius-xl);padding:32px;box-shadow:var(--shadow-md)}
+.auth-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:32px;box-shadow:var(--shadow-md)}
 .auth-logo{display:flex;justify-content:center;margin-bottom:24px}
 .auth-logo img{height:60px;object-fit:contain}
 .auth-title{font-size:22px;font-weight:900;color:var(--gray-800);text-align:center;margin-bottom:4px}
@@ -451,7 +440,7 @@ body.dark-mode .skeleton{background:linear-gradient(90deg,#1c1c1c 25%,#2a2a2a 37
 .profile-avatar{width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.2);margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:36px}
 .profile-name{font-size:20px;font-weight:900}
 .profile-email{font-size:14px;opacity:.8;margin-top:4px}
-.profile-section{background:#1a1a1a;border:1px solid #222;border-radius:var(--radius-lg);padding:16px;margin-bottom:12px;box-shadow:var(--shadow-sm)}
+.profile-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin-bottom:12px;box-shadow:var(--shadow-sm)}
 .profile-section-title{font-size:15px;font-weight:800;color:var(--gray-800);margin-bottom:14px;display:flex;align-items:center;gap:8px}
 .profile-section-title i{color:var(--orange)}
 
@@ -770,19 +759,19 @@ body.dark-mode #pwreset-audit-log { background: #111 !important; border-color: #
 <style>
 
 /* HEADER &mdash; white bg */
-#header{background:#141414!important;box-shadow:0 1px 3px rgba(0,0,0,.08)!important}
+#header{background:var(--surface)!important;box-shadow:0 1px 3px rgba(0,0,0,.08)!important}
 .header-top{padding:12px 14px 10px!important;gap:8px!important}
-.hamburger{color:#222!important;font-size:22px!important;background:none!important;border:none!important;padding:0!important}
+.hamburger{color:var(--gray-800)!important;font-size:22px!important;background:none!important;border:none!important;padding:0!important}
 #logo-text,#header-logo-img{cursor:pointer!important;display:inline-block!important;vertical-align:middle!important;height:40px!important;width:auto!important;max-width:150px!important}
-.hicon{background:transparent!important;color:#333!important;font-size:22px!important;padding:4px 6px!important;border:none!important}
+.hicon{background:transparent!important;color:var(--gray-700)!important;font-size:22px!important;padding:4px 6px!important;border:none!important}
 .hicon .badge{background:#e8420a!important;color:#fff!important;top:-5px!important;right:-4px!important;width:17px!important;height:17px!important;font-size:9px!important}
 .hicon-label{display:none!important}
 .header-icons{gap:6px!important}
 
 /* SEARCH BAR &mdash; full-width pill below header row */
-.header-search-row{background:#141414!important;padding:0 14px 12px!important}
-.header-search-wrap{background:#f2f2f2!important;border-radius:50px!important;padding:0 16px!important;display:flex!important;align-items:center!important;gap:8px!important;border:none!important}
-.header-search{background:transparent!important;border:none!important;padding:12px 0!important;font-size:13px!important;flex:1!important;outline:none!important;color:#333!important}
+.header-search-row{background:var(--surface)!important;padding:0 14px 12px!important}
+.header-search-wrap{background:var(--gray-100)!important;border-radius:50px!important;padding:0 16px!important;display:flex!important;align-items:center!important;gap:8px!important;border:none!important}
+.header-search{background:transparent!important;border:none!important;padding:12px 0!important;font-size:13px!important;flex:1!important;outline:none!important;color:var(--gray-700)!important}
 .header-search::placeholder{color:#aaa!important;font-size:13px!important}
 .header-search-btn{background:transparent!important;color:#aaa!important;border:none!important;font-size:16px!important;padding:0!important;display:flex!important;align-items:center!important;cursor:pointer!important}
 .header-search-btn:hover{color:#e8420a!important}
@@ -794,8 +783,8 @@ body.dark-mode #pwreset-audit-log { background: #111 !important; border-color: #
 .slider-dots{bottom:8px!important}
 
 /* HOME SECTIONS */
-.home-section{background:#0f0f0f!important;margin:8px 0 0!important;padding:14px 12px 16px!important}
-.home-section-title{font-size:16px!important;font-weight:800!important;color:#111!important;font-family:'Poppins',sans-serif!important;margin-bottom:4px!important}
+.home-section{background:var(--bg)!important;margin:8px 0 0!important;padding:14px 12px 16px!important}
+.home-section-title{font-size:16px!important;font-weight:800!important;color:var(--text)!important;font-family:'Poppins',sans-serif!important;margin-bottom:4px!important}
 .home-section-header{margin-bottom:14px!important}
 .home-see-all{color:#e8420a!important;font-size:13px!important;font-weight:700!important;white-space:nowrap!important;padding-top:2px!important}
 
@@ -836,15 +825,15 @@ body.dark-mode #pwreset-audit-log { background: #111 !important; border-color: #
 .pc-wish-btn:hover,.pc-wish-btn.active{color:#e53e3e;background:#fff}
 
 /* BOTTOM NAV */
-.bottom-nav{background:#141414!important;border-top:1px solid #eee!important;padding:0!important}
-.bnav-item{padding:8px 4px 6px!important;font-size:10px!important;font-weight:600!important;color:#aaa!important;gap:2px!important}
+.bottom-nav{background:var(--surface)!important;border-top:1px solid var(--border)!important;padding:0!important}
+.bnav-item{padding:8px 4px 6px!important;font-size:10px!important;font-weight:600!important;color:var(--gray-400)!important;gap:2px!important}
 .bnav-item i{font-size:20px!important}
 .bnav-item.active{color:#e8420a!important}
 .bnav-badge{top:4px!important;right:calc(50% - 18px)!important;font-size:9px!important;padding:1px 4px!important}
 
 /* PAGE BACKGROUNDS */
-#page-home{background:#f2f2f2!important}
-body{padding-bottom:65px!important;background:#f2f2f2!important}
+#page-home{background:var(--bg)!important}
+body{padding-bottom:65px!important;background:var(--bg)!important}
 
 /* CARD ACTION BUTTONS */
 .card-action-btns{display:flex;gap:4px;margin-top:8px}
@@ -854,7 +843,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
 .card-btn-buy:hover{background:#111;color:#fff}
 </style>
 </head>
-<body class="dark-mode">
+<body>
 <!-- PWA INSTALL BANNER -->
 <div id="pwa-install-banner">
   <img class="pwa-banner-icon" src="icon-192.png" alt="Benim" style="border-radius:12px" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
@@ -913,7 +902,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
       <span onclick="navigate('home')" style="font-family:'Poppins',sans-serif;font-weight:900;font-size:26px;color:#e8420a;cursor:pointer;letter-spacing:-0.5px;line-height:1">BENIM</span>
     </div>
     <div class="header-icons" style="display:flex;align-items:center;gap:4px">
-      <button id="dark-mode-btn" onclick="toggleDarkMode()" title="Toggle dark/light mode">☀️</button>
+      <button id="dark-mode-btn" onclick="toggleDarkMode()" title="Toggle dark/light mode">🌙</button>
       <button class="hicon" onclick="navigate('profile')" title="Account"><i class="fas fa-user-circle"></i><span class="badge hidden" id="wish-count">0</span></button>
       <button class="hicon" onclick="navigate('cart')" title="Cart" style="position:relative"><i class="fas fa-shopping-cart"></i><span class="badge hidden" id="cart-count">0</span></button>
     </div>
@@ -2263,7 +2252,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
     </div>
     <div class="faq-item" onclick="toggleFaq(this)">
       <div class="faq-q">What payment methods do you accept? <i class="fas fa-chevron-down"></i></div>
-      <div class="faq-a">We accept Bank Transfer (Opay) and Pay on Delivery. Bank details: Opay | Adewole Aderonke Aishat | Account Number: 9168031213. Please use your Order ID as the transfer reference.</div>
+      <div class="faq-a" id="faq-bank-details">We accept Bank Transfer and Pay on Delivery. Please use your Order ID as the transfer reference.</div>
     </div>
     <div class="faq-item" onclick="toggleFaq(this)">
       <div class="faq-q">How do I track my order? <i class="fas fa-chevron-down"></i></div>
@@ -2837,6 +2826,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const ADMIN_EMAIL = 'shopwitbenim@gmail.com';
+const ADMIN_WHATSAPP = '2349168031213';
 
 // ===== STATE SHIPPING FEES =====
 const STATE_SHIPPING_FEES = {"Lagos": 2500, "Abuja": 3500, "FCT": 3500, "Ogun": 3500, "Oyo": 1500, "Osun": 2000, "Ondo": 3500, "Ekiti": 3500, "Edo": 4500, "Delta": 4500, "Rivers": 4500, "Bayelsa": 5000, "Anambra": 4500, "Enugu": 4500, "Imo": 4500, "Abia": 5000, "Ebonyi": 5000, "Cross River": 5500, "Akwa Ibom": 5000, "Kano": 5000, "Kaduna": 5000, "Katsina": 5500, "Sokoto": 6000, "Kebbi": 6000, "Zamfara": 6000, "Niger": 5500, "Kwara": 3500, "Kogi": 5000, "Benue": 5500, "Plateau": 5500, "Nassarawa": 5000, "Taraba": 6000, "Adamawa": 6000, "Borno": 6500, "Yobe": 6500, "Gombe": 6000, "Bauchi": 6000, "Jigawa": 6000};
@@ -2898,6 +2888,8 @@ onAuthStateChanged(auth, async (user) => {
 
 // Load Paystack settings on startup (for all users)
 loadPaystackSettings();
+// Load bank account details on startup (for all users) — keeps checkout, wallet funding, FAQ, receipts in sync
+loadAccountDetails();
 
 function updateAuthUI() {
   const loggedIn = !!currentUser;
@@ -4681,6 +4673,8 @@ window.goToCheckout = function() {
 };
 
 async function loadCheckout() {
+  // Ensure bank account details are current before showing checkout
+  applyAccountDetailsToDOM();
   // Load addresses
   const addrDiv = document.getElementById('saved-addresses');
   addrDiv.innerHTML = '<p style="color:var(--gray-400);font-size:13px">Loading addresses...</p>';
@@ -4981,6 +4975,68 @@ window.setDeliveryType = function(type) {
   }
 };
 
+// ===== WHATSAPP ORDER NOTIFICATIONS =====
+// Notify admin (you) on WhatsApp when a new order comes in
+function notifyAdminWhatsApp(orderId, buyerName, buyerEmail, itemNames, subtotal, deliveryFee, payment, addrStr, buyerPhone, couponDiscount, couponCode, loyaltyDiscount) {
+  const paymentLabel = payment === 'bank' ? `🏦 Bank Transfer (${_accountDetails.bankName})`
+    : payment === 'wallet' ? '💰 Wallet'
+    : payment === 'paystack' ? '⚡ Paystack'
+    : '💵 Pay on Delivery';
+  const grandTotal = Math.max(0, subtotal - (couponDiscount||0) - (loyaltyDiscount||0) + (deliveryFee||0));
+  let msg = `🛍️ *New Order — Benim!*\n\n`
+    + `🆔 *Order ID:* ${orderId}\n`
+    + `👤 *Customer:* ${buyerName}\n`
+    + `📧 *Email:* ${buyerEmail}\n`
+    + (buyerPhone ? `📱 *Phone:* ${buyerPhone}\n` : '')
+    + (addrStr ? `📍 *Address:* ${addrStr}\n` : '')
+    + `\n📦 *Items:*\n${itemNames}\n\n`
+    + `💳 *Payment:* ${paymentLabel}\n`
+    + `💵 *Subtotal:* ₦${(subtotal||0).toLocaleString()}\n`
+    + (couponDiscount>0 ? `🏷️ *Coupon (${couponCode}):* -₦${couponDiscount.toLocaleString()}\n` : '')
+    + (loyaltyDiscount>0 ? `⭐ *Loyalty Discount:* -₦${loyaltyDiscount.toLocaleString()}\n` : '')
+    + `🚚 *Delivery Fee:* ₦${(deliveryFee||0).toLocaleString()}\n`
+    + `\n💰 *Grand Total:* ₦${grandTotal.toLocaleString()}\n\n`
+    + `Go to Admin Panel to process this order.`;
+  window.open('https://wa.me/'+ADMIN_WHATSAPP+'?text='+encodeURIComponent(msg), '_blank');
+}
+
+// Notify the buyer on WhatsApp about their order (placed or status-updated)
+function notifyBuyerWhatsApp(phone, orderId, status, itemNames, buyerName, total, deliveryFee) {
+  if (!phone) return; // no phone on file — skip silently
+  const cleanPhone = phone.replace(/[^0-9]/g,'');
+  const waNum = cleanPhone.startsWith('0') ? '234'+cleanPhone.slice(1) : cleanPhone;
+  const statusLabels = {
+    pending: '⏳ Pending Confirmation',
+    confirmed: '✅ Confirmed',
+    processing: '📦 Processing',
+    out_for_delivery: '🚚 Out for Delivery',
+    delivered: '🎉 Delivered',
+    cancelled: '❌ Cancelled'
+  };
+  const statusLabel = statusLabels[status] || status;
+  let msg;
+  if (status === 'pending') {
+    msg = `🛍️ *Order Confirmation — Benim!*\n\n`
+      + `Hi ${buyerName},\n\n`
+      + `Thank you for your order! Here's a summary:\n\n`
+      + `🆔 *Order ID:* ${orderId}\n`
+      + `📦 *Items:* ${itemNames}\n`
+      + `💰 *Total:* ₦${(total||0).toLocaleString()}\n`
+      + `🚚 *Delivery Fee:* ₦${(deliveryFee||0).toLocaleString()}\n\n`
+      + `Status: ${statusLabel}\n\n`
+      + `We'll keep you updated as your order progresses. Thank you for shopping with Benim! 🧡`;
+  } else {
+    msg = `📦 *Order Update — Benim!*\n\n`
+      + `Hi ${buyerName},\n\n`
+      + `Your order *${orderId}* status has been updated:\n\n`
+      + `${statusLabel}\n\n`
+      + `📦 *Items:* ${itemNames}\n`
+      + `💰 *Total:* ₦${(total||0).toLocaleString()}\n\n`
+      + `Thank you for shopping with Benim! 🧡`;
+  }
+  window.open('https://wa.me/'+waNum+'?text='+encodeURIComponent(msg), '_blank');
+}
+
 window.placeOrder = async function() {
   if(!currentUser) { navigate('login'); return; }
   // Validate delivery method selection
@@ -5209,7 +5265,7 @@ function showReceipt(orderId, data) {
     ${loyaltyDiscount>0 ? '<div class="summary-row"><span style="color:var(--green)">⭐ Loyalty Points</span><span style="color:var(--green);font-weight:800">-₦'+loyaltyDiscount.toLocaleString()+'</span></div>' : ''}
     ${savings>0 ? '<div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:6px;padding:6px 10px;margin:6px 0;font-size:12px;color:var(--green);font-weight:700;text-align:center">🎉 You saved ₦'+savings.toLocaleString()+' on this order!</div>' : ''}
     <div class="summary-row total" style="border-top:2px solid var(--gray-200);padding-top:10px;margin-top:6px"><span>Grand Total</span><span style="color:var(--orange)">₦${(data.total||0).toLocaleString()}</span></div>
-    ${data.payment==='bank'?'<div style="margin-top:12px;background:var(--gray-50);padding:10px;border-radius:8px;font-size:12px"><p style="font-weight:800;margin-bottom:4px">Transfer Details:</p><p>Bank: Opay</p><p>Account: Adewole Aderonke Aishat</p><p>Number: 9168031213</p><p style="color:var(--orange);font-weight:700;margin-top:6px">Reference: '+orderId+'</p></div>':''}
+    ${data.payment==='bank'?'<div style="margin-top:12px;background:var(--gray-50);padding:10px;border-radius:8px;font-size:12px"><p style="font-weight:800;margin-bottom:4px">Transfer Details:</p><p>Bank: '+escHtml(_accountDetails.bankName)+'</p><p>Account: '+escHtml(_accountDetails.accountName)+'</p><p>Number: '+escHtml(_accountDetails.accountNumber)+'</p><p style="color:var(--orange);font-weight:700;margin-top:6px">Reference: '+orderId+'</p></div>':''}
   `;
 }
 
@@ -5390,18 +5446,18 @@ window.toggleDarkMode = function() {
   document.getElementById('dark-mode-btn').textContent = isDark ? '☀️' : '🌙';
   localStorage.setItem('benim-theme', isDark ? 'dark' : 'light');
 };
-// Dark is the default — only go light if user explicitly chose it
+// Light mode is the default — only go dark if user explicitly chose it
 (function(){
   const saved = localStorage.getItem('benim-theme');
-  if(saved === 'light') {
-    document.body.classList.remove('dark-mode');
-    const btn = document.getElementById('dark-mode-btn');
-    if(btn) btn.textContent = '🌙';
-  } else {
-    // Ensure dark mode is on (it's already in the class, this just syncs the button)
+  if(saved === 'dark') {
     document.body.classList.add('dark-mode');
     const btn = document.getElementById('dark-mode-btn');
     if(btn) btn.textContent = '☀️';
+  } else {
+    // Ensure light mode is on (default)
+    document.body.classList.remove('dark-mode');
+    const btn = document.getElementById('dark-mode-btn');
+    if(btn) btn.textContent = '🌙';
   }
 })();
 window.handleSearchKey = function(e) {
@@ -5741,7 +5797,7 @@ window.viewOrderDetails = async function(docId) {
       <!-- PAYMENT SUMMARY -->
       <div style="padding:16px">
         <div style="font-size:12px;font-weight:800;text-transform:uppercase;color:var(--gray-500);letter-spacing:.5px;margin-bottom:10px">💰 Payment Summary</div>
-        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span style="color:var(--gray-500)">Payment Method</span><span style="font-weight:700">${o.payment==='bank'?'🏦 Bank Transfer (Opay)':'💵 Pay on Delivery'}</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span style="color:var(--gray-500)">Payment Method</span><span style="font-weight:700">${o.payment==='bank'?'🏦 Bank Transfer ('+escHtml(_accountDetails.bankName)+')':'💵 Pay on Delivery'}</span></div>
         <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span style="color:var(--gray-500)">Subtotal</span><span style="font-weight:700">₦${((o.total||0)-(o.deliveryFee||0)).toLocaleString()}</span></div>
         ${(o.deliveryFee||0)>0 ? '<div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span style="color:var(--gray-500)">Delivery Fee</span><span style="font-weight:700">₦'+(o.deliveryFee||0).toLocaleString()+'</span></div>' : ''}
         <div style="display:flex;justify-content:space-between;font-size:15px;font-weight:900;border-top:2px solid var(--gray-200);padding-top:10px;margin-top:4px"><span>Total</span><span style="color:var(--orange)">₦${(o.total||0).toLocaleString()}</span></div>
@@ -6001,7 +6057,7 @@ function smartLocalReply(text) {
   }
   if (/price|cost|how much|fee/.test(t)) return "Prices are in ₦ on each product. Delivery: ₦3,500 (FREE above ₦150,000). Ask me any product name for its price!";
   if (/deliver|shipping|how long|when|days/.test(t)) return "🚚 Delivery:\n• Lagos: 1–2 days\n• Abuja/PH: 2–3 days\n• Others: 3–5 days\nFree delivery on orders ₦150,000+";
-  if (/pay|payment|transfer|bank|opay/.test(t)) return "💳 Payment options:\n1. Bank Transfer (Opay): Adewole Aderonke Aishat | 9168031213\n2. Pay on Delivery\nChoose at checkout!";
+  if (/pay|payment|transfer|bank|opay/.test(t)) return `💳 Payment options:\n1. Bank Transfer (${_accountDetails.bankName}): ${_accountDetails.accountName} | ${_accountDetails.accountNumber}\n2. Pay on Delivery\nChoose at checkout!`;
   if (/track|where is|my order|status/.test(t)) return "📦 Track order: Menu → Track Order → enter Order ID or phone. You also get WhatsApp updates automatically!";
   if (/return|refund|exchange|wrong|damaged/.test(t)) return "😟 For returns/refunds, contact us within 24hrs of delivery via WhatsApp: +234 916 803 1213";
   if (/contact|whatsapp|call|reach/.test(t)) return "📞 Contact: WhatsApp +234 916 803 1213 | Email: shopwitbenim@gmail.com\nMon–Sat 8AM–8PM";
