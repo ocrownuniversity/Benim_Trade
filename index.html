@@ -258,13 +258,52 @@ body.light-mode #page-home{background:#f5f5f5}
 
 /* product-card css moved below */
 
-/* ====== SKELETON ====== */
-.skeleton{background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.5s infinite}
+/* ====== SKELETON LOADING SYSTEM ====== */
+.skeleton{background:linear-gradient(90deg,var(--gray-100) 25%,var(--gray-200) 37%,var(--gray-100) 63%);background-size:400% 100%;animation:shimmer 1.6s ease-in-out infinite;border-radius:6px}
+body.dark-mode .skeleton{background:linear-gradient(90deg,#1c1c1c 25%,#2a2a2a 37%,#1c1c1c 63%);background-size:400% 100%}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-.skel-card{background:#1a1a1a;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-sm)}
+@keyframes skelFadeIn{from{opacity:0}to{opacity:1}}
+@keyframes skelFadeOut{from{opacity:1}to{opacity:0}}
+.skel-wrap{animation:skelFadeIn .25s ease}
+.skel-wrap.skel-leaving{animation:skelFadeOut .2s ease forwards}
+.real-content{animation:skelFadeIn .35s ease}
+
+/* Product card skeleton */
+.skel-card{background:var(--surface);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-sm);border:1px solid var(--border)}
 .skel-img{aspect-ratio:1;width:100%}
-.skel-line{height:12px;margin:10px;border-radius:4px}
-.skel-line.short{width:60%;margin-top:6px}
+.skel-line{height:12px;margin:10px 10px 0;border-radius:4px}
+.skel-line.short{width:55%;margin-top:8px;margin-bottom:10px}
+.skel-line.price{width:45%;height:16px;margin-top:8px}
+.skel-line.btn{height:30px;margin:10px;border-radius:8px}
+
+/* Generic row skeleton (lists: orders, addresses, tx history, admin tables) */
+.skel-row{display:flex;align-items:center;gap:12px;padding:14px;border-bottom:1px solid var(--border)}
+.skel-row:last-child{border-bottom:none}
+.skel-avatar{width:42px;height:42px;border-radius:50%;flex-shrink:0}
+.skel-row-body{flex:1;display:flex;flex-direction:column;gap:8px}
+.skel-row-line{height:11px;border-radius:4px}
+.skel-row-line.w70{width:70%}
+.skel-row-line.w40{width:40%}
+.skel-row-line.w90{width:90%}
+.skel-row-amt{width:64px;height:16px;border-radius:4px;flex-shrink:0}
+
+/* Order card skeleton */
+.skel-order-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px;margin-bottom:12px}
+.skel-order-top{display:flex;justify-content:space-between;margin-bottom:10px}
+.skel-order-top .skeleton:first-child{width:35%;height:13px}
+.skel-order-top .skeleton:last-child{width:20%;height:20px;border-radius:99px}
+
+/* Profile/dashboard skeleton */
+.skel-profile-avatar{width:84px;height:84px;border-radius:50%;margin:0 auto 14px}
+.skel-profile-line{height:14px;border-radius:4px;margin:0 auto}
+
+/* Table row skeleton (admin) */
+.skel-table-row td{padding:12px 10px}
+.skel-table-cell{height:13px;border-radius:4px}
+
+/* Wallet balance card skeleton */
+.skel-wallet-card{border-radius:16px;padding:24px;text-align:center}
+.skel-wallet-card .skeleton{margin:0 auto}
 
 /* ====== FLASH SALE ====== */
 
@@ -1573,6 +1612,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
       <button class="admin-tab" data-tab="pwresets" onclick="switchAdminTab('pwresets',this)" style="position:relative">🔑 PW Resets <span id="pw-reset-badge" style="display:none;position:absolute;top:4px;right:4px;background:#ef4444;color:#fff;border-radius:50%;width:16px;height:16px;font-size:9px;font-weight:900;align-items:center;justify-content:center"></span></button>
       <button class="admin-tab" onclick="switchAdminTab('wallets',this)">💰 Wallets</button>
       <button class="admin-tab" onclick="switchAdminTab('paystack',this)">⚡ Paystack</button>
+      <button class="admin-tab" onclick="switchAdminTab('bankdetails',this)">🏦 Account Details</button>
     </div>
     <!-- PASSWORD RESET REQUESTS TAB -->
     <div id="admin-pwresets" class="admin-tab-content hidden">
@@ -1680,6 +1720,45 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
           <button onclick="testPaystackKey()" style="background:rgba(0,181,216,.12);color:#00b5d8;border:1px solid #00b5d8;border-radius:8px;padding:10px 16px;font-size:13px;font-weight:700;cursor:pointer"><i class="fas fa-plug"></i> Test Connection</button>
         </div>
         <div id="paystack-save-msg" style="margin-top:10px;display:none"></div>
+      </div>
+    </div>
+
+    <!-- BANK ACCOUNT DETAILS TAB -->
+    <div id="admin-bankdetails" class="admin-tab-content hidden">
+      <div class="admin-card">
+        <div class="admin-card-title">🏦 Bank Account Details</div>
+        <p style="font-size:12px;color:var(--gray-500);margin-bottom:18px">These details are shown to customers everywhere they need to make a bank transfer — checkout, wallet funding, order receipts, and the FAQ. Update once here and it updates across the whole site automatically.</p>
+        <div class="form-group">
+          <label class="form-label">Bank Name *</label>
+          <input class="form-input" id="acc-bank-name" placeholder="e.g. Opay" oninput="updateAccountDetailsPreview()">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Account Name *</label>
+          <input class="form-input" id="acc-account-name" placeholder="e.g. Adewole Aderonke Aishat" oninput="updateAccountDetailsPreview()">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Account Number *</label>
+          <input class="form-input" id="acc-account-number" placeholder="e.g. 9168031213" inputmode="numeric" oninput="updateAccountDetailsPreview()">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Contact Phone <span style="color:var(--gray-400);font-weight:400">(shown with account info, optional)</span></label>
+          <input class="form-input" id="acc-phone" placeholder="e.g. +2349168031213" oninput="updateAccountDetailsPreview()">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Note for Customers <span style="color:var(--gray-400);font-weight:400">(optional)</span></label>
+          <input class="form-input" id="acc-note" placeholder="e.g. Please use your Order ID as reference" oninput="updateAccountDetailsPreview()">
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px">
+          <button class="btn-primary" onclick="saveAccountDetails()"><i class="fas fa-save"></i> Save Account Details</button>
+        </div>
+        <div id="acc-save-msg" style="margin-top:10px;display:none"></div>
+
+        <div style="margin-top:24px;padding-top:18px;border-top:1px solid var(--border)">
+          <div style="font-size:13px;font-weight:800;margin-bottom:10px;color:var(--gray-500)">LIVE PREVIEW — what customers will see</div>
+          <div class="bank-info" id="acc-preview-box" style="margin-top:0">
+            <p style="color:var(--gray-400)">Fill in the fields above to see a preview</p>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -2608,7 +2687,7 @@ body{padding-bottom:65px!important;background:#f2f2f2!important}
       </div>
       <!-- BANK TRANSFER FIELDS -->
       <div id="fund-bank-fields">
-        <div style="background:var(--surface2);border-radius:10px;padding:14px;margin-bottom:10px;font-size:13px">
+        <div id="fund-bank-transfer-box" style="background:var(--surface2);border-radius:10px;padding:14px;margin-bottom:10px;font-size:13px">
           <div style="font-weight:800;margin-bottom:6px;color:var(--orange)">Transfer To:</div>
           <div>Bank: <strong>Opay</strong></div>
           <div>Name: <strong>Adewole Aderonke Aishat</strong></div>
@@ -2841,16 +2920,22 @@ function updateAuthUI() {
 
 async function loadUserProfile() {
   if(!currentUser) return;
+  const pn = document.getElementById('profile-name');
+  const pp = document.getElementById('profile-phone');
+  // Show subtle skeleton placeholder text while fetching
+  if(pn) pn.placeholder = 'Loading...';
+  if(pp) pp.placeholder = 'Loading...';
   try {
     const snap = await getDoc(doc(db,'users',currentUser.uid));
     if(snap.exists()) {
       const d = snap.data();
-      const pn = document.getElementById('profile-name');
-      const pp = document.getElementById('profile-phone');
-      if(pn) pn.value = d.name || '';
-      if(pp) pp.value = d.phone || '';
+      if(pn) { pn.value = d.name || ''; pn.placeholder = 'Your name'; }
+      if(pp) { pp.value = d.phone || ''; pp.placeholder = '+234...'; }
     }
-  } catch(e){}
+  } catch(e){
+    if(pn) pn.placeholder = 'Your name';
+    if(pp) pp.placeholder = '+234...';
+  }
 }
 
 // expose globally
@@ -3008,7 +3093,7 @@ let allPWResets = [];
 window.loadPWResetRequests = async function() {
   if (!isAdmin) return;
   const tbody = document.getElementById('pwresets-tbody');
-  tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--gray-400);padding:20px"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>';
+  tbody.innerHTML = skelTableRows(5, 5);
 
   try {
     const snap = await getDocs(query(collection(db,'password_reset_requests'), orderBy('requestedAt','desc')));
@@ -3519,7 +3604,8 @@ async function loadWalletTransactions() {
   if (!currentUser) return;
   const list = document.getElementById('wallet-tx-list');
   if (!list) return;
-  list.innerHTML = '<p style="color:var(--gray-400);font-size:13px;text-align:center;padding:20px"><i class="fas fa-spinner fa-spin"></i> Loading...</p>';
+  list.classList.add('skel-wrap');
+  list.innerHTML = skelRows(4, { avatar:false, amount:true });
   try {
     let snap;
     try {
@@ -3529,11 +3615,12 @@ async function loadWalletTransactions() {
       snap = await getDocs(query(collection(db,'wallet_transactions'), where('uid','==',currentUser.uid)));
     }
     if (snap.empty) {
+      list.classList.remove('skel-wrap');
       list.innerHTML = '<p style="color:var(--gray-400);font-size:13px;text-align:center;padding:20px">No transactions yet.</p>';
       return;
     }
     const typeIcons = { credit:'⬆️', debit:'⬇️', purchase:'🛒', refund:'↩️', admin_credit:'🎁', admin_debit:'🔻', paystack:'⚡', bank_transfer:'🏦' };
-    list.innerHTML = snap.docs.map(d => {
+    const txHtml = snap.docs.map(d => {
       const t = d.data();
       const amt = t.amount || 0;
       const isCredit = amt > 0;
@@ -3550,7 +3637,8 @@ async function loadWalletTransactions() {
         </div>
       </div>`;
     }).join('');
-  } catch(e) { list.innerHTML = '<p style="color:var(--red);font-size:13px;text-align:center;padding:20px">Error loading transactions.</p>'; }
+    swapSkeletonContent(list, txHtml);
+  } catch(e) { list.classList.remove('skel-wrap'); list.innerHTML = '<p style="color:var(--red);font-size:13px;text-align:center;padding:20px">Error loading transactions.</p>'; }
 }
 
 // ---- Show fund wallet modal ----
@@ -3708,7 +3796,11 @@ window.loadAdminWallets = async function() {
   if (!isAdmin) return;
   // Load funding requests
   const reqDiv = document.getElementById('wallet-funding-requests');
-  if (reqDiv) reqDiv.innerHTML = '<p style="color:var(--gray-400);font-size:13px;text-align:center;padding:20px"><i class="fas fa-spinner fa-spin"></i> Loading...</p>';
+  if (reqDiv) { reqDiv.classList.add('skel-wrap'); reqDiv.innerHTML = skelRows(3, { avatar:false, amount:true }); }
+
+  // Load all wallets — show table skeleton immediately
+  const tbody = document.getElementById('admin-wallets-tbody');
+  if (tbody) tbody.innerHTML = skelTableRows(4, 5);
 
   try {
     let snap;
@@ -3720,13 +3812,12 @@ window.loadAdminWallets = async function() {
     }
     const requests = snap.docs.map(d => ({id:d.id,...d.data()}))
       .sort((a,b) => (b.createdAtISO||'') > (a.createdAtISO||'') ? 1 : -1);
+    reqDiv.classList.remove('skel-wrap');
     renderFundingRequests(requests, reqDiv);
   } catch(e) {
-    if (reqDiv) reqDiv.innerHTML = '<p style="color:var(--red);font-size:13px;text-align:center;padding:20px">Error: ' + e.message + '</p>';
+    if (reqDiv) { reqDiv.classList.remove('skel-wrap'); reqDiv.innerHTML = '<p style="color:var(--red);font-size:13px;text-align:center;padding:20px">Error: ' + e.message + '</p>'; }
   }
 
-  // Load all wallets
-  const tbody = document.getElementById('admin-wallets-tbody');
   if (tbody) {
     try {
       const wSnap = await getDocs(collection(db,'wallets'));
@@ -3924,6 +4015,118 @@ async function openAdminWalletHistory(uid, w) {
   } catch(e) { body.innerHTML = '<p style="padding:20px;color:var(--red)">Error loading history.</p>'; }
 }
 
+// ---- BANK ACCOUNT DETAILS (admin-editable, shown site-wide) ----
+let _accountDetails = {
+  bankName: 'Opay',
+  accountName: 'Adewole Aderonke Aishat',
+  accountNumber: '9168031213',
+  phone: '+2349168031213',
+  note: 'Please transfer exact amount and include your order ID as reference.'
+};
+
+async function loadAccountDetails() {
+  try {
+    const snap = await getDoc(doc(db,'settings','bank_account'));
+    if (snap.exists()) {
+      const d = snap.data();
+      _accountDetails = {
+        bankName: d.bankName || _accountDetails.bankName,
+        accountName: d.accountName || _accountDetails.accountName,
+        accountNumber: d.accountNumber || _accountDetails.accountNumber,
+        phone: d.phone || '',
+        note: d.note || ''
+      };
+    }
+    applyAccountDetailsToDOM();
+    // Populate admin form fields if present (admin tab open)
+    const bn = document.getElementById('acc-bank-name');
+    if (bn) {
+      document.getElementById('acc-bank-name').value = _accountDetails.bankName;
+      document.getElementById('acc-account-name').value = _accountDetails.accountName;
+      document.getElementById('acc-account-number').value = _accountDetails.accountNumber;
+      document.getElementById('acc-phone').value = _accountDetails.phone;
+      document.getElementById('acc-note').value = _accountDetails.note;
+      updateAccountDetailsPreview();
+    }
+  } catch(e) { console.error('loadAccountDetails:', e); applyAccountDetailsToDOM(); }
+}
+
+// Push the current account details into every place on the site that shows them
+function applyAccountDetailsToDOM() {
+  const a = _accountDetails;
+  // Checkout bank-info box
+  const bankInfo = document.getElementById('bank-info');
+  if (bankInfo) {
+    bankInfo.innerHTML = `
+      <p><strong>Bank:</strong> ${escHtml(a.bankName)}</p>
+      <p><strong>Account Name:</strong> ${escHtml(a.accountName)}</p>
+      <p><strong>Account Number:</strong> <strong style="font-size:18px;color:var(--orange)">${escHtml(a.accountNumber)}</strong></p>
+      ${a.phone ? `<p><strong>Phone:</strong> ${escHtml(a.phone)}</p>` : ''}
+      <p style="margin-top:8px;color:var(--red);font-size:12px"><i class="fas fa-exclamation-triangle"></i> ${escHtml(a.note || 'Please transfer exact amount and include your order ID as reference.')}</p>`;
+  }
+  // Fund wallet modal transfer-to box
+  const fundBox = document.getElementById('fund-bank-transfer-box');
+  if (fundBox) {
+    fundBox.innerHTML = `
+      <div style="font-weight:800;margin-bottom:6px;color:var(--orange)">Transfer To:</div>
+      <div>Bank: <strong>${escHtml(a.bankName)}</strong></div>
+      <div>Name: <strong>${escHtml(a.accountName)}</strong></div>
+      <div>Account: <strong style="font-size:16px;color:var(--orange)">${escHtml(a.accountNumber)}</strong></div>
+      <div style="margin-top:6px;font-size:12px;color:var(--gray-400)">Use your email as transfer reference.</div>`;
+  }
+  // FAQ answer
+  const faqBank = document.getElementById('faq-bank-details');
+  if (faqBank) {
+    faqBank.textContent = `We accept Bank Transfer (${a.bankName}) and Pay on Delivery. Bank details: ${a.bankName} | ${a.accountName} | Account Number: ${a.accountNumber}. Please use your Order ID as the transfer reference.`;
+  }
+}
+
+function updateAccountDetailsPreview() {
+  const preview = document.getElementById('acc-preview-box');
+  if (!preview) return;
+  const bankName = document.getElementById('acc-bank-name').value.trim() || '—';
+  const accountName = document.getElementById('acc-account-name').value.trim() || '—';
+  const accountNumber = document.getElementById('acc-account-number').value.trim() || '—';
+  const phone = document.getElementById('acc-phone').value.trim();
+  const note = document.getElementById('acc-note').value.trim();
+  preview.innerHTML = `
+    <p><strong>Bank:</strong> ${escHtml(bankName)}</p>
+    <p><strong>Account Name:</strong> ${escHtml(accountName)}</p>
+    <p><strong>Account Number:</strong> <strong style="font-size:18px;color:var(--orange)">${escHtml(accountNumber)}</strong></p>
+    ${phone ? `<p><strong>Phone:</strong> ${escHtml(phone)}</p>` : ''}
+    ${note ? `<p style="margin-top:8px;color:var(--red);font-size:12px"><i class="fas fa-exclamation-triangle"></i> ${escHtml(note)}</p>` : ''}`;
+}
+
+window.saveAccountDetails = async function() {
+  if (!isAdmin) return;
+  const bankName = document.getElementById('acc-bank-name').value.trim();
+  const accountName = document.getElementById('acc-account-name').value.trim();
+  const accountNumber = document.getElementById('acc-account-number').value.trim();
+  const phone = document.getElementById('acc-phone').value.trim();
+  const note = document.getElementById('acc-note').value.trim();
+  const msgEl = document.getElementById('acc-save-msg');
+
+  if (!bankName || !accountName || !accountNumber) {
+    showToast('Please fill bank name, account name and account number','error');
+    return;
+  }
+
+  try {
+    await setDoc(doc(db,'settings','bank_account'), {
+      bankName, accountName, accountNumber, phone, note,
+      updatedAt: serverTimestamp(), updatedBy: currentUser?.email || 'admin'
+    });
+    _accountDetails = { bankName, accountName, accountNumber, phone, note };
+    applyAccountDetailsToDOM();
+    updateAccountDetailsPreview();
+    if (msgEl) { msgEl.style.display='block'; msgEl.innerHTML='<div style="background:rgba(22,163,74,.1);border:1px solid rgba(22,163,74,.3);border-radius:8px;padding:10px;font-size:13px;color:var(--green);font-weight:700"><i class="fas fa-check-circle"></i> Account details saved! Now live across the site.</div>'; }
+    showToast('Account details saved!','success');
+  } catch(e) {
+    if (msgEl) { msgEl.style.display='block'; msgEl.innerHTML='<div style="background:rgba(220,38,38,.1);border-radius:8px;padding:10px;font-size:13px;color:var(--red)">Error: '+e.message+'</div>'; }
+    showToast('Failed to save account details','error');
+  }
+};
+
 // ---- PAYSTACK SETTINGS ----
 async function loadPaystackSettings() {
   try {
@@ -4030,7 +4233,87 @@ function renderHome() {
 function renderSkeletons(gridId, count) {
   const grid = document.getElementById(gridId);
   if(!grid) return;
-  grid.innerHTML = Array(count).fill(`<div class="skel-card"><div class="skel-img skeleton"></div><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div></div>`).join('');
+  grid.classList.add('skel-wrap');
+  grid.innerHTML = Array(count).fill(`<div class="skel-card"><div class="skel-img skeleton"></div><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div><div class="skel-line price skeleton"></div><div class="skel-line btn skeleton"></div></div>`).join('');
+}
+
+// ===== UNIVERSAL SKELETON HELPERS =====
+// Generic row-style skeleton (orders list, tx history, addresses, chat list, admin lists)
+function skelRows(count = 4, opts = {}) {
+  const { avatar = true, amount = true } = opts;
+  return Array(count).fill(0).map(() => `
+    <div class="skel-row">
+      ${avatar ? '<div class="skeleton skel-avatar"></div>' : ''}
+      <div class="skel-row-body">
+        <div class="skeleton skel-row-line w70"></div>
+        <div class="skeleton skel-row-line w40"></div>
+      </div>
+      ${amount ? '<div class="skeleton skel-row-amt"></div>' : ''}
+    </div>`).join('');
+}
+
+// Order-card style skeleton (matches .order-card layout)
+function skelOrderCards(count = 3) {
+  return Array(count).fill(0).map(() => `
+    <div class="skel-order-card">
+      <div class="skel-order-top">
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+      </div>
+      <div class="skeleton skel-row-line w90" style="margin-bottom:10px"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div class="skeleton" style="width:80px;height:16px"></div>
+        <div style="display:flex;gap:6px">
+          <div class="skeleton" style="width:60px;height:26px;border-radius:6px"></div>
+          <div class="skeleton" style="width:60px;height:26px;border-radius:6px"></div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// Admin table row skeleton — pass column widths e.g. [40,'15%','20%',...] or just count
+function skelTableRows(colCount = 5, rowCount = 5) {
+  return Array(rowCount).fill(0).map(() => `
+    <tr class="skel-table-row">
+      ${Array(colCount).fill(0).map(() => `<td><div class="skeleton skel-table-cell" style="width:${60+Math.random()*30}%"></div></td>`).join('')}
+    </tr>`).join('');
+}
+
+// Profile / dashboard header skeleton
+function skelProfileHeader() {
+  return `
+    <div class="skeleton skel-profile-avatar"></div>
+    <div class="skeleton skel-profile-line" style="width:140px;height:16px;margin-bottom:8px"></div>
+    <div class="skeleton skel-profile-line" style="width:180px;height:12px;margin-bottom:14px"></div>
+    <div class="skeleton" style="width:200px;height:64px;border-radius:12px;margin:0 auto"></div>`;
+}
+
+// Wallet balance card skeleton
+function skelWalletCard() {
+  return `
+    <div class="skel-wallet-card">
+      <div class="skeleton" style="width:140px;height:11px;margin-bottom:10px"></div>
+      <div class="skeleton" style="width:180px;height:34px;margin-bottom:8px"></div>
+      <div class="skeleton" style="width:120px;height:10px"></div>
+    </div>`;
+}
+
+// Generic text-line skeleton block (for misc sections)
+function skelLines(count = 3, widths = ['90%','70%','50%']) {
+  return Array(count).fill(0).map((_,i) => `<div class="skeleton skel-row-line" style="width:${widths[i % widths.length]};margin-bottom:10px"></div>`).join('');
+}
+
+// Smoothly swap skeleton HTML for real content without flicker
+function swapSkeletonContent(el, htmlOrFn) {
+  if (!el) return;
+  el.classList.add('skel-leaving');
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      el.innerHTML = typeof htmlOrFn === 'function' ? htmlOrFn() : htmlOrFn;
+      el.classList.remove('skel-wrap','skel-leaving');
+      el.classList.add('real-content');
+    }, 120);
+  });
 }
 
 function renderProductGrid(gridId, products, isFlash=false) {
@@ -4937,12 +5220,14 @@ window.loadOrders = async function() {
   if(!currentUser) { navigate('login'); return; }
   const list = document.getElementById('orders-list');
   const empty = document.getElementById('orders-empty');
-  list.innerHTML = '<div class="empty-state"><i class="fas fa-spinner fa-spin"></i><p>Loading...</p></div>';
+  empty.classList.add('hidden');
+  list.classList.add('skel-wrap');
+  list.innerHTML = skelOrderCards(3);
   try {
     // Query without orderBy to avoid needing a composite Firestore index
     const q = query(collection(db,'orders'), where('userId','==',currentUser.uid));
     const snap = await getDocs(q);
-    if(snap.empty) { list.innerHTML=''; empty.classList.remove('hidden'); return; }
+    if(snap.empty) { list.classList.remove('skel-wrap'); list.innerHTML=''; empty.classList.remove('hidden'); return; }
     empty.classList.add('hidden');
     // Sort client-side by createdAt descending
     const sorted = snap.docs.sort((a,b) => {
@@ -4950,7 +5235,7 @@ window.loadOrders = async function() {
       const bt = b.data().createdAt?.toMillis?.() || 0;
       return bt - at;
     });
-    list.innerHTML = sorted.map(d=>{
+    const ordersHtml = sorted.map(d=>{
       const o = d.data();
       const statusClass = {'pending':'status-pending','confirmed':'status-confirmed','processing':'status-processing','out_for_delivery':'status-out','delivered':'status-delivered','cancelled':'status-cancelled'}[o.status]||'status-pending';
       const canCancel = ['pending','confirmed'].includes(o.status||'pending');
@@ -4974,8 +5259,10 @@ window.loadOrders = async function() {
         </div>
       </div>`;
     }).join('');
+    swapSkeletonContent(list, ordersHtml);
   } catch(e) {
     console.error('loadOrders error:', e);
+    list.classList.remove('skel-wrap');
     list.innerHTML = `<div style="padding:20px;text-align:center;color:var(--red)">
       <i class="fas fa-exclamation-circle" style="font-size:32px;margin-bottom:8px"></i>
       <p style="font-weight:700">Could not load orders</p>
@@ -5196,10 +5483,12 @@ window.saveAddress = async function() {
 window.loadAddresses = async function() {
   if(!currentUser) return;
   const list = document.getElementById('addresses-list');
+  list.classList.add('skel-wrap');
+  list.innerHTML = skelRows(2, { avatar:false, amount:false });
   try {
     const snap = await getDocs(collection(db,`users/${currentUser.uid}/addresses`));
-    if(snap.empty) { list.innerHTML = '<p style="color:var(--gray-400)">No addresses saved.</p>'; return; }
-    list.innerHTML = snap.docs.map(d=>{
+    if(snap.empty) { list.classList.remove('skel-wrap'); list.innerHTML = '<p style="color:var(--gray-400)">No addresses saved.</p>'; return; }
+    const addrHtml = snap.docs.map(d=>{
       const a = d.data();
       return `<div class="address-card" style="position:relative">
         <h4>${a.name} &mdash; ${a.phone}</h4>
@@ -5207,7 +5496,8 @@ window.loadAddresses = async function() {
         <button class="btn-danger" style="position:absolute;top:10px;right:10px;padding:4px 10px;font-size:11px" onclick="deleteAddress('${d.id}')"><i class="fas fa-trash"></i></button>
       </div>`;
     }).join('');
-  } catch(e){}
+    swapSkeletonContent(list, addrHtml);
+  } catch(e){ list.classList.remove('skel-wrap'); }
 };
 
 window.deleteAddress = async function(id) {
@@ -5290,6 +5580,10 @@ window.loadAdminProducts = function() {
   selectedAdminProducts.clear();
   const bar = document.getElementById('bulk-actions-bar');
   if(bar) bar.style.display='none';
+  if(!allProducts.length) {
+    tbody.innerHTML = skelTableRows(6, 5);
+    return;
+  }
   tbody.innerHTML = allProducts.map(p=>`
     <tr>
       <td><input type="checkbox" class="prod-select-cb" data-id="${p.id}" onchange="toggleProductSelect('${p.id}',this)"></td>
@@ -5308,7 +5602,7 @@ window.loadAdminProducts = function() {
 
 window.loadAdminOrders = async function() {
   const tbody = document.getElementById('admin-orders-body');
-  tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--gray-400)">Loading...</td></tr>';
+  tbody.innerHTML = skelTableRows(7, 6);
   try {
     const q = collection(db,'orders');
     const snap = await getDocs(q);
@@ -5495,12 +5789,13 @@ window.updateOrderStatus = async function() {
 
 window.loadAdminReviews = async function() {
   const wrap = document.getElementById('admin-reviews-list');
-  wrap.innerHTML = '<p style="color:var(--gray-400)">Loading...</p>';
+  wrap.classList.add('skel-wrap');
+  wrap.innerHTML = skelRows(3, { avatar:true, amount:false });
   try {
     const q = query(collection(db,'reviews'), where('status','==','pending'));
     const snap = await getDocs(q);
-    if(snap.empty) { wrap.innerHTML = '<p style="color:var(--gray-400)">No pending reviews.</p>'; return; }
-    wrap.innerHTML = snap.docs.map(d=>{
+    if(snap.empty) { wrap.classList.remove('skel-wrap'); wrap.innerHTML = '<p style="color:var(--gray-400)">No pending reviews.</p>'; return; }
+    const revHtml = snap.docs.map(d=>{
       const r = d.data();
       return `<div class="review-card" style="display:flex;flex-direction:column;gap:8px">
         <div class="review-top"><span class="stars">${starsHTML(r.rating||5)}</span><span class="reviewer-name">${r.userName||'?'}</span></div>
@@ -5511,7 +5806,8 @@ window.loadAdminReviews = async function() {
         </div>
       </div>`;
     }).join('');
-  } catch(e){}
+    swapSkeletonContent(wrap, revHtml);
+  } catch(e){ wrap.classList.remove('skel-wrap'); }
 };
 
 window.approveReview = async function(id) {
@@ -5593,13 +5889,14 @@ window.switchAdminTab = function(tab, btn) {
   else if(tab==='pwresets') loadPWResetRequests();
   else if(tab==='wallets') loadAdminWallets();
   else if(tab==='paystack') loadPaystackSettings();
+  else if(tab==='bankdetails') loadAccountDetails();
 };
 
 
 window.loadAdminUsers = async function() {
   const tbody = document.getElementById('admin-users-body');
   const countEl = document.getElementById('admin-users-count');
-  tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--gray-400)">Loading users...</td></tr>';
+  tbody.innerHTML = skelTableRows(6, 6);
   try {
     // Load all users
     const usersSnap = await getDocs(collection(db, 'users'));
@@ -5967,13 +6264,15 @@ window.chatKeyPress = function(e) { if (e.key === 'Enter' && !e.shiftKey) { e.pr
 // ===== ADMIN SUPPORT DASHBOARD (enhanced loadAdminChats) =====
 window.loadAdminChats = async function() {
   const wrap = document.getElementById('admin-chats-list');
-  wrap.innerHTML = '<p style="color:var(--gray-400);font-size:13px"><i class="fas fa-spinner fa-spin"></i> Loading support chats...</p>';
+  wrap.classList.add('skel-wrap');
+  wrap.innerHTML = skelRows(4, { avatar:true, amount:false });
   try {
     // Toggle admin online status
     await setDoc(doc(db,'settings','admin_status'), { online: true, lastSeen: serverTimestamp() }, { merge: true });
 
     const snap = await getDocs(collection(db, 'support_chats'));
     if (snap.empty) {
+      wrap.classList.remove('skel-wrap');
       wrap.innerHTML = '<div style="text-align:center;padding:30px;color:var(--gray-400)"><i class="fas fa-comments" style="font-size:36px;display:block;margin-bottom:10px"></i><p>No support chats yet</p></div>';
       return;
     }
@@ -5981,7 +6280,7 @@ window.loadAdminChats = async function() {
       .sort((a, b) => (b.updatedAt?.seconds||0) - (a.updatedAt?.seconds||0));
 
     const waiting = chats.filter(c => c.status === 'waiting' || c.requestedHuman).length;
-    wrap.innerHTML = (waiting > 0 ? '<div style="background:#fee2e2;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:13px;font-weight:700;color:#dc2626"><i class="fas fa-bell"></i> '+waiting+' customer(s) waiting for human support</div>' : '')
+    const chatsHtml = (waiting > 0 ? '<div style="background:#fee2e2;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:13px;font-weight:700;color:#dc2626"><i class="fas fa-bell"></i> '+waiting+' customer(s) waiting for human support</div>' : '')
       + chats.map(c => {
       const lastMsg = (c.messages||[]).slice(-1)[0];
       const unread = !c.adminRead && lastMsg?.role === 'user';
@@ -5996,7 +6295,9 @@ window.loadAdminChats = async function() {
         (lastMsg ? '<div style="font-size:12px;color:var(--gray-600);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:240px">'+(lastMsg.role==='user'?'👤 ':'🤖 ')+(lastMsg.text||'').substring(0,60)+'</div>' : '')+
       '</div>';
     }).join('');
+    swapSkeletonContent(wrap, chatsHtml);
   } catch(e) {
+    wrap.classList.remove('skel-wrap');
     wrap.innerHTML = '<p style="color:var(--red);font-size:13px">Error: '+e.message+'</p>';
   }
 };
@@ -6139,10 +6440,12 @@ async function renderSlider() {
 
 window.loadAdminBanners = async function() {
   const list = document.getElementById('admin-banners-list');
-  list.innerHTML = '<p style="color:var(--gray-400);font-size:13px;padding:10px"><i class="fas fa-spinner fa-spin"></i> Loading all 5 slides...</p>';
+  list.classList.add('skel-wrap');
+  list.innerHTML = skelRows(3, { avatar:true, amount:false });
   const banners = await loadBanners();
   console.log('Loaded banners:', banners.length, banners.map(b=>b.slotId));
   const bgLabels = {'slide-1':'🟠 Orange','slide-2':'🌑 Dark Navy','slide-3':'🔵 Blue/Purple','slide-green':'🟢 Green','slide-dark':'⚫ Dark'};
+  list.classList.remove('skel-wrap');
   list.innerHTML = `<p style="font-size:12px;color:var(--green);font-weight:700;margin-bottom:10px"><i class="fas fa-check-circle"></i> Showing all ${banners.length} slides</p>` + banners.map(b=>{
     const isCustom = !!b.firestoreId;
     return `<div class="banner-card">
@@ -6611,7 +6914,8 @@ window.showCouponModal = function() {
 
 window.loadAdminCoupons = async function() {
   const list = document.getElementById('admin-coupons-list');
-  list.innerHTML = '<p style="color:var(--gray-400);font-size:13px"><i class="fas fa-spinner fa-spin"></i> Loading...</p>';
+  list.classList.add('skel-wrap');
+  list.innerHTML = skelRows(3, { avatar:false, amount:true });
   try {
     const snap = await getDocs(collection(db,'coupons'));
     if(snap.empty) {
